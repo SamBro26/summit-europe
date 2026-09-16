@@ -154,3 +154,48 @@
     color: var(--color-foreground);
   }
 }
+
+@utility bg-brand-gradient {
+  background-image: var(--gradient-brand);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+  }
+}
+
+@keyframes splash-rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes splash-ring {
+  0% { opacity: 0.6; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+@keyframes shimmer-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@utility animate-splash-rise {
+  animation: splash-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility animate-splash-ring {
+  animation: splash-ring 2.4s ease-out infinite;
+}
+@utility animate-shimmer-line {
+  animation: shimmer-line 2.2s ease-out both;
+  transform-origin: left;
+}
