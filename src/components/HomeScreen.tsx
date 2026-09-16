@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Globe, Home, LogOut, Plus, Search, Sparkles } from "lucide-react";
+import { Globe, Home, LogOut, MessageSquare, Plus, Search, Sparkles } from "lucide-react";
+import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
+import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { LocationFilter, type LocationValue } from "@/components/LocationFilter";
@@ -42,7 +44,7 @@ export function HomeScreen({
   }
 
   return (
-    <div className="min-h-screen bg-background pb-16">
+    <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
       <header className="bg-brand-gradient px-5 pt-8 pb-14 sm:px-10">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -65,6 +67,18 @@ export function HomeScreen({
               <span className="sm:hidden">{language.flag}</span>
             </Button>
             {user ? (
+              <>
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <Link to="/inbox">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden sm:inline">Inbox</span>
+                </Link>
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -74,6 +88,7 @@ export function HomeScreen({
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">Sign out</span>
               </Button>
+              </>
             ) : (
               <Button
                 asChild
@@ -136,6 +151,8 @@ export function HomeScreen({
           </TabsContent>
         </Tabs>
       </main>
+
+      <AdBanner />
     </div>
   );
 }
