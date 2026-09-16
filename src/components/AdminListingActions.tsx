@@ -80,10 +80,16 @@ export function AdminListingActions({
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>Moderation</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => setPending("delete")}>
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive gap-2"
+            onSelect={() => setPending("delete")}
+          >
             <Trash2 className="h-4 w-4" /> Delete this listing
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" onSelect={() => setPending("ban")}>
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive gap-2"
+            onSelect={() => setPending("ban")}
+          >
             <Ban className="h-4 w-4" /> Ban the author
           </DropdownMenuItem>
         </DropdownMenuContent>
