@@ -151,6 +151,8 @@ export function HomeScreen({
           </TabsContent>
         </Tabs>
       </main>
+
+      <AdBanner />
     </div>
   );
 }
