@@ -79,6 +79,19 @@ export function HomeScreen({
                   <span className="hidden sm:inline">Inbox</span>
                 </Link>
               </Button>
+              {isAdmin && (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                >
+                  <Link to="/admin">
+                    <ShieldCheck className="h-4 w-4" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </Link>
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"

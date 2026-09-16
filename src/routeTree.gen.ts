@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedPostRouteImport } from './routes/_authenticated/post'
 import { Route as ListingsIdRouteImport } from './routes/listings.$id'
@@ -30,6 +31,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedInboxRoute = AuthenticatedInboxRouteImport.update({
   id: '/inbox',
@@ -56,6 +62,7 @@ const AuthenticatedListingsIdEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/post': typeof AuthenticatedPostRoute
   '/listings/$id': typeof ListingsIdRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/post': typeof AuthenticatedPostRoute
   '/listings/$id': typeof ListingsIdRoute
@@ -74,6 +82,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/post': typeof AuthenticatedPostRoute
   '/listings/$id': typeof ListingsIdRoute
@@ -82,15 +91,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/inbox' | '/post' | '/listings/$id' | '/listings/$id/edit'
+    | '/'
+    | '/auth'
+    | '/admin'
+    | '/inbox'
+    | '/post'
+    | '/listings/$id'
+    | '/listings/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/inbox' | '/post' | '/listings/$id' | '/listings/$id/edit'
+    | '/'
+    | '/auth'
+    | '/admin'
+    | '/inbox'
+    | '/post'
+    | '/listings/$id'
+    | '/listings/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admin'
     | '/_authenticated/inbox'
     | '/_authenticated/post'
     | '/listings/$id'
@@ -127,6 +149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/inbox': {
       id: '/_authenticated/inbox'
       path: '/inbox'
@@ -159,12 +188,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedPostRoute: typeof AuthenticatedPostRoute
   AuthenticatedListingsIdEditRoute: typeof AuthenticatedListingsIdEditRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedPostRoute: AuthenticatedPostRoute,
   AuthenticatedListingsIdEditRoute: AuthenticatedListingsIdEditRoute,
