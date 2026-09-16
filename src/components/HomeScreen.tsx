@@ -33,6 +33,7 @@ export function HomeScreen({
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [location, setLocation] = useState<LocationValue>({
     country: null,
     region: null,
