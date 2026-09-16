@@ -88,6 +88,7 @@ export function HomeScreen({
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">Sign out</span>
               </Button>
+              </>
             ) : (
               <Button
                 asChild
