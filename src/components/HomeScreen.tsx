@@ -1,8 +1,14 @@
 import { useState } from "react";
-import { Globe, Home, Search, Sparkles } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Globe, Home, LogOut, Plus, Search, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { LocationFilter, type LocationValue } from "@/components/LocationFilter";
+import { ListingCard } from "@/components/ListingCard";
+import { fetchListings } from "@/lib/listings";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { getCountry } from "@/lib/locations";
 import { getLanguage } from "@/lib/languages";
 
@@ -13,7 +19,14 @@ export function HomeScreen({
   languageCode: string | null;
   onChangeLanguage: () => void;
 }) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [location, setLocation] = useState<LocationValue>({
+    country: null,
+    region: null,
+    city: null,
+  });
+  const [applied, setApplied] = useState<LocationValue>({
     country: null,
     region: null,
     city: null,
@@ -22,6 +35,11 @@ export function HomeScreen({
   const country = location.country ? getCountry(location.country) : undefined;
 
   const scope = [country?.name, location.region, location.city].filter(Boolean).join(" › ");
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth" });
+  }
 
   return (
     <div className="min-h-screen bg-background pb-16">
@@ -35,16 +53,38 @@ export function HomeScreen({
               FindMe <span className="text-accent">RealEstate</span>
             </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onChangeLanguage}
-            className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-          >
-            <Globe className="h-4 w-4" />
-            <span className="hidden sm:inline">{language.native}</span>
-            <span className="sm:hidden">{language.flag}</span>
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onChangeLanguage}
+              className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            >
+              <Globe className="h-4 w-4" />
+              <span className="hidden sm:inline">{language.native}</span>
+              <span className="sm:hidden">{language.flag}</span>
+            </Button>
+            {user ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={signOut}
+                className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign out</span>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <Link to="/auth">Sign in</Link>
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="mx-auto mt-10 max-w-5xl">
@@ -54,6 +94,11 @@ export function HomeScreen({
           <p className="mt-2 max-w-xl text-sm text-primary-foreground/75">
             Start with a country — regions and cities unlock as you go.
           </p>
+          <Button asChild className="mt-6 gap-2">
+            <Link to="/post">
+              <Plus className="h-4 w-4" /> Post a free ad
+            </Link>
+          </Button>
         </div>
       </header>
 
@@ -70,7 +115,7 @@ export function HomeScreen({
                 "Select a country to begin — it is required."
               )}
             </p>
-            <Button disabled={!location.country} className="gap-2">
+            <Button disabled={!location.country} onClick={() => setApplied(location)} className="gap-2">
               <Search className="h-4 w-4" /> Search
             </Button>
           </div>
@@ -83,25 +128,11 @@ export function HomeScreen({
           </TabsList>
 
           <TabsContent value="offers" className="mt-5">
-            <MarketPanel
-              title="Offered Properties"
-              body={
-                location.country
-                  ? `Listings for ${scope} will appear here once the listing wizard is live.`
-                  : "Pick a country above to load available supply in that market."
-              }
-            />
+            <ListingGrid kind="supply" filter={applied} />
           </TabsContent>
 
           <TabsContent value="requests" className="mt-5">
-            <MarketPanel
-              title="Search Requests"
-              body={
-                location.country
-                  ? `Buyer and tenant requests for ${scope} will appear here.`
-                  : "Pick a country above to see what buyers and tenants are looking for."
-              }
-            />
+            <ListingGrid kind="demand" filter={applied} />
           </TabsContent>
         </Tabs>
       </main>
@@ -109,14 +140,49 @@ export function HomeScreen({
   );
 }
 
-function MarketPanel({ title, body }: { title: string; body: string }) {
+function ListingGrid({
+  kind,
+  filter,
+}: {
+  kind: "supply" | "demand";
+  filter: LocationValue;
+}) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["listings", kind, filter.country, filter.region, filter.city],
+    queryFn: () =>
+      fetchListings({
+        kind,
+        country: filter.country,
+        region: filter.region,
+        city: filter.city,
+      }),
+  });
+
+  if (isLoading) {
+    return <p className="py-10 text-center text-sm text-muted-foreground">Loading ads…</p>;
+  }
+
+  if (!data?.length) {
+    return (
+      <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-10 text-center">
+        <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/25">
+          <Sparkles className="h-5 w-5 text-accent-foreground" />
+        </span>
+        <h2 className="mt-4 text-base font-semibold text-foreground">
+          {kind === "supply" ? "No properties listed yet" : "No search requests yet"}
+        </h2>
+        <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
+          Be the first to post — it is completely free.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-10 text-center">
-      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/25">
-        <Sparkles className="h-5 w-5 text-accent-foreground" />
-      </span>
-      <h2 className="mt-4 text-base font-semibold text-foreground">{title}</h2>
-      <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">{body}</p>
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {data.map((listing) => (
+        <ListingCard key={listing.id} listing={listing} />
+      ))}
     </div>
   );
 }

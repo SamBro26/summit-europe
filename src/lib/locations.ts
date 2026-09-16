@@ -62,6 +62,41 @@ export const COUNTRIES: Country[] = [
 
 export const getCountry = (code: string) => COUNTRIES.find((c) => c.code === code);
 
+export const DIAL_CODES: Record<string, string> = {
+  FR: "+33",
+  DE: "+49",
+  ES: "+34",
+  IT: "+39",
+  BE: "+32",
+  NL: "+31",
+  IE: "+353",
+  PT: "+351",
+  AT: "+43",
+  GR: "+30",
+  CY: "+357",
+  EE: "+372",
+  FI: "+358",
+  LV: "+371",
+  LT: "+370",
+  LU: "+352",
+  MT: "+356",
+  SK: "+421",
+  SI: "+386",
+  HR: "+385",
+  BG: "+359",
+  AD: "+376",
+  MC: "+377",
+  SM: "+378",
+  VA: "+379",
+};
+
+export const DIAL_OPTIONS = COUNTRIES.map((c) => ({
+  code: c.code,
+  flag: c.flag,
+  name: c.name,
+  dial: DIAL_CODES[c.code] ?? "+",
+}));
+
 // Smart placeholder hierarchy for countries without curated data.
 export const regionsFor = (code: string): Region[] => {
   const country = getCountry(code);
