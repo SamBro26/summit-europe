@@ -14,7 +14,200 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      listing_likes: {
+        Row: {
+          created_at: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          listing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_likes_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_photos: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          sort_order: number
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          sort_order?: number
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          sort_order?: number
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_photos_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_ratings: {
+        Row: {
+          created_at: string
+          listing_id: string
+          stars: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          listing_id: string
+          stars: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          listing_id?: string
+          stars?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_ratings_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          author_id: string
+          city: string
+          country_code: string
+          created_at: string
+          description: string | null
+          id: string
+          kind: Database["public"]["Enums"]["ad_kind"]
+          phone: string | null
+          price_eur: number | null
+          property_type: Database["public"]["Enums"]["property_type"]
+          region: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          city: string
+          country_code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["ad_kind"]
+          phone?: string | null
+          price_eur?: number | null
+          property_type: Database["public"]["Enums"]["property_type"]
+          region: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          city?: string
+          country_code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["ad_kind"]
+          phone?: string | null
+          price_eur?: number | null
+          property_type?: Database["public"]["Enums"]["property_type"]
+          region?: string
+          transaction_type?: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          listing_id: string
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          listing_id: string
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          listing_id?: string
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +216,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      ad_kind: "supply" | "demand"
+      property_type:
+        | "apartment"
+        | "house_villa"
+        | "chalet"
+        | "commercial_shop"
+        | "building_land"
+        | "agricultural_land"
+      transaction_type: "sale" | "rent"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +351,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      ad_kind: ["supply", "demand"],
+      property_type: [
+        "apartment",
+        "house_villa",
+        "chalet",
+        "commercial_shop",
+        "building_land",
+        "agricultural_land",
+      ],
+      transaction_type: ["sale", "rent"],
+    },
   },
 } as const
