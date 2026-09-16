@@ -12,6 +12,7 @@ import { getCountry } from "@/lib/locations";
 import { StarRating } from "@/components/StarRating";
 import { ContactActions } from "@/components/ContactActions";
 import { ChatPanel } from "@/components/ChatPanel";
+import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -121,7 +122,7 @@ function ListingDetails() {
   const cover = photos[active]?.storage_path;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
       <header className="bg-brand-gradient px-5 pt-6 pb-16 sm:px-10">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <Link
