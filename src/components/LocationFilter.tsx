@@ -29,7 +29,7 @@ export function LocationFilter({
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label="Country" icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
-          value={value.country ?? undefined}
+          {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
           <SelectTrigger className="w-full">
@@ -53,7 +53,7 @@ export function LocationFilter({
       >
         <Select
           disabled={!value.country}
-          value={value.region ?? undefined}
+          {...(value.region ? { value: value.region } : {})}
           onValueChange={(region) => onChange({ ...value, region, city: null })}
         >
           <SelectTrigger className="w-full">
@@ -76,7 +76,7 @@ export function LocationFilter({
       >
         <Select
           disabled={!value.region}
-          value={value.city ?? undefined}
+          {...(value.city ? { value: value.city } : {})}
           onValueChange={(city) => onChange({ ...value, city })}
         >
           <SelectTrigger className="w-full">

@@ -1,24 +1,59 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { SplashScreen } from "@/components/SplashScreen";
+import { LanguageSelect } from "@/components/LanguageSelect";
+import { HomeScreen } from "@/components/HomeScreen";
+import { useLanguagePreference } from "@/lib/preferences";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "FindMe RealEstate — Property across the Eurozone" },
+      {
+        name: "description",
+        content:
+          "Browse offered properties and search requests across every Eurozone country, in your own language.",
+      },
+      { property: "og:title", content: "FindMe RealEstate — Property across the Eurozone" },
+      {
+        property: "og:description",
+        content:
+          "Browse offered properties and search requests across every Eurozone country, in your own language.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+type Stage = "splash" | "language" | "home";
+
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+  const { hydrated, language, setLanguage } = useLanguagePreference();
+  const [splashDone, setSplashDone] = useState(false);
+  const [changing, setChanging] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setSplashDone(true), 2400);
+    return () => clearTimeout(t);
+  }, []);
+
+  const stage: Stage = !hydrated || !splashDone ? "splash" : changing || !language ? "language" : "home";
+
+  if (stage === "splash") return <SplashScreen />;
+
+  if (stage === "language")
+    return (
+      <LanguageSelect
+        current={language}
+        onConfirm={(code) => {
+          setLanguage(code);
+          setChanging(false);
+        }}
+        {...(language ? { onCancel: () => setChanging(false) } : {})}
       />
-    </div>
-  );
+    );
+
+  return <HomeScreen languageCode={language} onChangeLanguage={() => setChanging(true)} />;
 }
