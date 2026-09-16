@@ -1,7 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Globe, Home, LogOut, MessageSquare, Plus, Search, Sparkles } from "lucide-react";
+import {
+  Globe,
+  Home,
+  LogOut,
+  MessageSquare,
+  Plus,
+  Search,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +33,7 @@ export function HomeScreen({
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [location, setLocation] = useState<LocationValue>({
     country: null,
     region: null,
@@ -79,6 +90,19 @@ export function HomeScreen({
                   <span className="hidden sm:inline">Inbox</span>
                 </Link>
               </Button>
+              {isAdmin && (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                >
+                  <Link to="/admin">
+                    <ShieldCheck className="h-4 w-4" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </Link>
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"

@@ -13,6 +13,8 @@ import { StarRating } from "@/components/StarRating";
 import { ContactActions } from "@/components/ContactActions";
 import { ChatPanel } from "@/components/ChatPanel";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
+import { ReportListingDialog } from "@/components/ReportListingDialog";
+import { AdminListingActions } from "@/components/AdminListingActions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -246,6 +248,11 @@ function ListingDetails() {
               This advertiser has not shared a phone number — use in-app messaging.
             </p>
           )}
+        </section>
+
+        <section className="mt-4 flex flex-wrap items-center justify-between gap-2">
+          <ReportListingDialog listingId={id} />
+          <AdminListingActions listingId={id} authorId={listing.author_id} />
         </section>
       </main>
 
