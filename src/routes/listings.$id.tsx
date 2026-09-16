@@ -257,6 +257,8 @@ function ListingDetails() {
           onClose={() => setChatOpen(false)}
         />
       )}
+
+      <AdBanner />
     </div>
   );
 }
