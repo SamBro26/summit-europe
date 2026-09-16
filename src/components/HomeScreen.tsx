@@ -1,7 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Globe, Home, LogOut, MessageSquare, Plus, Search, Sparkles } from "lucide-react";
+import {
+  Globe,
+  Home,
+  LogOut,
+  MessageSquare,
+  Plus,
+  Search,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
