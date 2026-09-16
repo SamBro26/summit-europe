@@ -30,5 +30,5 @@ export const LANGUAGES: Language[] = [
   { code: "hr", name: "Croatian", native: "Hrvatski", flag: "🇭🇷" },
 ];
 
-export const getLanguage = (code: string | null) =>
-  LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0];
+export const getLanguage = (code: string | null): Language =>
+  LANGUAGES.find((l) => l.code === code) ?? (LANGUAGES[0] as Language);
