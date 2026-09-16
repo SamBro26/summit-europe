@@ -80,7 +80,7 @@ export function ChatPanel({
   }
 
   return (
-    <div className="shadow-soft fixed right-4 bottom-4 z-50 flex h-[26rem] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card">
+    <div className="shadow-soft fixed right-4 bottom-[74px] z-50 flex h-[26rem] max-h-[70vh] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card sm:bottom-[114px]">
       <header className="flex items-center justify-between border-b border-border px-4 py-3">
         <span className="text-sm font-semibold">Message the advertiser</span>
         <button onClick={onClose} aria-label="Close chat">
