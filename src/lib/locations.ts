@@ -24,7 +24,7 @@ const flagOf = (code: string) =>
 export const localizedLocationName = (
   names: LocationNames,
   language: string | null | undefined,
-) => (language ? names[language] : undefined) ?? names.en ?? "";
+) => (language ? names[language] : undefined) ?? names["en"] ?? "";
 
 export const COUNTRIES: Country[] = LOCATION_DATA.map((c) => ({
   code: c.iso_3166_1,
