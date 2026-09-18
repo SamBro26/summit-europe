@@ -22,7 +22,7 @@ type Region = { names: LocationNames; municipalities?: Municipality[] };
 type Country = { iso_3166_1: string; names: LocationNames; regions?: Region[] };
 
 const localizedName = (names: LocationNames, language: string | null) =>
-  (language ? names[language] : undefined) || names.en || "";
+  (language ? names[language] : undefined) || names["en"] || "";
 
 export function LocationFilter({
   value,
