@@ -1,5 +1,6 @@
 import { MessageSquare, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 
 const digitsOnly = (phone: string) => phone.replace(/[^\d]/g, "");
 
@@ -11,15 +12,16 @@ export function ContactActions({
   onMessage: () => void;
 }) {
   const wa = phone ? digitsOnly(phone) : "";
+  const t = useT();
 
   return (
     <div className="grid gap-2 sm:grid-cols-3">
       <Button onClick={onMessage} className="gap-2">
-        <MessageSquare className="h-4 w-4" /> Send message
+        <MessageSquare className="h-4 w-4" /> {t("listing.sendMessage")}
       </Button>
       <Button asChild variant="outline" className="gap-2" disabled={!phone}>
         <a href={phone ? `tel:${digitsOnly(phone)}` : undefined} aria-disabled={!phone}>
-          <Phone className="h-4 w-4" /> Call
+          <Phone className="h-4 w-4" /> {t("listing.call")}
         </a>
       </Button>
       <Button asChild variant="outline" className="gap-2" disabled={!wa}>

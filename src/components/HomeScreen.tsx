@@ -23,6 +23,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { getCountry } from "@/lib/locations";
 import { getLanguage } from "@/lib/languages";
+import { useT } from "@/lib/i18n";
 
 export function HomeScreen({
   languageCode,
@@ -32,6 +33,7 @@ export function HomeScreen({
   onChangeLanguage: () => void;
 }) {
   const navigate = useNavigate();
+  const t = useT();
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
   const [location, setLocation] = useState<LocationValue>({
@@ -87,7 +89,7 @@ export function HomeScreen({
               >
                 <Link to="/inbox">
                   <MessageSquare className="h-4 w-4" />
-                  <span className="hidden sm:inline">Inbox</span>
+                  <span className="hidden sm:inline">{t("common.inbox")}</span>
                 </Link>
               </Button>
               {isAdmin && (
@@ -99,7 +101,7 @@ export function HomeScreen({
                 >
                   <Link to="/admin">
                     <ShieldCheck className="h-4 w-4" />
-                    <span className="hidden sm:inline">Admin</span>
+                    <span className="hidden sm:inline">{t("common.admin")}</span>
                   </Link>
                 </Button>
               )}
@@ -110,7 +112,7 @@ export function HomeScreen({
                 className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Sign out</span>
+                <span className="hidden sm:inline">{t("common.signOut")}</span>
               </Button>
               </>
             ) : (
@@ -120,7 +122,7 @@ export function HomeScreen({
                 size="sm"
                 className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                <Link to="/auth">Sign in</Link>
+                <Link to="/auth">{t("common.signIn")}</Link>
               </Button>
             )}
           </div>
@@ -128,14 +130,12 @@ export function HomeScreen({
 
         <div className="mx-auto mt-10 max-w-5xl">
           <h1 className="text-2xl font-semibold text-primary-foreground sm:text-4xl">
-            Property across the Eurozone, in one place.
+            {t("home.headline")}
           </h1>
-          <p className="mt-2 max-w-xl text-sm text-primary-foreground/75">
-            Start with a country — regions and cities unlock as you go.
-          </p>
+          <p className="mt-2 max-w-xl text-sm text-primary-foreground/75">{t("home.sub")}</p>
           <Button asChild className="mt-6 gap-2">
             <Link to="/post">
-              <Plus className="h-4 w-4" /> Post a free ad
+              <Plus className="h-4 w-4" /> {t("home.post")}
             </Link>
           </Button>
         </div>
@@ -148,22 +148,23 @@ export function HomeScreen({
             <p className="text-sm text-muted-foreground">
               {scope ? (
                 <>
-                  Searching in <span className="font-medium text-foreground">{scope}</span>
+                  {t("home.searchingIn")}{" "}
+                  <span className="font-medium text-foreground">{scope}</span>
                 </>
               ) : (
-                "Select a country to begin — it is required."
+                t("home.selectCountryFirst")
               )}
             </p>
             <Button disabled={!location.country} onClick={() => setApplied(location)} className="gap-2">
-              <Search className="h-4 w-4" /> Search
+              <Search className="h-4 w-4" /> {t("common.search")}
             </Button>
           </div>
         </section>
 
         <Tabs defaultValue="offers" className="mt-8">
           <TabsList className="grid w-full grid-cols-2 sm:w-auto sm:inline-grid">
-            <TabsTrigger value="offers">Offered Properties</TabsTrigger>
-            <TabsTrigger value="requests">Search Requests</TabsTrigger>
+            <TabsTrigger value="offers">{t("home.tabs.offers")}</TabsTrigger>
+            <TabsTrigger value="requests">{t("home.tabs.requests")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="offers" className="mt-5">
@@ -188,6 +189,7 @@ function ListingGrid({
   kind: "supply" | "demand";
   filter: LocationValue;
 }) {
+  const t = useT();
   const { data, isLoading } = useQuery({
     queryKey: ["listings", kind, filter.country, filter.region, filter.city],
     queryFn: () =>
@@ -200,7 +202,9 @@ function ListingGrid({
   });
 
   if (isLoading) {
-    return <p className="py-10 text-center text-sm text-muted-foreground">Loading ads…</p>;
+    return (
+      <p className="py-10 text-center text-sm text-muted-foreground">{t("home.loadingAds")}</p>
+    );
   }
 
   if (!data?.length) {
@@ -210,10 +214,10 @@ function ListingGrid({
           <Sparkles className="h-5 w-5 text-accent-foreground" />
         </span>
         <h2 className="mt-4 text-base font-semibold text-foreground">
-          {kind === "supply" ? "No properties listed yet" : "No search requests yet"}
+          {kind === "supply" ? t("home.emptyOffers") : t("home.emptyRequests")}
         </h2>
         <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
-          Be the first to post — it is completely free.
+          {t("home.emptyHint")}
         </p>
       </div>
     );
