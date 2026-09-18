@@ -184,7 +184,7 @@ function InboxPage() {
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">
-                          {nameById.get(thread.otherId) ?? "FindMe user"}
+                          {nameById.get(thread.otherId) ?? t("common.user")}
                         </span>
                         <span className="shrink-0 text-xs text-muted-foreground">
                           {new Date(thread.last.created_at).toLocaleDateString()}
