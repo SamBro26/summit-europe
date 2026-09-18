@@ -211,12 +211,12 @@ function PostWizard() {
                   {t("post.transaction")}
                 </Label>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {TRANSACTION_TYPES.map((t) => (
+                  {TRANSACTION_TYPES.map((transactionOption) => (
                     <Choice
-                      key={t.value}
-                      label={t(`tx.${t.value}` as TranslationKey)}
-                      active={transaction === t.value}
-                      onClick={() => setTransaction(t.value)}
+                      key={transactionOption.value}
+                      label={t(`tx.${transactionOption.value}` as TranslationKey)}
+                      active={transaction === transactionOption.value}
+                      onClick={() => setTransaction(transactionOption.value)}
                     />
                   ))}
                 </div>
@@ -228,9 +228,7 @@ function PostWizard() {
             <div className="space-y-4">
               <LocationFilter value={location} onChange={setLocation} />
               <p className="text-sm text-muted-foreground">
-                {locationComplete
-                  ? "Location set. It cannot be changed after publishing."
-                  : "Select country, region and city to continue."}
+                {locationComplete ? t("post.locationSet") : t("post.locationPrompt")}
               </p>
             </div>
           )}
@@ -238,7 +236,7 @@ function PostWizard() {
           {step === 3 && (
             <div className="space-y-5">
               <div className="space-y-1.5">
-                <Label htmlFor="price">Price (€) — optional</Label>
+                <Label htmlFor="price">{t("post.priceOptional")}</Label>
                 <Input
                   id="price"
                   inputMode="decimal"
@@ -249,18 +247,18 @@ function PostWizard() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="description">Description — optional</Label>
+                <Label htmlFor="description">{t("post.descriptionOptional")}</Label>
                 <Textarea
                   id="description"
                   rows={5}
                   maxLength={4000}
-                  placeholder="Tell people about the property or what you are looking for."
+                  placeholder={t("post.descriptionPlaceholder")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
-                <Label>Phone number — optional</Label>
+                <Label>{t("post.phoneOptional")}</Label>
                 <PhoneInput value={phone} onChange={setPhone} defaultCountry={location.country} />
               </div>
             </div>
@@ -270,8 +268,8 @@ function PostWizard() {
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
                 {kind === "supply"
-                  ? "At least one photo is required for property offers."
-                  : "Photos are optional for search requests."}
+                  ? t("post.photosRequired")
+                  : t("post.photosOptional")}
               </p>
               <PhotoUploader
                 paths={photos}
@@ -288,11 +286,11 @@ function PostWizard() {
               disabled={step === 0}
               onClick={() => setStep((s) => Math.max(0, s - 1))}
             >
-              Back
+              {t("common.back")}
             </Button>
             {step < STEPS.length - 1 ? (
               <Button disabled={!canNext} onClick={() => setStep((s) => s + 1)} className="gap-2">
-                Next <ArrowRight className="h-4 w-4" />
+                {t("post.next")} <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
               <Button
@@ -300,7 +298,7 @@ function PostWizard() {
                 onClick={publish}
                 className="gap-2"
               >
-                <Check className="h-4 w-4" /> Publish ad
+                <Check className="h-4 w-4" /> {t("post.publish")}
               </Button>
             )}
           </div>

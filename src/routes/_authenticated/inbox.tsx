@@ -169,25 +169,25 @@ function InboxPage() {
           )}
 
           <ul className="divide-y divide-border">
-            {threads.map((t) => {
-              const listing: any = listingById.get(t.listingId);
+            {threads.map((thread) => {
+              const listing: any = listingById.get(thread.listingId);
               const country = listing ? getCountry(listing.country_code) : undefined;
               return (
-                <li key={t.key}>
+                <li key={thread.key}>
                   <button
-                    onClick={() => setOpen(t)}
+                    onClick={() => setOpen(thread)}
                     className="hover:bg-secondary/40 flex w-full items-start gap-3 p-4 text-left transition-colors"
                   >
                     <span className="bg-brand-gradient flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-primary-foreground">
-                      {(nameById.get(t.otherId) ?? "?").slice(0, 1).toUpperCase()}
+                      {(nameById.get(thread.otherId) ?? "?").slice(0, 1).toUpperCase()}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">
-                          {nameById.get(t.otherId) ?? "FindMe user"}
+                          {nameById.get(thread.otherId) ?? "FindMe user"}
                         </span>
                         <span className="shrink-0 text-xs text-muted-foreground">
-                          {new Date(t.last.created_at).toLocaleDateString()}
+                          {new Date(thread.last.created_at).toLocaleDateString()}
                         </span>
                       </span>
                       {listing && (
@@ -198,11 +198,11 @@ function InboxPage() {
                         </span>
                       )}
                       <span className="mt-1 block truncate text-sm text-muted-foreground">
-                        {t.last.sender_id === user?.id ? `${t("inbox.you")}: ` : ""}
-                        {t.last.body}
+                        {thread.last.sender_id === user?.id ? `${t("inbox.you")}: ` : ""}
+                        {thread.last.body}
                       </span>
                     </span>
-                    {t.unread > 0 && <Badge className="shrink-0">{t.unread}</Badge>}
+                    {thread.unread > 0 && <Badge className="shrink-0">{thread.unread}</Badge>}
                   </button>
                 </li>
               );
