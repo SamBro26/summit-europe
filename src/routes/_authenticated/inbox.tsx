@@ -54,6 +54,7 @@ type Thread = {
 
 function InboxPage() {
   const t = useT();
+  const loc = useLocationNames();
   const { user } = useAuth();
   const [open, setOpen] = useState<Thread | null>(null);
 

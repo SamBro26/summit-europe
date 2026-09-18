@@ -78,6 +78,7 @@ function AdminPage() {
 
 function AdminDashboard() {
   const t = useT();
+  const loc = useLocationNames();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
 
