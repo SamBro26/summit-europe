@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Building2, Lock, MapPin, Map } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Building2, Lock, Map, MapPin } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,65 +18,55 @@ export type LocationValue = {
 
 type LocationNames = Record<string, string>;
 type Municipality = { names: LocationNames };
-type Region = { names: LocationNames; municipalities?: Municipality[] };
-type Country = { iso_3166_1: string; names: LocationNames; regions?: Region[] };
+type Region = { names: LocationNames; municipalities: Municipality[] };
+type Country = {
+  iso_3166_1: string;
+  names: LocationNames;
+  regions: Region[];
+};
 
 const LOCATION_ASSET_URL = "/euro_multilingual.json";
 
-// Immediate rescue data keeps the controls usable if the public asset cannot load.
-const FALLBACK_GEO_DATA: Country[] = [
-  {
-    iso_3166_1: "FR",
-    names: { en: "France", fr: "France", de: "Frankreich", es: "Francia" },
-    regions: [
-      {
-        names: { en: "Île-de-France", fr: "Île-de-France" },
-        municipalities: [{ names: { en: "Paris", fr: "Paris" } }],
-      },
-      {
-        names: { en: "Provence-Alpes-Côte d'Azur", fr: "Provence-Alpes-Côte d'Azur" },
-        municipalities: [
-          { names: { en: "Marseille", fr: "Marseille" } },
-          { names: { en: "Nice", fr: "Nice" } },
-        ],
-      },
-    ],
-  },
-  {
-    iso_3166_1: "DE",
-    names: { en: "Germany", de: "Deutschland", fr: "Allemagne", es: "Alemania" },
-    regions: [
-      {
-        names: { en: "Bavaria", de: "Bayern", fr: "Bavière" },
-        municipalities: [
-          { names: { en: "Munich", de: "München", fr: "Munich" } },
-          { names: { en: "Nuremberg", de: "Nürnberg", fr: "Nuremberg" } },
-        ],
-      },
-      {
-        names: { en: "Berlin", de: "Berlin" },
-        municipalities: [{ names: { en: "Berlin", de: "Berlin" } }],
-      },
-    ],
-  },
-  {
-    iso_3166_1: "ES",
-    names: { en: "Spain", es: "España", fr: "Espagne", de: "Spanien" },
-    regions: [
-      {
-        names: { en: "Catalonia", es: "Cataluña", ca: "Catalunya" },
-        municipalities: [{ names: { en: "Barcelona", es: "Barcelona" } }],
-      },
-      {
-        names: { en: "Community of Madrid", es: "Comunidad de Madrid" },
-        municipalities: [{ names: { en: "Madrid", es: "Madrid" } }],
-      },
-    ],
-  },
-];
+function isNames(value: unknown): value is LocationNames {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as LocationNames)["en"] === "string"
+  );
+}
 
-const localizedName = (names: LocationNames, language: string | null) =>
-  (language ? names[language] : undefined) || names["en"] || "";
+function isMunicipality(value: unknown): value is Municipality {
+  return typeof value === "object" && value !== null && isNames((value as Municipality).names);
+}
+
+function isRegion(value: unknown): value is Region {
+  if (typeof value !== "object" || value === null) return false;
+  const region = value as Region;
+  return (
+    isNames(region.names) &&
+    Array.isArray(region.municipalities) &&
+    region.municipalities.every(isMunicipality)
+  );
+}
+
+function isCountry(value: unknown): value is Country {
+  if (typeof value !== "object" || value === null) return false;
+  const country = value as Country;
+  return (
+    typeof country.iso_3166_1 === "string" &&
+    isNames(country.names) &&
+    Array.isArray(country.regions) &&
+    country.regions.every(isRegion)
+  );
+}
+
+function localizedName(names: LocationNames, language: string | null | undefined) {
+  return (language ? names[language] : undefined) || names["en"] || "";
+}
+
+function canonicalName(names: LocationNames) {
+  return names["en"] || "";
+}
 
 export function LocationFilter({
   value,
@@ -86,8 +76,9 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<Country[]>(() => FALLBACK_GEO_DATA);
-  const [dataRevision, setDataRevision] = useState(0);
+  const [geoData, setGeoData] = useState<Country[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -98,23 +89,24 @@ export function LocationFilter({
           signal: controller.signal,
           cache: "no-store",
         });
-        if (!response.ok) throw new Error(`Location data request failed: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Location data request failed with status ${response.status}`);
+        }
 
-        const data: unknown = await response.json();
-        if (!Array.isArray(data) || data.length === 0) {
-          throw new Error("Location data is not a non-empty array");
+        const parsed: unknown = await response.json();
+        if (!Array.isArray(parsed) || parsed.length === 0 || !parsed.every(isCountry)) {
+          throw new Error("Location data has an invalid structure");
         }
-        setGeoData([...(data as Country[])]);
-        setDataRevision((revision) => revision + 1);
+
+        setGeoData(parsed);
+        setLoadFailed(false);
       } catch (error) {
-        if (!controller.signal.aborted) {
-          console.error(
-            `Unable to load location data from ${LOCATION_ASSET_URL}; using fallback data`,
-            error,
-          );
-          setGeoData([...FALLBACK_GEO_DATA]);
-          setDataRevision((revision) => revision + 1);
-        }
+        if (controller.signal.aborted) return;
+        console.error(`Unable to load location data from ${LOCATION_ASSET_URL}`, error);
+        setGeoData([]);
+        setLoadFailed(true);
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     }
 
@@ -124,38 +116,43 @@ export function LocationFilter({
 
   const countries = useMemo(
     () =>
-      geoData.map((country) => ({
-        value: country.iso_3166_1,
-        flag: flagOf(country.iso_3166_1),
-        label: localizedName(country.names, language),
-      })).sort((a, b) => a.label.localeCompare(b.label, language ?? "en")),
-    [dataRevision, geoData, language],
+      geoData
+        .map((country) => ({
+          source: country,
+          value: country.iso_3166_1,
+          label: localizedName(country.names, language),
+        }))
+        .sort((left, right) => left.label.localeCompare(right.label, language ?? "en")),
+    [geoData, language],
   );
 
   const selectedCountry = useMemo(
     () => geoData.find((country) => country.iso_3166_1 === value.country),
-    [dataRevision, geoData, value.country],
+    [geoData, value.country],
   );
 
   const regions = useMemo(
     () =>
       (selectedCountry?.regions ?? []).map((region) => ({
         source: region,
-        value: localizedName(region.names, "en"),
+        value: canonicalName(region.names),
         label: localizedName(region.names, language),
       })),
     [language, selectedCountry],
   );
 
   const selectedRegion = useMemo(
-    () => regions.find((region) => region.value === value.region)?.source,
-    [regions, value.region],
+    () =>
+      (selectedCountry?.regions ?? []).find(
+        (region) => canonicalName(region.names) === value.region,
+      ),
+    [selectedCountry, value.region],
   );
 
   const cities = useMemo(
     () =>
       (selectedRegion?.municipalities ?? []).map((municipality) => ({
-        value: localizedName(municipality.names, "en"),
+        value: canonicalName(municipality.names),
         label: localizedName(municipality.names, language),
       })),
     [language, selectedRegion],
@@ -166,36 +163,47 @@ export function LocationFilter({
   const cityLabel = cities.find((city) => city.value === value.city)?.label;
 
   useEffect(() => {
-    if (geoData.length === 0) return;
-    if (value.region && !regions.some((region) => region.value === value.region)) {
+    if (isLoading || loadFailed) return;
+
+    if (value.country && !selectedCountry) {
+      onChange({ country: null, region: null, city: null });
+      return;
+    }
+    if (value.region && !selectedRegion) {
       onChange({ country: value.country, region: null, city: null });
       return;
     }
     if (value.city && !cities.some((city) => city.value === value.city)) {
       onChange({ ...value, city: null });
     }
-  }, [cities, geoData.length, onChange, regions, value]);
+  }, [cities, isLoading, loadFailed, onChange, selectedCountry, selectedRegion, value]);
+
+  const unavailable = isLoading || loadFailed || geoData.length === 0;
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
-          key={`country-${language ?? "en"}-${dataRevision}`}
+          key={`country-${language}-${geoData.length}`}
+          disabled={unavailable}
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder={t("filter.selectCountry")}>
               {countryLabel ? (
-                <span><span className="mr-2">{flagOf(value.country ?? "")}</span>{countryLabel}</span>
+                <span>
+                  <span className="mr-2">{flagOf(value.country ?? "")}</span>
+                  {countryLabel}
+                </span>
               ) : undefined}
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {countries.map((c) => (
-              <SelectItem key={c.value} value={c.value}>
-                <span className="mr-2">{c.flag}</span>
-                {c.label}
+            {countries.map((country) => (
+              <SelectItem key={country.value} value={country.value}>
+                <span className="mr-2">{flagOf(country.value)}</span>
+                {country.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -205,23 +213,25 @@ export function LocationFilter({
       <Field
         label={t("filter.region")}
         icon={<MapPin className="h-3.5 w-3.5" />}
-        locked={!value.country}
+        locked={!selectedCountry}
       >
         <Select
-          key={`region-${language ?? "en"}-${value.country ?? "none"}-${dataRevision}`}
-          disabled={!value.country}
+          key={`region-${language}-${value.country ?? "none"}-${regions.length}`}
+          disabled={!selectedCountry}
           {...(value.region ? { value: value.region } : {})}
-          onValueChange={(region) => onChange({ ...value, region, city: null })}
+          onValueChange={(region) => onChange({ country: value.country, region, city: null })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={value.country ? t("filter.selectRegion") : t("filter.countryFirst")}>
+            <SelectValue
+              placeholder={selectedCountry ? t("filter.selectRegion") : t("filter.countryFirst")}
+            >
               {regionLabel}
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {regions.map((r) => (
-              <SelectItem key={r.value} value={r.value}>
-                {r.label}
+            {regions.map((region) => (
+              <SelectItem key={region.value} value={region.value}>
+                {region.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -231,23 +241,25 @@ export function LocationFilter({
       <Field
         label={t("filter.city")}
         icon={<Building2 className="h-3.5 w-3.5" />}
-        locked={!value.region}
+        locked={!selectedRegion}
       >
         <Select
-          key={`city-${language ?? "en"}-${value.country ?? "none"}-${value.region ?? "none"}-${dataRevision}`}
-          disabled={!value.region}
+          key={`city-${language}-${value.country ?? "none"}-${value.region ?? "none"}-${cities.length}`}
+          disabled={!selectedRegion}
           {...(value.city ? { value: value.city } : {})}
           onValueChange={(city) => onChange({ ...value, city })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={value.region ? t("filter.selectCity") : t("filter.regionFirst")}>
+            <SelectValue
+              placeholder={selectedRegion ? t("filter.selectCity") : t("filter.regionFirst")}
+            >
               {cityLabel}
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {cities.map((c) => (
-              <SelectItem key={c.value} value={c.value}>
-                {c.label}
+            {cities.map((city) => (
+              <SelectItem key={city.value} value={city.value}>
+                {city.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -270,9 +282,9 @@ function Field({
   children,
 }: {
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   locked: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="space-y-1.5">
