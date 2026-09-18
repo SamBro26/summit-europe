@@ -75,7 +75,7 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
           <Flag className="h-4 w-4" />
-          {t("listing.report")} <span dir="rtl">(إبلاغ)</span>
+          {t("listing.report")}
         </Button>
       </DialogTrigger>
       <DialogContent>
