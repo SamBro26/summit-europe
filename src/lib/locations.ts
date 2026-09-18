@@ -1,66 +1,103 @@
+import divisions from "@/data/euroDivisions.json";
+import { useI18n } from "@/lib/i18n";
+
+type Names = Record<string, string>;
+type RawMunicipality = { names: Names };
+type RawRegion = { names: Names; municipalities?: RawMunicipality[] };
+type RawCountry = { iso_3166_1: string; names: Names; regions?: RawRegion[] };
+
+const DATA = divisions as unknown as RawCountry[];
+
 export type Region = { name: string; cities: string[] };
 export type Country = { code: string; name: string; flag: string; regions: Region[] };
 
-// Phase 1: detailed data for FR / DE / ES, smart placeholders elsewhere.
-export const COUNTRIES: Country[] = [
-  {
-    code: "FR",
-    name: "France",
-    flag: "🇫🇷",
-    regions: [
-      { name: "Île-de-France", cities: ["Paris", "Versailles", "Boulogne-Billancourt"] },
-      { name: "Auvergne-Rhône-Alpes", cities: ["Lyon", "Grenoble", "Annecy"] },
-      { name: "Provence-Alpes-Côte d'Azur", cities: ["Marseille", "Nice", "Aix-en-Provence"] },
-      { name: "Occitanie", cities: ["Toulouse", "Montpellier", "Nîmes"] },
-    ],
-  },
-  {
-    code: "DE",
-    name: "Germany",
-    flag: "🇩🇪",
-    regions: [
-      { name: "Bavaria", cities: ["Munich", "Nuremberg", "Augsburg"] },
-      { name: "Berlin", cities: ["Berlin", "Potsdam"] },
-      { name: "North Rhine-Westphalia", cities: ["Cologne", "Düsseldorf", "Dortmund"] },
-      { name: "Hamburg", cities: ["Hamburg"] },
-    ],
-  },
-  {
-    code: "ES",
-    name: "Spain",
-    flag: "🇪🇸",
-    regions: [
-      { name: "Catalonia", cities: ["Barcelona", "Girona", "Tarragona"] },
-      { name: "Community of Madrid", cities: ["Madrid", "Alcalá de Henares"] },
-      { name: "Andalusia", cities: ["Seville", "Málaga", "Granada"] },
-      { name: "Valencian Community", cities: ["Valencia", "Alicante"] },
-    ],
-  },
-  { code: "IT", name: "Italy", flag: "🇮🇹", regions: [] },
-  { code: "BE", name: "Belgium", flag: "🇧🇪", regions: [] },
-  { code: "NL", name: "Netherlands", flag: "🇳🇱", regions: [] },
-  { code: "IE", name: "Ireland", flag: "🇮🇪", regions: [] },
-  { code: "PT", name: "Portugal", flag: "🇵🇹", regions: [] },
-  { code: "AT", name: "Austria", flag: "🇦🇹", regions: [] },
-  { code: "GR", name: "Greece", flag: "🇬🇷", regions: [] },
-  { code: "CY", name: "Cyprus", flag: "🇨🇾", regions: [] },
-  { code: "EE", name: "Estonia", flag: "🇪🇪", regions: [] },
-  { code: "FI", name: "Finland", flag: "🇫🇮", regions: [] },
-  { code: "LV", name: "Latvia", flag: "🇱🇻", regions: [] },
-  { code: "LT", name: "Lithuania", flag: "🇱🇹", regions: [] },
-  { code: "LU", name: "Luxembourg", flag: "🇱🇺", regions: [] },
-  { code: "MT", name: "Malta", flag: "🇲🇹", regions: [] },
-  { code: "SK", name: "Slovakia", flag: "🇸🇰", regions: [] },
-  { code: "SI", name: "Slovenia", flag: "🇸🇮", regions: [] },
-  { code: "HR", name: "Croatia", flag: "🇭🇷", regions: [] },
-  { code: "BG", name: "Bulgaria", flag: "🇧🇬", regions: [] },
-  { code: "AD", name: "Andorra", flag: "🇦🇩", regions: [] },
-  { code: "MC", name: "Monaco", flag: "🇲🇨", regions: [] },
-  { code: "SM", name: "San Marino", flag: "🇸🇲", regions: [] },
-  { code: "VA", name: "Vatican City", flag: "🇻🇦", regions: [] },
-];
+const flagOf = (code: string) =>
+  code
+    .toUpperCase()
+    .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
+
+const pick = (names: Names, lang: string | null | undefined) =>
+  (lang ? names[lang] : undefined) ?? names["en"] ?? Object.values(names)[0] ?? "";
+
+export const COUNTRIES: Country[] = DATA.map((c) => ({
+  code: c.iso_3166_1,
+  name: pick(c.names, "en"),
+  flag: flagOf(c.iso_3166_1),
+  regions: (c.regions ?? []).map((r) => ({
+    name: pick(r.names, "en"),
+    cities: (r.municipalities ?? []).map((m) => pick(m.names, "en")),
+  })),
+}));
 
 export const getCountry = (code: string) => COUNTRIES.find((c) => c.code === code);
+
+const rawCountry = (code: string) => DATA.find((c) => c.iso_3166_1 === code);
+const rawRegion = (code: string, regionEn: string) =>
+  (rawCountry(code)?.regions ?? []).find((r) => pick(r.names, "en") === regionEn);
+
+/** Localized display names — stored values stay canonical English. */
+export const countryName = (code: string | null | undefined, lang?: string | null) => {
+  if (!code) return "";
+  const c = rawCountry(code);
+  return c ? pick(c.names, lang) : code;
+};
+
+export const regionName = (
+  code: string | null | undefined,
+  regionEn: string | null | undefined,
+  lang?: string | null,
+) => {
+  if (!regionEn) return "";
+  if (!code) return regionEn;
+  const r = rawRegion(code, regionEn);
+  return r ? pick(r.names, lang) : regionEn;
+};
+
+export const cityName = (
+  code: string | null | undefined,
+  regionEn: string | null | undefined,
+  cityEn: string | null | undefined,
+  lang?: string | null,
+) => {
+  if (!cityEn) return "";
+  if (!code || !regionEn) return cityEn;
+  const m = (rawRegion(code, regionEn)?.municipalities ?? []).find(
+    (x) => pick(x.names, "en") === cityEn,
+  );
+  return m ? pick(m.names, lang) : cityEn;
+};
+
+/** Hook that re-renders with the active app language. */
+export function useLocationNames() {
+  const { language } = useI18n();
+  return {
+    language,
+    countryName: (code: string | null | undefined) => countryName(code, language),
+    regionName: (code: string | null | undefined, region: string | null | undefined) =>
+      regionName(code, region, language),
+    cityName: (
+      code: string | null | undefined,
+      region: string | null | undefined,
+      city: string | null | undefined,
+    ) => cityName(code, region, city, language),
+    countryOptions: COUNTRIES.map((c) => ({
+      code: c.code,
+      flag: c.flag,
+      label: countryName(c.code, language),
+    })).sort((a, b) => a.label.localeCompare(b.label)),
+    regionOptions: (code: string | null | undefined) =>
+      code
+        ? regionsFor(code).map((r) => ({ value: r.name, label: regionName(code, r.name, language) }))
+        : [],
+    cityOptions: (code: string | null | undefined, region: string | null | undefined) =>
+      code && region
+        ? (regionsFor(code).find((r) => r.name === region)?.cities ?? []).map((city) => ({
+            value: city,
+            label: cityName(code, region, city, language),
+          }))
+        : [],
+  };
+}
 
 export const DIAL_CODES: Record<string, string> = {
   FR: "+33",
@@ -97,7 +134,7 @@ export const DIAL_OPTIONS = COUNTRIES.map((c) => ({
   dial: DIAL_CODES[c.code] ?? "+",
 }));
 
-// Smart placeholder hierarchy for countries without curated data.
+/** Regions from the dataset, with a smart placeholder when a country has none. */
 export const regionsFor = (code: string): Region[] => {
   const country = getCountry(code);
   if (!country) return [];
