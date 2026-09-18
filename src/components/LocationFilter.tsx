@@ -186,7 +186,7 @@ export function LocationFilter({
         <Select
           key={`country-${language}-${geoData.length}`}
           disabled={unavailable}
-          value={value.country ?? undefined}
+          {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
           <SelectTrigger className="w-full">
@@ -218,7 +218,7 @@ export function LocationFilter({
         <Select
           key={`region-${language}-${value.country ?? "none"}-${regions.length}`}
           disabled={!selectedCountry}
-          value={value.region ?? undefined}
+          {...(value.region ? { value: value.region } : {})}
           onValueChange={(region) => onChange({ country: value.country, region, city: null })}
         >
           <SelectTrigger className="w-full">
@@ -246,7 +246,7 @@ export function LocationFilter({
         <Select
           key={`city-${language}-${value.country ?? "none"}-${value.region ?? "none"}-${cities.length}`}
           disabled={!selectedRegion}
-          value={value.city ?? undefined}
+          {...(value.city ? { value: value.city } : {})}
           onValueChange={(city) => onChange({ ...value, city })}
         >
           <SelectTrigger className="w-full">
