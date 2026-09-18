@@ -40,10 +40,10 @@ export function LocationFilter({
             <SelectValue placeholder={t("filter.selectCountry")} />
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {COUNTRIES.map((c) => (
+            {countries.map((c) => (
               <SelectItem key={c.code} value={c.code}>
                 <span className="mr-2">{c.flag}</span>
-                {c.name}
+                {c.label}
               </SelectItem>
             ))}
           </SelectContent>
