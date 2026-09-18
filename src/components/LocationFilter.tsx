@@ -1,9 +1,5 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Building2, Lock, MapPin, Map } from "lucide-react";
-import {
-  LOCATION_DATA,
-  localizedLocationName,
-} from "@/lib/locations";
 import {
   Select,
   SelectContent,
@@ -20,6 +16,14 @@ export type LocationValue = {
   city: string | null;
 };
 
+type LocationNames = Record<string, string>;
+type Municipality = { names: LocationNames };
+type Region = { names: LocationNames; municipalities?: Municipality[] };
+type Country = { iso_3166_1: string; names: LocationNames; regions?: Region[] };
+
+const localizedName = (names: LocationNames, language: string | null) =>
+  (language ? names[language] : undefined) || names["en"] || "";
+
 export function LocationFilter({
   value,
   onChange,
@@ -28,28 +32,51 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
+  const [geoData, setGeoData] = useState<Country[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadLocations() {
+      try {
+        const response = await fetch("/euro_multilingual.json", {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`Location data request failed: ${response.status}`);
+
+        const data: unknown = await response.json();
+        if (!Array.isArray(data)) throw new Error("Location data is not an array");
+        setGeoData(data as Country[]);
+      } catch (error) {
+        if (!controller.signal.aborted) console.error("Unable to load location data", error);
+      }
+    }
+
+    void loadLocations();
+    return () => controller.abort();
+  }, []);
 
   const countries = useMemo(
     () =>
-      LOCATION_DATA.map((country) => ({
+      geoData.map((country) => ({
         value: country.iso_3166_1,
         flag: flagOf(country.iso_3166_1),
-        label: localizedLocationName(country.names, language),
+        label: localizedName(country.names, language),
       })).sort((a, b) => a.label.localeCompare(b.label, language ?? "en")),
-    [language],
+    [geoData, language],
   );
 
   const selectedCountry = useMemo(
-    () => LOCATION_DATA.find((country) => country.iso_3166_1 === value.country),
-    [value.country],
+    () => geoData.find((country) => country.iso_3166_1 === value.country),
+    [geoData, value.country],
   );
 
   const regions = useMemo(
     () =>
       (selectedCountry?.regions ?? []).map((region) => ({
         source: region,
-        value: localizedLocationName(region.names, "en"),
-        label: localizedLocationName(region.names, language),
+        value: localizedName(region.names, "en"),
+        label: localizedName(region.names, language),
       })),
     [language, selectedCountry],
   );
@@ -62,8 +89,8 @@ export function LocationFilter({
   const cities = useMemo(
     () =>
       (selectedRegion?.municipalities ?? []).map((municipality) => ({
-        value: localizedLocationName(municipality.names, "en"),
-        label: localizedLocationName(municipality.names, language),
+        value: localizedName(municipality.names, "en"),
+        label: localizedName(municipality.names, language),
       })),
     [language, selectedRegion],
   );
@@ -73,6 +100,7 @@ export function LocationFilter({
   const cityLabel = cities.find((city) => city.value === value.city)?.label;
 
   useEffect(() => {
+    if (geoData.length === 0) return;
     if (value.region && !regions.some((region) => region.value === value.region)) {
       onChange({ country: value.country, region: null, city: null });
       return;
@@ -80,13 +108,14 @@ export function LocationFilter({
     if (value.city && !cities.some((city) => city.value === value.city)) {
       onChange({ ...value, city: null });
     }
-  }, [cities, onChange, regions, value]);
+  }, [cities, geoData.length, onChange, regions, value]);
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
           key={`country-${language ?? "en"}`}
+          disabled={geoData.length === 0}
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
