@@ -26,6 +26,12 @@ export function useLanguagePreference() {
   useEffect(() => {
     setLanguageState(readStoredLanguage());
     setHydrated(true);
+
+    const syncLanguage = (event: StorageEvent) => {
+      if (event.key === LANG_KEY) setLanguageState(event.newValue);
+    };
+    window.addEventListener("storage", syncLanguage);
+    return () => window.removeEventListener("storage", syncLanguage);
   }, []);
 
   const setLanguage = useCallback((code: string) => {
