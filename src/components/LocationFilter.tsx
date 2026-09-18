@@ -1,5 +1,5 @@
 import { Building2, Lock, MapPin, Map } from "lucide-react";
-import { COUNTRIES, regionsFor } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import {
   Select,
   SelectContent,
