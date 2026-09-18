@@ -1,5 +1,9 @@
+import { useEffect, useMemo } from "react";
 import { Building2, Lock, MapPin, Map } from "lucide-react";
-import { useLocationNames } from "@/lib/locations";
+import {
+  LOCATION_DATA,
+  localizedLocationName,
+} from "@/lib/locations";
 import {
   Select,
   SelectContent,
@@ -8,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useT } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
 
 export type LocationValue = {
   country: string | null;
@@ -23,25 +27,79 @@ export function LocationFilter({
   value: LocationValue;
   onChange: (next: LocationValue) => void;
 }) {
-  const t = useT();
-  const loc = useLocationNames();
-  const countries = loc.countryOptions;
-  const regions = loc.regionOptions(value.country);
-  const cities = loc.cityOptions(value.country, value.region);
+  const { language, t } = useI18n();
+
+  const countries = useMemo(
+    () =>
+      LOCATION_DATA.map((country) => ({
+        value: country.iso_3166_1,
+        flag: flagOf(country.iso_3166_1),
+        label: localizedLocationName(country.names, language),
+      })).sort((a, b) => a.label.localeCompare(b.label, language ?? "en")),
+    [language],
+  );
+
+  const selectedCountry = useMemo(
+    () => LOCATION_DATA.find((country) => country.iso_3166_1 === value.country),
+    [value.country],
+  );
+
+  const regions = useMemo(
+    () =>
+      (selectedCountry?.regions ?? []).map((region) => ({
+        source: region,
+        value: localizedLocationName(region.names, "en"),
+        label: localizedLocationName(region.names, language),
+      })),
+    [language, selectedCountry],
+  );
+
+  const selectedRegion = useMemo(
+    () => regions.find((region) => region.value === value.region)?.source,
+    [regions, value.region],
+  );
+
+  const cities = useMemo(
+    () =>
+      (selectedRegion?.municipalities ?? []).map((municipality) => ({
+        value: localizedLocationName(municipality.names, "en"),
+        label: localizedLocationName(municipality.names, language),
+      })),
+    [language, selectedRegion],
+  );
+
+  const countryLabel = countries.find((country) => country.value === value.country)?.label;
+  const regionLabel = regions.find((region) => region.value === value.region)?.label;
+  const cityLabel = cities.find((city) => city.value === value.city)?.label;
+
+  useEffect(() => {
+    if (value.region && !regions.some((region) => region.value === value.region)) {
+      onChange({ country: value.country, region: null, city: null });
+      return;
+    }
+    if (value.city && !cities.some((city) => city.value === value.city)) {
+      onChange({ ...value, city: null });
+    }
+  }, [cities, onChange, regions, value]);
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
+          key={`country-${language ?? "en"}`}
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("filter.selectCountry")} />
+            <SelectValue placeholder={t("filter.selectCountry")}>
+              {countryLabel ? (
+                <span><span className="mr-2">{flagOf(value.country ?? "")}</span>{countryLabel}</span>
+              ) : undefined}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {countries.map((c) => (
-              <SelectItem key={c.code} value={c.code}>
+              <SelectItem key={c.value} value={c.value}>
                 <span className="mr-2">{c.flag}</span>
                 {c.label}
               </SelectItem>
@@ -56,14 +114,15 @@ export function LocationFilter({
         locked={!value.country}
       >
         <Select
+          key={`region-${language ?? "en"}-${value.country ?? "none"}`}
           disabled={!value.country}
           {...(value.region ? { value: value.region } : {})}
           onValueChange={(region) => onChange({ ...value, region, city: null })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue
-              placeholder={value.country ? t("filter.selectRegion") : t("filter.countryFirst")}
-            />
+            <SelectValue placeholder={value.country ? t("filter.selectRegion") : t("filter.countryFirst")}>
+              {regionLabel}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {regions.map((r) => (
@@ -81,14 +140,15 @@ export function LocationFilter({
         locked={!value.region}
       >
         <Select
+          key={`city-${language ?? "en"}-${value.country ?? "none"}-${value.region ?? "none"}`}
           disabled={!value.region}
           {...(value.city ? { value: value.city } : {})}
           onValueChange={(city) => onChange({ ...value, city })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue
-              placeholder={value.region ? t("filter.selectCity") : t("filter.regionFirst")}
-            />
+            <SelectValue placeholder={value.region ? t("filter.selectCity") : t("filter.regionFirst")}>
+              {cityLabel}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {cities.map((c) => (
@@ -101,6 +161,12 @@ export function LocationFilter({
       </Field>
     </div>
   );
+}
+
+function flagOf(code: string) {
+  return code
+    .toUpperCase()
+    .replace(/./g, (character) => String.fromCodePoint(127397 + character.charCodeAt(0)));
 }
 
 function Field({
