@@ -21,6 +21,60 @@ type Municipality = { names: LocationNames };
 type Region = { names: LocationNames; municipalities?: Municipality[] };
 type Country = { iso_3166_1: string; names: LocationNames; regions?: Region[] };
 
+const LOCATION_ASSET_URL = "/euro_multilingual.json";
+
+// Immediate rescue data keeps the controls usable if the public asset cannot load.
+const FALLBACK_GEO_DATA: Country[] = [
+  {
+    iso_3166_1: "FR",
+    names: { en: "France", fr: "France", de: "Frankreich", es: "Francia" },
+    regions: [
+      {
+        names: { en: "Île-de-France", fr: "Île-de-France" },
+        municipalities: [{ names: { en: "Paris", fr: "Paris" } }],
+      },
+      {
+        names: { en: "Provence-Alpes-Côte d'Azur", fr: "Provence-Alpes-Côte d'Azur" },
+        municipalities: [
+          { names: { en: "Marseille", fr: "Marseille" } },
+          { names: { en: "Nice", fr: "Nice" } },
+        ],
+      },
+    ],
+  },
+  {
+    iso_3166_1: "DE",
+    names: { en: "Germany", de: "Deutschland", fr: "Allemagne", es: "Alemania" },
+    regions: [
+      {
+        names: { en: "Bavaria", de: "Bayern", fr: "Bavière" },
+        municipalities: [
+          { names: { en: "Munich", de: "München", fr: "Munich" } },
+          { names: { en: "Nuremberg", de: "Nürnberg", fr: "Nuremberg" } },
+        ],
+      },
+      {
+        names: { en: "Berlin", de: "Berlin" },
+        municipalities: [{ names: { en: "Berlin", de: "Berlin" } }],
+      },
+    ],
+  },
+  {
+    iso_3166_1: "ES",
+    names: { en: "Spain", es: "España", fr: "Espagne", de: "Spanien" },
+    regions: [
+      {
+        names: { en: "Catalonia", es: "Cataluña", ca: "Catalunya" },
+        municipalities: [{ names: { en: "Barcelona", es: "Barcelona" } }],
+      },
+      {
+        names: { en: "Community of Madrid", es: "Comunidad de Madrid" },
+        municipalities: [{ names: { en: "Madrid", es: "Madrid" } }],
+      },
+    ],
+  },
+];
+
 const localizedName = (names: LocationNames, language: string | null) =>
   (language ? names[language] : undefined) || names["en"] || "";
 
@@ -32,23 +86,35 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<Country[]>([]);
+  const [geoData, setGeoData] = useState<Country[]>(() => FALLBACK_GEO_DATA);
+  const [dataRevision, setDataRevision] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function loadLocations() {
       try {
-        const response = await fetch("/euro_multilingual.json", {
+        const response = await fetch(LOCATION_ASSET_URL, {
           signal: controller.signal,
+          cache: "no-store",
         });
         if (!response.ok) throw new Error(`Location data request failed: ${response.status}`);
 
         const data: unknown = await response.json();
-        if (!Array.isArray(data)) throw new Error("Location data is not an array");
-        setGeoData(data as Country[]);
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error("Location data is not a non-empty array");
+        }
+        setGeoData([...(data as Country[])]);
+        setDataRevision((revision) => revision + 1);
       } catch (error) {
-        if (!controller.signal.aborted) console.error("Unable to load location data", error);
+        if (!controller.signal.aborted) {
+          console.error(
+            `Unable to load location data from ${LOCATION_ASSET_URL}; using fallback data`,
+            error,
+          );
+          setGeoData([...FALLBACK_GEO_DATA]);
+          setDataRevision((revision) => revision + 1);
+        }
       }
     }
 
@@ -63,12 +129,12 @@ export function LocationFilter({
         flag: flagOf(country.iso_3166_1),
         label: localizedName(country.names, language),
       })).sort((a, b) => a.label.localeCompare(b.label, language ?? "en")),
-    [geoData, language],
+    [dataRevision, geoData, language],
   );
 
   const selectedCountry = useMemo(
     () => geoData.find((country) => country.iso_3166_1 === value.country),
-    [geoData, value.country],
+    [dataRevision, geoData, value.country],
   );
 
   const regions = useMemo(
@@ -114,8 +180,7 @@ export function LocationFilter({
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
-          key={`country-${language ?? "en"}`}
-          disabled={geoData.length === 0}
+          key={`country-${language ?? "en"}-${dataRevision}`}
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
@@ -143,7 +208,7 @@ export function LocationFilter({
         locked={!value.country}
       >
         <Select
-          key={`region-${language ?? "en"}-${value.country ?? "none"}`}
+          key={`region-${language ?? "en"}-${value.country ?? "none"}-${dataRevision}`}
           disabled={!value.country}
           {...(value.region ? { value: value.region } : {})}
           onValueChange={(region) => onChange({ ...value, region, city: null })}
@@ -169,7 +234,7 @@ export function LocationFilter({
         locked={!value.region}
       >
         <Select
-          key={`city-${language ?? "en"}-${value.country ?? "none"}-${value.region ?? "none"}`}
+          key={`city-${language ?? "en"}-${value.country ?? "none"}-${value.region ?? "none"}-${dataRevision}`}
           disabled={!value.region}
           {...(value.city ? { value: value.city } : {})}
           onValueChange={(city) => onChange({ ...value, city })}
