@@ -7,13 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { fetchListing, uploadListingPhoto } from "@/lib/listings";
 import { getCountry } from "@/lib/locations";
-import { propertyTypeLabel, transactionLabel } from "@/lib/property";
 import { PhoneInput } from "@/components/PhoneInput";
 import { PhotoUploader } from "@/components/PhotoUploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useT, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/listings/$id/edit")({
   head: () => ({
@@ -36,6 +36,7 @@ export const Route = createFileRoute("/_authenticated/listings/$id/edit")({
 });
 
 function EditListing() {
+  const t = useT();
   const { id } = useParams({ from: "/_authenticated/listings/$id/edit" });
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -66,15 +67,15 @@ function EditListing() {
   }, [listing, ready]);
 
   if (isLoading) {
-    return <p className="p-10 text-center text-sm text-muted-foreground">Loading your ad…</p>;
+    return <p className="p-10 text-center text-sm text-muted-foreground">{t("edit.loading")}</p>;
   }
 
   if (!listing || (user && listing.author_id !== user.id)) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-5">
-        <h1 className="text-xl font-semibold">You cannot edit this ad</h1>
+        <h1 className="text-xl font-semibold">{t("edit.denied")}</h1>
         <Button asChild>
-          <Link to="/">Back to home</Link>
+          <Link to="/">{t("listing.backHome")}</Link>
         </Button>
       </div>
     );
@@ -103,7 +104,7 @@ function EditListing() {
       }
       setPhotos((prev) => [...prev, ...rows]);
     } catch {
-      toast.error("Could not upload that photo.");
+      toast.error(t("edit.photoError"));
     } finally {
       setUploading(false);
     }
@@ -119,11 +120,11 @@ function EditListing() {
   async function save() {
     if (!listing) return;
     if (listing.kind === "supply" && photos.length === 0) {
-      toast.error("A property offer needs at least one photo.");
+      toast.error(t("edit.photoRequired"));
       return;
     }
     if (price && !/^\d{1,9}([.,]\d{1,2})?$/.test(price.trim())) {
-      toast.error("Enter a valid price in euro.");
+      toast.error(t("edit.invalidPrice"));
       return;
     }
     setSaving(true);
@@ -137,10 +138,10 @@ function EditListing() {
       .eq("id", id);
     setSaving(false);
     if (error) {
-      toast.error("Could not save your changes.");
+      toast.error(t("edit.saveError"));
       return;
     }
-    toast.success("Ad updated.");
+    toast.success(t("edit.saved"));
     navigate({ to: "/listings/$id", params: { id } });
   }
 
@@ -153,9 +154,9 @@ function EditListing() {
             params={{ id }}
             className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to listing
+            <ArrowLeft className="h-4 w-4" /> {t("edit.back")}
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-primary-foreground">Edit your ad</h1>
+          <h1 className="mt-6 text-2xl font-semibold text-primary-foreground">{t("edit.title")}</h1>
         </div>
       </header>
 
@@ -163,10 +164,10 @@ function EditListing() {
         <section className="shadow-soft space-y-6 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div className="bg-secondary/40 rounded-xl border border-border p-4">
             <p className="flex items-center gap-1.5 text-xs tracking-wide text-muted-foreground uppercase">
-              <Lock className="h-3 w-3" /> Locked after publishing
+              <Lock className="h-3 w-3" /> {t("edit.locked")}
             </p>
             <p className="mt-2 text-sm">
-              {propertyTypeLabel(listing.property_type)} · {transactionLabel(listing.transaction_type)}
+              {t(`prop.${listing.property_type}` as TranslationKey)} · {t(`tx.${listing.transaction_type}` as TranslationKey)}
             </p>
             <p className="text-sm text-muted-foreground">
               {[listing.city, listing.region, country?.name].filter(Boolean).join(", ")}
@@ -174,7 +175,7 @@ function EditListing() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="price">Price (€)</Label>
+            <Label htmlFor="price">{t("edit.price")}</Label>
             <Input
               id="price"
               inputMode="decimal"
@@ -184,7 +185,7 @@ function EditListing() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("edit.description")}</Label>
             <Textarea
               id="description"
               rows={5}
@@ -194,11 +195,11 @@ function EditListing() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label>Phone number</Label>
+            <Label>{t("edit.phone")}</Label>
             <PhoneInput value={phone} onChange={setPhone} defaultCountry={listing.country_code} />
           </div>
           <div className="space-y-2">
-            <Label>Photos</Label>
+            <Label>{t("edit.photos")}</Label>
             <PhotoUploader
               paths={photos.map((p) => p.path)}
               onAdd={addPhotos}
@@ -210,11 +211,11 @@ function EditListing() {
           <div className="flex justify-end gap-2 border-t border-border pt-4">
             <Button variant="ghost" asChild>
               <Link to="/listings/$id" params={{ id }}>
-                Cancel
+                {t("common.cancel")}
               </Link>
             </Button>
             <Button onClick={save} disabled={saving || uploading}>
-              Save changes
+              {t("common.save")}
             </Button>
           </div>
         </section>

@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useT } from "@/lib/i18n";
 
 /**
  * Listens for incoming messages anywhere in the app and raises a
@@ -13,6 +14,7 @@ export function NotificationWatcher() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const t = useT();
 
   useEffect(() => {
     if (!user) return;
@@ -29,10 +31,10 @@ export function NotificationWatcher() {
         (payload) => {
           const row = payload.new as { body: string; listing_id: string };
           queryClient.invalidateQueries({ queryKey: ["inbox"] });
-          toast("New message", {
+          toast(t("chat.newMessage"), {
             description: row.body.slice(0, 90),
             action: {
-              label: "Open",
+              label: t("chat.open"),
               onClick: () => navigate({ to: "/inbox" }),
             },
           });
@@ -43,7 +45,7 @@ export function NotificationWatcher() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, navigate, queryClient]);
+  }, [user, navigate, queryClient, t]);
 
   return null;
 }

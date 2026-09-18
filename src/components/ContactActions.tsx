@@ -31,7 +31,7 @@ export function ContactActions({
           rel="noopener noreferrer"
           aria-disabled={!wa}
         >
-          <WhatsAppIcon /> WhatsApp
+          <WhatsAppIcon /> {t("listing.whatsapp")}
         </a>
       </Button>
     </div>

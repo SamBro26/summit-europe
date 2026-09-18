@@ -7,13 +7,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { deleteListingAsAdmin, setUserBanned } from "@/lib/admin";
 import { getCountry } from "@/lib/locations";
-import { formatEuro, propertyTypeLabel } from "@/lib/property";
+import { formatEuro } from "@/lib/property";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useT, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -46,11 +47,12 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 function AdminPage() {
+  const t = useT();
   const { isAdmin, loading } = useIsAdmin();
 
   if (loading) {
     return (
-      <p className="p-16 text-center text-sm text-muted-foreground">Checking your access…</p>
+      <p className="p-16 text-center text-sm text-muted-foreground">{t("admin.checking")}</p>
     );
   }
 
@@ -59,13 +61,13 @@ function AdminPage() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
         <ShieldCheck className="h-8 w-8 text-muted-foreground" />
         <div>
-          <h1 className="text-lg font-semibold">Admins only</h1>
+          <h1 className="text-lg font-semibold">{t("admin.only")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            This dashboard is restricted to the moderation team.
+            {t("admin.restricted")}
           </p>
         </div>
         <Button asChild variant="outline">
-          <Link to="/">Back to home</Link>
+          <Link to="/">{t("listing.backHome")}</Link>
         </Button>
       </div>
     );
@@ -75,6 +77,7 @@ function AdminPage() {
 }
 
 function AdminDashboard() {
+  const t = useT();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
 
@@ -131,7 +134,7 @@ function AdminDashboard() {
       toast.success(ok);
       refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Action failed");
+      toast.error(error instanceof Error ? error.message : t("common.actionFailed"));
     }
   }
 
@@ -150,13 +153,13 @@ function AdminDashboard() {
             to="/"
             className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Home
+            <ArrowLeft className="h-4 w-4" /> {t("common.home")}
           </Link>
           <h1 className="mt-6 flex items-center gap-2 text-2xl font-semibold text-primary-foreground">
-            <ShieldCheck className="h-6 w-6" /> Admin dashboard
+            <ShieldCheck className="h-6 w-6" /> {t("admin.dashboard")}
           </h1>
           <p className="mt-1 text-sm text-primary-foreground/75">
-            {openCount} report{openCount === 1 ? "" : "s"} waiting for review across the network.
+            {t("admin.waiting").replace("{count}", String(openCount))}
           </p>
         </div>
       </header>
@@ -164,19 +167,19 @@ function AdminDashboard() {
       <main className="mx-auto -mt-8 w-full max-w-4xl px-5 pb-10 sm:px-10">
         <Tabs defaultValue="reports">
           <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
-            <TabsTrigger value="reports">Reported ads</TabsTrigger>
-            <TabsTrigger value="people">Accounts</TabsTrigger>
+            <TabsTrigger value="reports">{t("admin.reportedAds")}</TabsTrigger>
+            <TabsTrigger value="people">{t("admin.accounts")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="reports" className="mt-5 space-y-3">
             {reports.isLoading && (
-              <p className="text-sm text-muted-foreground">Loading reports…</p>
+              <p className="text-sm text-muted-foreground">{t("admin.loadingReports")}</p>
             )}
             {!reports.isLoading && (reports.data?.rows.length ?? 0) === 0 && (
               <div className="shadow-soft rounded-2xl border border-border bg-card p-10 text-center">
                 <Flag className="mx-auto h-6 w-6 text-muted-foreground" />
                 <p className="mt-3 text-sm text-muted-foreground">
-                  No reports yet — the network is clean.
+                  {t("admin.noReports")}
                 </p>
               </div>
             )}
@@ -191,7 +194,7 @@ function AdminDashboard() {
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant={r.status === "open" ? "default" : "secondary"}>
-                      {r.status === "open" ? "Open" : "Resolved"}
+                      {r.status === "open" ? t("admin.open") : t("admin.resolved")}
                     </Badge>
                     <Badge variant="outline">{REASON_LABELS[r.reason] ?? r.reason}</Badge>
                     <span className="text-xs text-muted-foreground">
@@ -201,12 +204,12 @@ function AdminDashboard() {
 
                   <p className="mt-3 text-sm font-medium">
                     {listing
-                      ? `${propertyTypeLabel(listing.property_type)} · ${[listing.city, country?.name].filter(Boolean).join(", ")}`
-                      : "Listing already removed"}
+                      ? `${t(`prop.${listing.property_type}` as TranslationKey)} · ${[listing.city, country?.name].filter(Boolean).join(", ")}`
+                      : t("admin.listingRemoved")}
                   </p>
                   {listing && (
                     <p className="text-sm text-muted-foreground">
-                      {formatEuro(listing.price_eur) ?? "Price on request"}
+                      {formatEuro(listing.price_eur) ?? t("listing.priceOnRequest")}
                     </p>
                   )}
                   {r.details && (
@@ -215,14 +218,14 @@ function AdminDashboard() {
                     </p>
                   )}
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Reported by {reports.data?.reporters.get(r.reporter_id) ?? "a user"}
+                    {t("admin.reportedBy").replace("{name}", reports.data?.reporters.get(r.reporter_id) ?? t("admin.aUser"))}
                   </p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     {listing && (
                       <Button asChild variant="outline" size="sm">
                         <Link to="/listings/$id" params={{ id: listing.id }}>
-                          View listing
+                          {t("admin.viewListing")}
                         </Link>
                       </Button>
                     )}
@@ -232,10 +235,10 @@ function AdminDashboard() {
                         size="sm"
                         className="text-destructive gap-1.5"
                         onClick={() =>
-                          run(() => deleteListingAsAdmin(listing.id), "Listing deleted")
+                          run(() => deleteListingAsAdmin(listing.id), t("admin.listingDeleted"))
                         }
                       >
-                        <Trash2 className="h-4 w-4" /> Delete ad
+                        <Trash2 className="h-4 w-4" /> {t("admin.deleteAd")}
                       </Button>
                     )}
                     {listing && (
@@ -246,11 +249,11 @@ function AdminDashboard() {
                         onClick={() =>
                           run(
                             () => setUserBanned(listing.author_id, true, "Banned after a report"),
-                            "Account banned",
+                            t("admin.accountBanned"),
                           )
                         }
                       >
-                        <Ban className="h-4 w-4" /> Ban author
+                        <Ban className="h-4 w-4" /> {t("admin.banAuthor")}
                       </Button>
                     )}
                     {r.status === "open" ? (
@@ -264,10 +267,10 @@ function AdminDashboard() {
                               .update({ status: "resolved" })
                               .eq("id", r.id);
                             if (error) throw error;
-                          }, "Report resolved")
+                          }, t("admin.reportResolved"))
                         }
                       >
-                        Mark resolved
+                        {t("admin.markResolved")}
                       </Button>
                     ) : (
                       <Button
@@ -280,10 +283,10 @@ function AdminDashboard() {
                               .update({ status: "open" })
                               .eq("id", r.id);
                             if (error) throw error;
-                          }, "Report reopened")
+                          }, t("admin.reportReopened"))
                         }
                       >
-                        Reopen
+                        {t("admin.reopen")}
                       </Button>
                     )}
                   </div>
@@ -296,23 +299,23 @@ function AdminDashboard() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name…"
+              placeholder={t("admin.searchName")}
               className="mb-4 bg-card"
             />
             <div className="shadow-soft divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
               {people.isLoading && (
-                <p className="p-6 text-sm text-muted-foreground">Loading accounts…</p>
+                <p className="p-6 text-sm text-muted-foreground">{t("admin.loadingAccounts")}</p>
               )}
               {filteredPeople.map((p: any) => (
                 <div key={p.id} className="flex items-center gap-3 p-4">
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">
-                      {p.display_name ?? "FindMe user"}
+                      {p.display_name ?? t("common.user")}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {p.banned_at
-                        ? `Banned ${new Date(p.banned_at).toLocaleDateString()}${p.ban_reason ? ` — ${p.ban_reason}` : ""}`
-                        : `Joined ${new Date(p.created_at).toLocaleDateString()}`}
+                        ? `${t("admin.bannedOn").replace("{date}", new Date(p.banned_at).toLocaleDateString())}${p.ban_reason ? ` — ${p.ban_reason}` : ""}`
+                        : t("admin.joinedOn").replace("{date}", new Date(p.created_at).toLocaleDateString())}
                     </span>
                   </span>
                   {p.banned_at ? (
@@ -320,9 +323,9 @@ function AdminDashboard() {
                       variant="outline"
                       size="sm"
                       className="gap-1.5"
-                      onClick={() => run(() => setUserBanned(p.id, false), "Account restored")}
+                      onClick={() => run(() => setUserBanned(p.id, false), t("admin.accountRestored"))}
                     >
-                      <Undo2 className="h-4 w-4" /> Unban
+                      <Undo2 className="h-4 w-4" /> {t("admin.unban")}
                     </Button>
                   ) : (
                     <Button
@@ -332,11 +335,11 @@ function AdminDashboard() {
                       onClick={() =>
                         run(
                           () => setUserBanned(p.id, true, "Banned from the admin dashboard"),
-                          "Account banned",
+                          t("admin.accountBanned"),
                         )
                       }
                     >
-                      <Ban className="h-4 w-4" /> Ban
+                      <Ban className="h-4 w-4" /> {t("admin.ban")}
                     </Button>
                   )}
                 </div>

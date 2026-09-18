@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ImageOff, MapPin } from "lucide-react";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
-import { formatEuro, propertyTypeLabel } from "@/lib/property";
+import { formatEuro } from "@/lib/property";
 import { getCountry } from "@/lib/locations";
 import type { ListingWithPhotos } from "@/lib/listings";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +28,7 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
         {cover ? (
           <img
             src={cover}
-            alt={`${propertyTypeLabel(listing.property_type)} in ${listing.city}`}
+            alt={`${typeLabel} — ${listing.city}`}
             loading="lazy"
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />

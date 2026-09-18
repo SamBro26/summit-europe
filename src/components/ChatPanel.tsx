@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 type Message = {
   id: string;
@@ -25,6 +26,7 @@ export function ChatPanel({
   otherId: string;
   onClose: () => void;
 }) {
+  const t = useT();
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
@@ -82,15 +84,15 @@ export function ChatPanel({
   return (
     <div className="shadow-soft fixed right-4 bottom-[74px] z-50 flex h-[26rem] max-h-[70vh] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card sm:bottom-[114px]">
       <header className="flex items-center justify-between border-b border-border px-4 py-3">
-        <span className="text-sm font-semibold">Message the advertiser</span>
-        <button onClick={onClose} aria-label="Close chat">
+        <span className="text-sm font-semibold">{t("chat.title")}</span>
+        <button onClick={onClose} aria-label={t("chat.close")}>
           <X className="h-4 w-4 text-muted-foreground" />
         </button>
       </header>
       <div className="flex-1 space-y-2 overflow-y-auto p-3">
         {messages.length === 0 && (
           <p className="pt-10 text-center text-sm text-muted-foreground">
-            No messages yet — say hello.
+            {t("chat.empty")}
           </p>
         )}
         {messages.map((m) => (
@@ -113,7 +115,7 @@ export function ChatPanel({
           rows={1}
           value={draft}
           maxLength={2000}
-          placeholder="Write a message…"
+          placeholder={t("chat.placeholder")}
           onChange={(e) => setDraft(e.target.value)}
           className="max-h-24 min-h-9 resize-none"
         />

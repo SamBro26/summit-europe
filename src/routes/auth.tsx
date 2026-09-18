@@ -33,11 +33,6 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-const credentials = z.object({
-  email: z.string().trim().email("Enter a valid email address").max(255),
-  password: z.string().min(6, "Password must be at least 6 characters").max(72),
-});
-
 function AuthPage() {
   const t = useT();
   const navigate = useNavigate();
@@ -57,6 +52,10 @@ function AuthPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    const credentials = z.object({
+      email: z.string().trim().email(t("auth.invalidEmail")).max(255),
+      password: z.string().min(6, t("auth.shortPassword")).max(72),
+    });
     const parsed = credentials.safeParse({ email, password });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]!.message);
@@ -75,7 +74,7 @@ function AuthPage() {
         return;
       }
       if (!data.session) {
-        toast.success("Check your email to confirm your account.");
+        toast.success(t("auth.confirmEmail"));
         return;
       }
       navigate({ to: target, replace: true });
@@ -98,7 +97,7 @@ function AuthPage() {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
-      toast.error("Google sign-in failed. Please try again.");
+      toast.error(t("auth.googleError"));
       return;
     }
     if (result.redirected) return;
