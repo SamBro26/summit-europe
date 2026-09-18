@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useT, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/post")({
   head: () => ({
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/post")({
   component: PostWizard,
 });
 
-const STEPS = ["Ad type", "Property", "Location", "Details", "Photos"];
+const STEPS: TranslationKey[] = ["post.step.adType", "post.step.property", "post.step.location", "post.step.details", "post.step.photos"];
 
 const detailsSchema = z.object({
   price: z
@@ -49,6 +50,7 @@ const detailsSchema = z.object({
 });
 
 function PostWizard() {
+  const t = useT();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [step, setStep] = useState(0);
@@ -85,7 +87,7 @@ function PostWizard() {
       for (const file of files) added.push(await uploadListingPhoto(user.id, file));
       setPhotos((prev) => [...prev, ...added]);
     } catch {
-      toast.error("Could not upload that photo. Please try another one.");
+      toast.error(t("post.photoUploadError"));
     } finally {
       setUploading(false);
     }
@@ -99,7 +101,7 @@ function PostWizard() {
   async function publish() {
     if (!user || !kind || !propertyType || !transaction || !locationComplete) return;
     if (kind === "supply" && photos.length === 0) {
-      toast.error("Add at least one photo for a property offer.");
+      toast.error(t("post.photosRequired"));
       return;
     }
     setSaving(true);
@@ -122,7 +124,7 @@ function PostWizard() {
 
     if (error || !data) {
       setSaving(false);
-      toast.error("Could not publish the ad. Please try again.");
+      toast.error(t("post.publishError"));
       return;
     }
 
@@ -132,7 +134,7 @@ function PostWizard() {
       );
     }
     setSaving(false);
-    toast.success("Your ad is live.");
+    toast.success(t("post.published"));
     navigate({ to: "/listings/$id", params: { id: data.id } });
   }
 
@@ -144,14 +146,14 @@ function PostWizard() {
             to="/"
             className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Home
+            <ArrowLeft className="h-4 w-4" /> {t("common.home")}
           </Link>
           <span className="text-sm text-primary-foreground/80">
-            Step {step + 1} of {STEPS.length}
+            {t("post.step")} {step + 1} {t("post.of")} {STEPS.length}
           </span>
         </div>
         <div className="mx-auto mt-6 max-w-3xl">
-          <h1 className="text-2xl font-semibold text-primary-foreground">{STEPS[step]}</h1>
+          <h1 className="text-2xl font-semibold text-primary-foreground">{t(STEPS[step] ?? "post.step.adType")}</h1>
           <div className="mt-4 flex gap-1.5">
             {STEPS.map((s, i) => (
               <span
@@ -180,8 +182,8 @@ function PostWizard() {
                     kind === k.value ? "border-primary bg-secondary/60" : "border-border hover:bg-secondary/40",
                   )}
                 >
-                  <p className="font-medium">{k.label}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{k.hint}</p>
+                  <p className="font-medium">{t(k.value === "supply" ? "post.offer" : "post.request")}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{t(k.value === "supply" ? "post.offerHint" : "post.requestHint")}</p>
                 </button>
               ))}
             </div>
@@ -191,13 +193,13 @@ function PostWizard() {
             <div className="space-y-6">
               <div>
                 <Label className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Property type
+                  {t("post.propertyType")}
                 </Label>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
                   {PROPERTY_TYPES.map((p) => (
                     <Choice
                       key={p.value}
-                      label={p.label}
+                      label={t(`prop.${p.value}` as TranslationKey)}
                       active={propertyType === p.value}
                       onClick={() => setPropertyType(p.value)}
                     />
@@ -206,15 +208,15 @@ function PostWizard() {
               </div>
               <div>
                 <Label className="text-xs tracking-wide text-muted-foreground uppercase">
-                  Transaction
+                  {t("post.transaction")}
                 </Label>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {TRANSACTION_TYPES.map((t) => (
+                  {TRANSACTION_TYPES.map((transactionOption) => (
                     <Choice
-                      key={t.value}
-                      label={t.label}
-                      active={transaction === t.value}
-                      onClick={() => setTransaction(t.value)}
+                      key={transactionOption.value}
+                      label={t(`tx.${transactionOption.value}` as TranslationKey)}
+                      active={transaction === transactionOption.value}
+                      onClick={() => setTransaction(transactionOption.value)}
                     />
                   ))}
                 </div>
@@ -226,9 +228,7 @@ function PostWizard() {
             <div className="space-y-4">
               <LocationFilter value={location} onChange={setLocation} />
               <p className="text-sm text-muted-foreground">
-                {locationComplete
-                  ? "Location set. It cannot be changed after publishing."
-                  : "Select country, region and city to continue."}
+                {locationComplete ? t("post.locationSet") : t("post.locationPrompt")}
               </p>
             </div>
           )}
@@ -236,7 +236,7 @@ function PostWizard() {
           {step === 3 && (
             <div className="space-y-5">
               <div className="space-y-1.5">
-                <Label htmlFor="price">Price (€) — optional</Label>
+                <Label htmlFor="price">{t("post.priceOptional")}</Label>
                 <Input
                   id="price"
                   inputMode="decimal"
@@ -247,18 +247,18 @@ function PostWizard() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="description">Description — optional</Label>
+                <Label htmlFor="description">{t("post.descriptionOptional")}</Label>
                 <Textarea
                   id="description"
                   rows={5}
                   maxLength={4000}
-                  placeholder="Tell people about the property or what you are looking for."
+                  placeholder={t("post.descriptionPlaceholder")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
-                <Label>Phone number — optional</Label>
+                <Label>{t("post.phoneOptional")}</Label>
                 <PhoneInput value={phone} onChange={setPhone} defaultCountry={location.country} />
               </div>
             </div>
@@ -268,8 +268,8 @@ function PostWizard() {
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
                 {kind === "supply"
-                  ? "At least one photo is required for property offers."
-                  : "Photos are optional for search requests."}
+                  ? t("post.photosRequired")
+                  : t("post.photosOptional")}
               </p>
               <PhotoUploader
                 paths={photos}
@@ -286,11 +286,11 @@ function PostWizard() {
               disabled={step === 0}
               onClick={() => setStep((s) => Math.max(0, s - 1))}
             >
-              Back
+              {t("common.back")}
             </Button>
             {step < STEPS.length - 1 ? (
               <Button disabled={!canNext} onClick={() => setStep((s) => s + 1)} className="gap-2">
-                Next <ArrowRight className="h-4 w-4" />
+                {t("post.next")} <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
               <Button
@@ -298,7 +298,7 @@ function PostWizard() {
                 onClick={publish}
                 className="gap-2"
               >
-                <Check className="h-4 w-4" /> Publish ad
+                <Check className="h-4 w-4" /> {t("post.publish")}
               </Button>
             )}
           </div>

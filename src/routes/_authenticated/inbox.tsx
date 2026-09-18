@@ -5,7 +5,7 @@ import { ArrowLeft, Inbox as InboxIcon, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { getCountry } from "@/lib/locations";
-import { propertyTypeLabel } from "@/lib/property";
+import { useT, type TranslationKey } from "@/lib/i18n";
 import { ChatPanel } from "@/components/ChatPanel";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +53,7 @@ type Thread = {
 };
 
 function InboxPage() {
+  const t = useT();
   const { user } = useAuth();
   const [open, setOpen] = useState<Thread | null>(null);
 
@@ -137,11 +138,11 @@ function InboxPage() {
             to="/"
             className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Home
+            <ArrowLeft className="h-4 w-4" /> {t("common.home")}
           </Link>
-          <h1 className="mt-6 text-2xl font-semibold text-primary-foreground">Inbox</h1>
+          <h1 className="mt-6 text-2xl font-semibold text-primary-foreground">{t("common.inbox")}</h1>
           <p className="mt-1 text-sm text-primary-foreground/75">
-            Every conversation with buyers and sellers, across all countries.
+            {t("inbox.subtitle")}
           </p>
         </div>
       </header>
@@ -149,7 +150,7 @@ function InboxPage() {
       <main className="mx-auto -mt-8 w-full max-w-3xl px-5 pb-10 sm:px-10">
         <section className="shadow-soft overflow-hidden rounded-2xl border border-border bg-card">
           {isLoading && (
-            <p className="p-10 text-center text-sm text-muted-foreground">Loading conversations…</p>
+            <p className="p-10 text-center text-sm text-muted-foreground">{t("inbox.loading")}</p>
           )}
 
           {!isLoading && threads.length === 0 && (
@@ -157,51 +158,51 @@ function InboxPage() {
               <span className="bg-secondary mx-auto flex h-11 w-11 items-center justify-center rounded-full">
                 <InboxIcon className="h-5 w-5 text-muted-foreground" />
               </span>
-              <h2 className="mt-4 text-base font-semibold">No conversations yet</h2>
+              <h2 className="mt-4 text-base font-semibold">{t("inbox.emptyTitle")}</h2>
               <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
-                Open a listing and tap “Send message” to start talking to an advertiser.
+                {t("inbox.emptyBody")}
               </p>
               <Button asChild className="mt-5">
-                <Link to="/">Browse listings</Link>
+                <Link to="/">{t("inbox.browse")}</Link>
               </Button>
             </div>
           )}
 
           <ul className="divide-y divide-border">
-            {threads.map((t) => {
-              const listing: any = listingById.get(t.listingId);
+            {threads.map((thread) => {
+              const listing: any = listingById.get(thread.listingId);
               const country = listing ? getCountry(listing.country_code) : undefined;
               return (
-                <li key={t.key}>
+                <li key={thread.key}>
                   <button
-                    onClick={() => setOpen(t)}
+                    onClick={() => setOpen(thread)}
                     className="hover:bg-secondary/40 flex w-full items-start gap-3 p-4 text-left transition-colors"
                   >
                     <span className="bg-brand-gradient flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-primary-foreground">
-                      {(nameById.get(t.otherId) ?? "?").slice(0, 1).toUpperCase()}
+                      {(nameById.get(thread.otherId) ?? "?").slice(0, 1).toUpperCase()}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">
-                          {nameById.get(t.otherId) ?? "FindMe user"}
+                          {nameById.get(thread.otherId) ?? "FindMe user"}
                         </span>
                         <span className="shrink-0 text-xs text-muted-foreground">
-                          {new Date(t.last.created_at).toLocaleDateString()}
+                          {new Date(thread.last.created_at).toLocaleDateString()}
                         </span>
                       </span>
                       {listing && (
                         <span className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
-                          {propertyTypeLabel(listing.property_type)} ·{" "}
+                          {t(`prop.${listing.property_type}` as TranslationKey)} ·{" "}
                           {[listing.city, country?.name].filter(Boolean).join(", ")}
                         </span>
                       )}
                       <span className="mt-1 block truncate text-sm text-muted-foreground">
-                        {t.last.sender_id === user?.id ? "You: " : ""}
-                        {t.last.body}
+                        {thread.last.sender_id === user?.id ? `${t("inbox.you")}: ` : ""}
+                        {thread.last.body}
                       </span>
                     </span>
-                    {t.unread > 0 && <Badge className="shrink-0">{t.unread}</Badge>}
+                    {thread.unread > 0 && <Badge className="shrink-0">{thread.unread}</Badge>}
                   </button>
                 </li>
               );

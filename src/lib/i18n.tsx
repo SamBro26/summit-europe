@@ -18,6 +18,44 @@ const en = {
   "common.back": "Back",
   "common.cancel": "Cancel",
 
+  "common.home": "Home",
+
+  "inbox.subtitle": "Every conversation with buyers and sellers, across all countries.",
+  "inbox.emptyTitle": "No conversations yet",
+  "inbox.emptyBody": "Open a listing and tap “Send message” to start talking to an advertiser.",
+  "inbox.browse": "Browse listings",
+  "inbox.loading": "Loading conversations…",
+  "inbox.you": "You",
+
+  "post.step.adType": "Ad type",
+  "post.step.property": "Property",
+  "post.step.location": "Location",
+  "post.step.details": "Details",
+  "post.step.photos": "Photos",
+  "post.step": "Step",
+  "post.of": "of",
+  "post.next": "Next",
+  "post.publish": "Publish ad",
+  "post.propertyType": "Property type",
+  "post.transaction": "Transaction",
+  "post.locationSet": "Location set. It cannot be changed after publishing.",
+  "post.locationPrompt": "Select country, region and city to continue.",
+  "post.priceOptional": "Price (€) — optional",
+  "post.descriptionOptional": "Description — optional",
+  "post.descriptionPlaceholder": "Tell people about the property or what you are looking for.",
+  "post.phoneOptional": "Phone number — optional",
+  "post.photosRequired": "At least one photo is required for property offers.",
+  "post.photosOptional": "Photos are optional for search requests.",
+  "post.addPhoto": "Add",
+  "post.uploading": "Uploading…",
+  "post.offer": "Offer a property",
+  "post.offerHint": "You have a property to sell or rent out. Photos required.",
+  "post.request": "Post a search request",
+  "post.requestHint": "You are looking for a property. Photos optional.",
+  "post.photoUploadError": "Could not upload that photo. Please try another one.",
+  "post.publishError": "Could not publish the ad. Please try again.",
+  "post.published": "Your ad is live.",
+
   "home.headline": "Property across the Eurozone, in one place.",
   "home.sub": "Start with a country — regions and cities unlock as you go.",
   "home.post": "Post a free ad",
@@ -82,7 +120,60 @@ const en = {
 export type TranslationKey = keyof typeof en;
 type Dict = Partial<Record<TranslationKey, string>>;
 
+const screenTranslations: Record<string, Record<string, string>> = {
+  ga: { "common.home": "Baile", "inbox.subtitle": "Gach comhrá le ceannaitheoirí agus díoltóirí, i ngach tír.", "inbox.emptyTitle": "Níl comhrá ar bith ann go fóill", "inbox.emptyBody": "Oscail liostú agus tapáil “Seol teachtaireacht” chun labhairt le fógróir.", "inbox.browse": "Brabhsáil liostuithe", "inbox.loading": "Comhráite á lódáil…", "inbox.you": "Tú", "post.step.adType": "Cineál fógra", "post.step.property": "Réadmhaoin", "post.step.location": "Suíomh", "post.step.details": "Sonraí", "post.step.photos": "Grianghraif", "post.step": "Céim", "post.of": "as", "post.next": "Ar aghaidh", "post.publish": "Foilsigh fógra", "post.propertyType": "Cineál réadmhaoine", "post.transaction": "Idirbheart", "post.locationPrompt": "Roghnaigh tír, réigiún agus cathair chun leanúint ar aghaidh.", "post.priceOptional": "Praghas (€) — roghnach", "post.descriptionOptional": "Cur síos — roghnach", "post.descriptionPlaceholder": "Inis do dhaoine faoin réadmhaoin nó faoi na rudaí atá á lorg agat.", "post.phoneOptional": "Uimhir ghutháin — roghnach", "post.photosRequired": "Tá grianghraf amháin ar a laghad riachtanach do thairiscintí réadmhaoine.", "post.photosOptional": "Tá grianghraif roghnach d’iarratais chuardaigh.", "post.addPhoto": "Cuir leis", "post.uploading": "Á uaslódáil…" },
+  fi: { "common.home": "Etusivu", "inbox.subtitle": "Kaikki keskustelusi ostajien ja myyjien kanssa kaikissa maissa.", "inbox.emptyTitle": "Ei vielä keskusteluja", "inbox.emptyBody": "Avaa ilmoitus ja napauta ”Lähetä viesti” keskustellaksesi ilmoittajan kanssa.", "inbox.browse": "Selaa ilmoituksia", "inbox.loading": "Keskusteluja ladataan…", "inbox.you": "Sinä", "post.step.adType": "Ilmoituksen tyyppi", "post.step.property": "Kohde", "post.step.location": "Sijainti", "post.step.details": "Tiedot", "post.step.photos": "Kuvat", "post.step": "Vaihe", "post.of": "/", "post.next": "Seuraava", "post.publish": "Julkaise ilmoitus", "post.propertyType": "Kiinteistötyyppi", "post.transaction": "Kauppa", "post.locationPrompt": "Valitse maa, alue ja kaupunki jatkaaksesi.", "post.priceOptional": "Hinta (€) — valinnainen", "post.descriptionOptional": "Kuvaus — valinnainen", "post.descriptionPlaceholder": "Kerro kiinteistöstä tai siitä, mitä etsit.", "post.phoneOptional": "Puhelinnumero — valinnainen", "post.photosRequired": "Kiinteistötarjouksiin vaaditaan vähintään yksi kuva.", "post.photosOptional": "Kuvat ovat valinnaisia hakupyynnöissä.", "post.addPhoto": "Lisää", "post.uploading": "Ladataan…" },
+  et: { "common.home": "Avaleht", "inbox.subtitle": "Kõik vestlused ostjate ja müüjatega kõigis riikides.", "inbox.emptyTitle": "Vestlusi pole veel", "inbox.emptyBody": "Ava kuulutus ja puuduta „Saada sõnum“, et kuulutajaga rääkida.", "inbox.browse": "Sirvi kuulutusi", "inbox.loading": "Vestluste laadimine…", "inbox.you": "Sina", "post.step.adType": "Kuulutuse tüüp", "post.step.property": "Kinnisvara", "post.step.location": "Asukoht", "post.step.details": "Üksikasjad", "post.step.photos": "Fotod", "post.step": "Samm", "post.of": "/", "post.next": "Järgmine", "post.publish": "Avalda kuulutus", "post.propertyType": "Kinnisvara tüüp", "post.transaction": "Tehing", "post.locationPrompt": "Jätkamiseks vali riik, piirkond ja linn.", "post.priceOptional": "Hind (€) — valikuline", "post.descriptionOptional": "Kirjeldus — valikuline", "post.descriptionPlaceholder": "Kirjelda kinnisvara või seda, mida otsid.", "post.phoneOptional": "Telefoninumber — valikuline", "post.photosRequired": "Kinnisvarapakkumisel on nõutav vähemalt üks foto.", "post.photosOptional": "Otsingusoovi puhul on fotod valikulised.", "post.addPhoto": "Lisa", "post.uploading": "Üleslaadimine…" },
+  it: {
+    "common.home": "Home", "inbox.subtitle": "Tutte le conversazioni con acquirenti e venditori, in ogni paese.", "inbox.emptyTitle": "Nessuna conversazione", "inbox.emptyBody": "Apri un annuncio e tocca “Invia messaggio” per parlare con un inserzionista.", "inbox.browse": "Sfoglia gli annunci", "inbox.loading": "Caricamento conversazioni…", "inbox.you": "Tu", "post.step.adType": "Tipo di annuncio", "post.step.property": "Immobile", "post.step.location": "Località", "post.step.details": "Dettagli", "post.step.photos": "Foto", "post.step": "Passaggio", "post.of": "di", "post.next": "Avanti", "post.publish": "Pubblica annuncio", "post.propertyType": "Tipo di immobile", "post.transaction": "Transazione", "post.locationSet": "Località impostata. Non può essere modificata dopo la pubblicazione.", "post.locationPrompt": "Seleziona paese, regione e città per continuare.", "post.priceOptional": "Prezzo (€) — facoltativo", "post.descriptionOptional": "Descrizione — facoltativa", "post.descriptionPlaceholder": "Descrivi l'immobile o ciò che stai cercando.", "post.phoneOptional": "Numero di telefono — facoltativo", "post.photosRequired": "Per le offerte immobiliari è richiesta almeno una foto.", "post.photosOptional": "Le foto sono facoltative per le richieste di ricerca.", "post.addPhoto": "Aggiungi", "post.uploading": "Caricamento…", "post.offer": "Offri un immobile", "post.offerHint": "Hai un immobile da vendere o affittare. Foto richieste.", "post.request": "Pubblica una ricerca", "post.requestHint": "Stai cercando un immobile. Foto facoltative."
+  },
+  pt: {
+    "common.home": "Início", "inbox.subtitle": "Todas as conversas com compradores e vendedores, em todos os países.", "inbox.emptyTitle": "Ainda não há conversas", "inbox.emptyBody": "Abra um anúncio e toque em “Enviar mensagem” para falar com o anunciante.", "inbox.browse": "Ver anúncios", "inbox.loading": "A carregar conversas…", "inbox.you": "Você", "post.step.adType": "Tipo de anúncio", "post.step.property": "Imóvel", "post.step.location": "Localização", "post.step.details": "Detalhes", "post.step.photos": "Fotos", "post.step": "Passo", "post.of": "de", "post.next": "Seguinte", "post.publish": "Publicar anúncio", "post.propertyType": "Tipo de imóvel", "post.transaction": "Transação", "post.locationSet": "Localização definida. Não pode ser alterada após a publicação.", "post.locationPrompt": "Selecione país, região e cidade para continuar.", "post.priceOptional": "Preço (€) — opcional", "post.descriptionOptional": "Descrição — opcional", "post.descriptionPlaceholder": "Descreva o imóvel ou o que procura.", "post.phoneOptional": "Número de telefone — opcional", "post.photosRequired": "É necessária pelo menos uma foto para ofertas de imóveis.", "post.photosOptional": "As fotos são opcionais para pedidos de procura.", "post.addPhoto": "Adicionar", "post.uploading": "A carregar…", "post.offer": "Oferecer um imóvel", "post.offerHint": "Tem um imóvel para vender ou arrendar. Fotos obrigatórias.", "post.request": "Publicar uma procura", "post.requestHint": "Procura um imóvel. Fotos opcionais."
+  },
+  nl: {
+    "common.home": "Start", "inbox.subtitle": "Al je gesprekken met kopers en verkopers uit alle landen.", "inbox.emptyTitle": "Nog geen gesprekken", "inbox.emptyBody": "Open een advertentie en tik op ‘Bericht sturen’ om met een adverteerder te praten.", "inbox.browse": "Advertenties bekijken", "inbox.loading": "Gesprekken laden…", "inbox.you": "Jij", "post.step.adType": "Advertentietype", "post.step.property": "Woning", "post.step.location": "Locatie", "post.step.details": "Details", "post.step.photos": "Foto's", "post.step": "Stap", "post.of": "van", "post.next": "Volgende", "post.publish": "Advertentie plaatsen", "post.propertyType": "Woningtype", "post.transaction": "Transactie", "post.locationSet": "Locatie ingesteld. Deze kan na publicatie niet worden gewijzigd.", "post.locationPrompt": "Selecteer land, regio en stad om door te gaan.", "post.priceOptional": "Prijs (€) — optioneel", "post.descriptionOptional": "Beschrijving — optioneel", "post.descriptionPlaceholder": "Vertel over de woning of wat je zoekt.", "post.phoneOptional": "Telefoonnummer — optioneel", "post.photosRequired": "Voor een woningaanbod is minimaal één foto vereist.", "post.photosOptional": "Foto's zijn optioneel voor zoekopdrachten.", "post.addPhoto": "Toevoegen", "post.uploading": "Uploaden…", "post.offer": "Woning aanbieden", "post.offerHint": "Je hebt een woning te koop of te huur. Foto's vereist.", "post.request": "Zoekopdracht plaatsen", "post.requestHint": "Je zoekt een woning. Foto's optioneel."
+  },
+  el: {
+    "common.home": "Αρχική", "inbox.subtitle": "Όλες οι συνομιλίες σας με αγοραστές και πωλητές, σε όλες τις χώρες.", "inbox.emptyTitle": "Δεν υπάρχουν συνομιλίες ακόμη", "inbox.emptyBody": "Ανοίξτε μια αγγελία και πατήστε «Αποστολή μηνύματος» για να μιλήσετε με τον διαφημιζόμενο.", "inbox.browse": "Περιήγηση αγγελιών", "inbox.loading": "Φόρτωση συνομιλιών…", "inbox.you": "Εσείς", "post.step.adType": "Τύπος αγγελίας", "post.step.property": "Ακίνητο", "post.step.location": "Τοποθεσία", "post.step.details": "Λεπτομέρειες", "post.step.photos": "Φωτογραφίες", "post.step": "Βήμα", "post.of": "από", "post.next": "Επόμενο", "post.publish": "Δημοσίευση αγγελίας", "post.propertyType": "Τύπος ακινήτου", "post.transaction": "Συναλλαγή", "post.locationSet": "Η τοποθεσία ορίστηκε. Δεν μπορεί να αλλάξει μετά τη δημοσίευση.", "post.locationPrompt": "Επιλέξτε χώρα, περιοχή και πόλη για να συνεχίσετε.", "post.priceOptional": "Τιμή (€) — προαιρετικό", "post.descriptionOptional": "Περιγραφή — προαιρετική", "post.descriptionPlaceholder": "Περιγράψτε το ακίνητο ή αυτό που αναζητάτε.", "post.phoneOptional": "Αριθμός τηλεφώνου — προαιρετικός", "post.photosRequired": "Απαιτείται τουλάχιστον μία φωτογραφία για προσφορές ακινήτων.", "post.photosOptional": "Οι φωτογραφίες είναι προαιρετικές για αιτήματα αναζήτησης.", "post.addPhoto": "Προσθήκη", "post.uploading": "Μεταφόρτωση…", "post.offer": "Προσφορά ακινήτου", "post.offerHint": "Έχετε ακίνητο για πώληση ή ενοικίαση. Απαιτούνται φωτογραφίες.", "post.request": "Δημοσίευση αναζήτησης", "post.requestHint": "Αναζητάτε ακίνητο. Οι φωτογραφίες είναι προαιρετικές."
+  },
+  tr: {
+    "common.home": "Ana sayfa", "inbox.subtitle": "Tüm ülkelerdeki alıcı ve satıcılarla tüm konuşmalarınız.", "inbox.emptyTitle": "Henüz konuşma yok", "inbox.emptyBody": "Bir ilan açın ve ilan sahibiyle konuşmak için “Mesaj gönder”e dokunun.", "inbox.browse": "İlanlara göz at", "inbox.loading": "Konuşmalar yükleniyor…", "inbox.you": "Siz", "post.step.adType": "İlan türü", "post.step.property": "Emlak", "post.step.location": "Konum", "post.step.details": "Ayrıntılar", "post.step.photos": "Fotoğraflar", "post.step": "Adım", "post.of": "/", "post.next": "İleri", "post.publish": "İlanı yayınla", "post.propertyType": "Emlak türü", "post.transaction": "İşlem", "post.locationSet": "Konum ayarlandı. Yayınlandıktan sonra değiştirilemez.", "post.locationPrompt": "Devam etmek için ülke, bölge ve şehir seçin.", "post.priceOptional": "Fiyat (€) — isteğe bağlı", "post.descriptionOptional": "Açıklama — isteğe bağlı", "post.descriptionPlaceholder": "Emlakı veya ne aradığınızı anlatın.", "post.phoneOptional": "Telefon numarası — isteğe bağlı", "post.photosRequired": "Emlak teklifleri için en az bir fotoğraf gereklidir.", "post.photosOptional": "Arama taleplerinde fotoğraflar isteğe bağlıdır.", "post.addPhoto": "Ekle", "post.uploading": "Yükleniyor…", "post.offer": "Emlak sun", "post.offerHint": "Satmak veya kiralamak istediğiniz bir emlak var. Fotoğraf gerekli.", "post.request": "Arama talebi yayınla", "post.requestHint": "Bir emlak arıyorsunuz. Fotoğraf isteğe bağlı."
+  }
+};
+
 const fr: Dict = {
+  "common.home": "Accueil",
+  "inbox.subtitle": "Toutes vos conversations avec acheteurs et vendeurs, dans tous les pays.",
+  "inbox.emptyTitle": "Aucune conversation pour le moment",
+  "inbox.emptyBody": "Ouvrez une annonce et appuyez sur « Envoyer un message » pour parler à un annonceur.",
+  "inbox.browse": "Parcourir les annonces",
+  "inbox.loading": "Chargement des conversations…",
+  "inbox.you": "Vous",
+  "post.step.adType": "Type d’annonce",
+  "post.step.property": "Bien",
+  "post.step.location": "Localisation",
+  "post.step.details": "Détails",
+  "post.step.photos": "Photos",
+  "post.step": "Étape",
+  "post.of": "sur",
+  "post.next": "Suivant",
+  "post.publish": "Publier l’annonce",
+  "post.propertyType": "Type de bien",
+  "post.transaction": "Transaction",
+  "post.locationSet": "Localisation définie. Elle ne peut plus être modifiée après publication.",
+  "post.locationPrompt": "Sélectionnez le pays, la région et la ville pour continuer.",
+  "post.priceOptional": "Prix (€) — facultatif",
+  "post.descriptionOptional": "Description — facultative",
+  "post.descriptionPlaceholder": "Décrivez le bien ou ce que vous recherchez.",
+  "post.phoneOptional": "Numéro de téléphone — facultatif",
+  "post.photosRequired": "Au moins une photo est requise pour les offres immobilières.",
+  "post.photosOptional": "Les photos sont facultatives pour les demandes.",
+  "post.addPhoto": "Ajouter",
+  "post.uploading": "Téléversement…",
+  "post.offer": "Proposer un bien",
+  "post.offerHint": "Vous avez un bien à vendre ou à louer. Photos requises.",
+  "post.request": "Publier une recherche",
+  "post.requestHint": "Vous recherchez un bien. Photos facultatives.",
   "app.tagline": "Réseau immobilier de la zone euro",
   "lang.title": "Bienvenue. Choisissez votre langue.",
   "lang.subtitle":
@@ -155,6 +246,38 @@ const fr: Dict = {
 };
 
 const de: Dict = {
+  "common.home": "Startseite",
+  "inbox.subtitle": "Alle Gespräche mit Käufern und Verkäufern aus allen Ländern.",
+  "inbox.emptyTitle": "Noch keine Unterhaltungen",
+  "inbox.emptyBody": "Öffnen Sie eine Anzeige und tippen Sie auf „Nachricht senden“, um den Anbieter zu kontaktieren.",
+  "inbox.browse": "Anzeigen durchsuchen",
+  "inbox.loading": "Unterhaltungen werden geladen…",
+  "inbox.you": "Sie",
+  "post.step.adType": "Anzeigentyp",
+  "post.step.property": "Immobilie",
+  "post.step.location": "Standort",
+  "post.step.details": "Details",
+  "post.step.photos": "Fotos",
+  "post.step": "Schritt",
+  "post.of": "von",
+  "post.next": "Weiter",
+  "post.publish": "Anzeige veröffentlichen",
+  "post.propertyType": "Immobilientyp",
+  "post.transaction": "Transaktion",
+  "post.locationSet": "Standort festgelegt. Nach der Veröffentlichung kann er nicht geändert werden.",
+  "post.locationPrompt": "Wählen Sie Land, Region und Stadt, um fortzufahren.",
+  "post.priceOptional": "Preis (€) — optional",
+  "post.descriptionOptional": "Beschreibung — optional",
+  "post.descriptionPlaceholder": "Beschreiben Sie die Immobilie oder wonach Sie suchen.",
+  "post.phoneOptional": "Telefonnummer — optional",
+  "post.photosRequired": "Für Immobilienangebote ist mindestens ein Foto erforderlich.",
+  "post.photosOptional": "Fotos sind bei Suchanfragen optional.",
+  "post.addPhoto": "Hinzufügen",
+  "post.uploading": "Wird hochgeladen…",
+  "post.offer": "Immobilie anbieten",
+  "post.offerHint": "Sie möchten eine Immobilie verkaufen oder vermieten. Fotos erforderlich.",
+  "post.request": "Suchanfrage veröffentlichen",
+  "post.requestHint": "Sie suchen eine Immobilie. Fotos optional.",
   "app.tagline": "Immobiliennetzwerk der Eurozone",
   "lang.title": "Willkommen. Wählen Sie Ihre Sprache.",
   "lang.subtitle":
@@ -297,6 +420,38 @@ const it: Dict = {
 };
 
 const es: Dict = {
+  "common.home": "Inicio",
+  "inbox.subtitle": "Todas tus conversaciones con compradores y vendedores, en todos los países.",
+  "inbox.emptyTitle": "Aún no hay conversaciones",
+  "inbox.emptyBody": "Abre un anuncio y pulsa «Enviar mensaje» para hablar con un anunciante.",
+  "inbox.browse": "Explorar anuncios",
+  "inbox.loading": "Cargando conversaciones…",
+  "inbox.you": "Tú",
+  "post.step.adType": "Tipo de anuncio",
+  "post.step.property": "Propiedad",
+  "post.step.location": "Ubicación",
+  "post.step.details": "Detalles",
+  "post.step.photos": "Fotos",
+  "post.step": "Paso",
+  "post.of": "de",
+  "post.next": "Siguiente",
+  "post.publish": "Publicar anuncio",
+  "post.propertyType": "Tipo de propiedad",
+  "post.transaction": "Operación",
+  "post.locationSet": "Ubicación establecida. No se puede cambiar después de publicar.",
+  "post.locationPrompt": "Selecciona país, región y ciudad para continuar.",
+  "post.priceOptional": "Precio (€) — opcional",
+  "post.descriptionOptional": "Descripción — opcional",
+  "post.descriptionPlaceholder": "Cuenta cómo es la propiedad o qué estás buscando.",
+  "post.phoneOptional": "Número de teléfono — opcional",
+  "post.photosRequired": "Se requiere al menos una foto para las ofertas de propiedades.",
+  "post.photosOptional": "Las fotos son opcionales para las solicitudes de búsqueda.",
+  "post.addPhoto": "Añadir",
+  "post.uploading": "Subiendo…",
+  "post.offer": "Ofrecer una propiedad",
+  "post.offerHint": "Tienes una propiedad para vender o alquilar. Fotos obligatorias.",
+  "post.request": "Publicar una búsqueda",
+  "post.requestHint": "Buscas una propiedad. Fotos opcionales.",
   "app.tagline": "Red inmobiliaria de la eurozona",
   "lang.title": "Bienvenido. Elige tu idioma.",
   "lang.subtitle":
@@ -1572,7 +1727,8 @@ const DICTIONARIES: Record<string, Dict> = {
 
 export function translate(language: string | null, key: TranslationKey): string {
   const dict = language ? DICTIONARIES[language] : undefined;
-  return dict?.[key] ?? en[key];
+  const screenValue = language ? screenTranslations[language]?.[key] : undefined;
+  return dict?.[key] ?? screenValue ?? en[key];
 }
 
 type I18nContextValue = {
