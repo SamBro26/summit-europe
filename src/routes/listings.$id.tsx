@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
 import { fetchListing } from "@/lib/listings";
-import { formatEuro, propertyTypeLabel, transactionLabel } from "@/lib/property";
+import { formatEuro } from "@/lib/property";
 import { getCountry } from "@/lib/locations";
 import { StarRating } from "@/components/StarRating";
 import { ContactActions } from "@/components/ContactActions";
@@ -84,7 +84,7 @@ function ListingDetails() {
 
   async function toggleLike() {
     if (!user) {
-      toast.error("Sign in to like this listing.");
+      toast.error(t("listing.signInLike"));
       return;
     }
     if (liked) {
@@ -97,7 +97,7 @@ function ListingDetails() {
 
   async function rate(stars: number) {
     if (!user) {
-      toast.error("Sign in to rate this listing.");
+      toast.error(t("listing.signInRate"));
       return;
     }
     await supabase
@@ -153,7 +153,7 @@ function ListingDetails() {
             {cover && urls[cover] ? (
               <img
                 src={urls[cover]}
-                alt={`${propertyTypeLabel(listing.property_type)} in ${listing.city}`}
+                alt={`${t(`prop.${listing.property_type}` as TranslationKey)} — ${listing.city}`}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -245,11 +245,11 @@ function ListingDetails() {
             phone={listing.phone}
             onMessage={() => {
               if (!user) {
-                toast.error("Sign in to send a message.");
+                toast.error(t("listing.signInMessage"));
                 return;
               }
               if (isAuthor) {
-                toast.info("This is your own ad.");
+                toast.info(t("listing.ownAd"));
                 return;
               }
               setChatOpen(true);

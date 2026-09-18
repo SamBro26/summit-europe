@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { deleteListingAsAdmin, setUserBanned } from "@/lib/admin";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +39,7 @@ export function AdminListingActions({
   authorId: string;
 }) {
   const { isAdmin } = useIsAdmin();
+  const t = useT();
   const navigate = useNavigate();
   const [pending, setPending] = useState<Pending>(null);
   const [busy, setBusy] = useState(false);
@@ -49,20 +51,20 @@ export function AdminListingActions({
     try {
       if (pending === "delete") {
         await deleteListingAsAdmin(listingId);
-        toast.success("Listing deleted");
+        toast.success(t("admin.listingDeleted"));
         setPending(null);
         navigate({ to: "/" });
         return;
       }
       if (pending === "ban") {
         await setUserBanned(authorId, true, "Banned from a listing page");
-        toast.success("Account banned", {
-          description: "They can no longer post ads or send messages.",
+        toast.success(t("admin.accountBanned"), {
+          description: t("admin.accountBannedDescription"),
         });
       }
       setPending(null);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Action failed");
+      toast.error(error instanceof Error ? error.message : t("common.actionFailed"));
     } finally {
       setBusy(false);
     }
@@ -74,23 +76,23 @@ export function AdminListingActions({
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="gap-1.5">
             <ShieldCheck className="h-4 w-4" />
-            Admin actions
+            {t("admin.actions")}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Moderation</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("admin.moderation")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-destructive focus:text-destructive gap-2"
             onSelect={() => setPending("delete")}
           >
-            <Trash2 className="h-4 w-4" /> Delete this listing
+            <Trash2 className="h-4 w-4" /> {t("admin.deleteListing")}
           </DropdownMenuItem>
           <DropdownMenuItem
             className="text-destructive focus:text-destructive gap-2"
             onSelect={() => setPending("ban")}
           >
-            <Ban className="h-4 w-4" /> Ban the author
+            <Ban className="h-4 w-4" /> {t("admin.banAuthor")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -99,16 +101,16 @@ export function AdminListingActions({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {pending === "delete" ? "Delete this listing?" : "Ban this account?"}
+              {pending === "delete" ? t("admin.deleteTitle") : t("admin.banTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {pending === "delete"
-                ? "The ad and its photos are removed immediately. This cannot be undone."
-                : "The author is blocked from posting new ads and sending messages until you unban them."}
+                ? t("admin.deleteDescription")
+                : t("admin.banDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={busy}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={busy}>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault();
@@ -116,7 +118,7 @@ export function AdminListingActions({
               }}
               disabled={busy}
             >
-              {busy ? "Working…" : pending === "delete" ? "Delete" : "Ban account"}
+              {busy ? t("admin.working") : pending === "delete" ? t("common.delete") : t("admin.banAccount")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

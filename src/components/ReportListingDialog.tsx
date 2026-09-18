@@ -3,7 +3,7 @@ import { Flag } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useT } from "@/lib/i18n";
+import { useT, type TranslationKey } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/select";
 
 const REASONS = [
-  { value: "fraud", label: "Suspected fraud or scam" },
-  { value: "wrong_info", label: "Wrong or misleading information" },
-  { value: "duplicate", label: "Duplicate listing" },
-  { value: "offensive", label: "Offensive content or photos" },
-  { value: "sold", label: "Already sold or rented" },
-  { value: "other", label: "Something else" },
+  "fraud",
+  "wrong_info",
+  "duplicate",
+  "offensive",
+  "sold",
+  "other",
 ];
 
 export function ReportListingDialog({ listingId }: { listingId: string }) {
@@ -43,11 +43,11 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
 
   async function submit() {
     if (!user) {
-      toast.error("Please sign in to report a listing.");
+      toast.error(t("report.signIn"));
       return;
     }
     if (!reason) {
-      toast.error("Choose a reason first.");
+      toast.error(t("report.chooseReason"));
       return;
     }
     setSaving(true);
@@ -65,8 +65,8 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
     setOpen(false);
     setReason("");
     setDetails("");
-    toast.success("Report sent", {
-      description: "Our moderation team will review this listing.",
+    toast.success(t("report.sent"), {
+      description: t("report.sentDescription"),
     });
   }
 
@@ -80,36 +80,36 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Report this listing</DialogTitle>
+          <DialogTitle>{t("report.title")}</DialogTitle>
           <DialogDescription>
-            Tell us what is wrong. Reports go straight to the moderation team.
+            {t("report.description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Reason</Label>
+            <Label>{t("report.reason")}</Label>
             <Select value={reason} onValueChange={setReason}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a reason" />
+                <SelectValue placeholder={t("report.selectReason")} />
               </SelectTrigger>
               <SelectContent>
-                {REASONS.map((r) => (
-                  <SelectItem key={r.value} value={r.value}>
-                    {r.label}
+                {REASONS.map((reasonValue) => (
+                  <SelectItem key={reasonValue} value={reasonValue}>
+                    {t(`report.reason.${reasonValue}` as TranslationKey)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="report-details">Details (optional)</Label>
+            <Label htmlFor="report-details">{t("report.details")}</Label>
             <Textarea
               id="report-details"
               value={details}
               maxLength={1000}
               rows={4}
-              placeholder="Anything that helps us review faster…"
+              placeholder={t("report.detailsPlaceholder")}
               onChange={(e) => setDetails(e.target.value)}
             />
           </div>
@@ -117,10 +117,10 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button onClick={submit} disabled={saving}>
-            {saving ? "Sending…" : "Send report"}
+            {saving ? t("report.sending") : t("report.send")}
           </Button>
         </DialogFooter>
       </DialogContent>

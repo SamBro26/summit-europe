@@ -25,14 +25,14 @@ export function PhotoUploader({
         {paths.map((p) => (
           <div key={p} className="group relative aspect-square overflow-hidden rounded-xl border border-border">
             {urls[p] ? (
-              <img src={urls[p]} alt="Listing photo" className="h-full w-full object-cover" />
+              <img src={urls[p]} alt={t("common.listingPhoto")} className="h-full w-full object-cover" />
             ) : (
               <div className="bg-secondary h-full w-full animate-pulse" />
             )}
             <button
               type="button"
               onClick={() => onRemove(p)}
-              aria-label="Delete photo"
+              aria-label={t("photo.delete")}
               className="bg-background/90 absolute top-1.5 right-1.5 rounded-lg p-1.5 text-destructive opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
             >
               <Trash2 className="h-3.5 w-3.5" />
