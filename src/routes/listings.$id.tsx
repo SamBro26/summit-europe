@@ -238,10 +238,8 @@ function ListingDetails() {
 
         <section className="shadow-soft space-y-3 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div>
-            <h2 className="text-base font-semibold">Contact — always free</h2>
-            <p className="text-sm text-muted-foreground">
-              Message in the app, call, or reach the advertiser on WhatsApp.
-            </p>
+            <h2 className="text-base font-semibold">{t("listing.contactTitle")}</h2>
+            <p className="text-sm text-muted-foreground">{t("listing.contactSub")}</p>
           </div>
           <ContactActions
             phone={listing.phone}
@@ -259,7 +257,7 @@ function ListingDetails() {
           />
           {!listing.phone && (
             <p className="text-xs text-muted-foreground">
-              This advertiser has not shared a phone number — use in-app messaging.
+              {t("listing.noPhone")}
             </p>
           )}
         </section>
