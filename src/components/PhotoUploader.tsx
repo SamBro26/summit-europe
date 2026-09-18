@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { ImagePlus, Trash2 } from "lucide-react";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 
 export function PhotoUploader({
   paths,
@@ -16,6 +17,7 @@ export function PhotoUploader({
 }) {
   const input = useRef<HTMLInputElement>(null);
   const urls = usePhotoUrls(paths);
+  const t = useT();
 
   return (
     <div className="space-y-3">
@@ -44,7 +46,7 @@ export function PhotoUploader({
           className="bg-secondary/40 hover:bg-secondary flex aspect-square flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border text-muted-foreground transition-colors"
         >
           <ImagePlus className="h-5 w-5" />
-          <span className="text-xs">Add</span>
+          <span className="text-xs">{t("post.addPhoto")}</span>
         </button>
       </div>
       <input
@@ -59,7 +61,7 @@ export function PhotoUploader({
           e.target.value = "";
         }}
       />
-      {busy && <p className="text-xs text-muted-foreground">Uploading…</p>}
+      {busy && <p className="text-xs text-muted-foreground">{t("post.uploading")}</p>}
       <Button type="button" variant="ghost" size="sm" className="hidden" />
     </div>
   );
