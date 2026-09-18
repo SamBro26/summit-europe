@@ -39,7 +39,7 @@ function Index() {
     return () => clearTimeout(t);
   }, []);
 
-  const stage: Stage = !hydrated || !splashDone ? "splash" : changing || !language ? "language" : "home";
+  const stage: Stage = !hydrated || !splashDone ? "splash" : !language ? "language" : "home";
 
   if (stage === "splash") return <SplashScreen />;
 
@@ -55,5 +55,21 @@ function Index() {
       />
     );
 
-  return <HomeScreen languageCode={language} onChangeLanguage={() => setChanging(true)} />;
+  return (
+    <>
+      <HomeScreen languageCode={language} onChangeLanguage={() => setChanging(true)} />
+      {changing && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-background">
+          <LanguageSelect
+            current={language}
+            onConfirm={(code) => {
+              setLanguage(code);
+              setChanging(false);
+            }}
+            onCancel={() => setChanging(false)}
+          />
+        </div>
+      )}
+    </>
+  );
 }
