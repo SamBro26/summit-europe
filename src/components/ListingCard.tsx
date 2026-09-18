@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ImageOff, MapPin } from "lucide-react";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
 import { formatEuro } from "@/lib/property";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import type { ListingWithPhotos } from "@/lib/listings";
 import { Badge } from "@/components/ui/badge";
 import { useT, type TranslationKey } from "@/lib/i18n";
@@ -13,7 +13,7 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
   const first = photos[0]?.storage_path ?? null;
   const urls = usePhotoUrls([first]);
   const cover = first ? urls[first] : undefined;
-  const country = getCountry(listing.country_code);
+  const loc = useLocationNames();
   const price = formatEuro(listing.price_eur);
   const typeLabel = t(`prop.${listing.property_type}` as TranslationKey);
   const txLabel = t(`tx.${listing.transaction_type}` as TranslationKey);
@@ -48,7 +48,13 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
         </p>
         <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" />
-          {[listing.city, listing.region, country?.name].filter(Boolean).join(", ")}
+          {[
+            loc.cityName(listing.country_code, listing.region, listing.city),
+            loc.regionName(listing.country_code, listing.region),
+            loc.countryName(listing.country_code),
+          ]
+            .filter(Boolean)
+            .join(", ")}
         </p>
         {listing.description && (
           <p className="line-clamp-2 text-sm text-muted-foreground">{listing.description}</p>

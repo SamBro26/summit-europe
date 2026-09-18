@@ -21,7 +21,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { fetchListings } from "@/lib/listings";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import { getLanguage } from "@/lib/languages";
 import { useT } from "@/lib/i18n";
 
@@ -47,9 +47,15 @@ export function HomeScreen({
     city: null,
   });
   const language = getLanguage(languageCode);
-  const country = location.country ? getCountry(location.country) : undefined;
+  const loc = useLocationNames();
 
-  const scope = [country?.name, location.region, location.city].filter(Boolean).join(" › ");
+  const scope = [
+    loc.countryName(location.country),
+    loc.regionName(location.country, location.region),
+    loc.cityName(location.country, location.region, location.city),
+  ]
+    .filter(Boolean)
+    .join(" › ");
 
   async function signOut() {
     await supabase.auth.signOut();

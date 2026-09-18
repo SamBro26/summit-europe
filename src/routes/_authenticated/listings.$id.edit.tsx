@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { fetchListing, uploadListingPhoto } from "@/lib/listings";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import { PhoneInput } from "@/components/PhoneInput";
 import { PhotoUploader } from "@/components/PhotoUploader";
 import { Button } from "@/components/ui/button";
@@ -81,7 +81,7 @@ function EditListing() {
     );
   }
 
-  const country = getCountry(listing.country_code);
+  const loc = useLocationNames();
 
   async function addPhotos(files: File[]) {
     if (!user) return;
@@ -170,7 +170,13 @@ function EditListing() {
               {t(`prop.${listing.property_type}` as TranslationKey)} · {t(`tx.${listing.transaction_type}` as TranslationKey)}
             </p>
             <p className="text-sm text-muted-foreground">
-              {[listing.city, listing.region, country?.name].filter(Boolean).join(", ")}
+              {[
+                loc.cityName(listing.country_code, listing.region, listing.city),
+                loc.regionName(listing.country_code, listing.region),
+                loc.countryName(listing.country_code),
+              ]
+                .filter(Boolean)
+                .join(", ")}
             </p>
           </div>
 

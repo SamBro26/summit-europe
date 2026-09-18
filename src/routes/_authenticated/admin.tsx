@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { deleteListingAsAdmin, setUserBanned } from "@/lib/admin";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import { formatEuro } from "@/lib/property";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { Badge } from "@/components/ui/badge";
@@ -186,7 +186,7 @@ function AdminDashboard() {
 
             {(reports.data?.rows ?? []).map((r: any) => {
               const listing: any = reports.data?.listings.get(r.listing_id);
-              const country = listing ? getCountry(listing.country_code) : undefined;
+
               return (
                 <article
                   key={r.id}
@@ -204,7 +204,7 @@ function AdminDashboard() {
 
                   <p className="mt-3 text-sm font-medium">
                     {listing
-                      ? `${t(`prop.${listing.property_type}` as TranslationKey)} · ${[listing.city, country?.name].filter(Boolean).join(", ")}`
+                      ? `${t(`prop.${listing.property_type}` as TranslationKey)} · ${[loc.cityName(listing.country_code, listing.region, listing.city), loc.countryName(listing.country_code)].filter(Boolean).join(", ")}`
                       : t("admin.listingRemoved")}
                   </p>
                   {listing && (

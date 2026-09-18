@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Inbox as InboxIcon, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import { useT, type TranslationKey } from "@/lib/i18n";
 import { ChatPanel } from "@/components/ChatPanel";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
@@ -171,7 +171,7 @@ function InboxPage() {
           <ul className="divide-y divide-border">
             {threads.map((thread) => {
               const listing: any = listingById.get(thread.listingId);
-              const country = listing ? getCountry(listing.country_code) : undefined;
+
               return (
                 <li key={thread.key}>
                   <button
@@ -194,7 +194,12 @@ function InboxPage() {
                         <span className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
                           {t(`prop.${listing.property_type}` as TranslationKey)} ·{" "}
-                          {[listing.city, country?.name].filter(Boolean).join(", ")}
+                          {[
+                            loc.cityName(listing.country_code, listing.region, listing.city),
+                            loc.countryName(listing.country_code),
+                          ]
+                            .filter(Boolean)
+                            .join(", ")}
                         </span>
                       )}
                       <span className="mt-1 block truncate text-sm text-muted-foreground">
