@@ -24,8 +24,10 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const t = useT();
-  const regions = value.country ? regionsFor(value.country) : [];
-  const cities = regions.find((r) => r.name === value.region)?.cities ?? [];
+  const loc = useLocationNames();
+  const countries = loc.countryOptions;
+  const regions = loc.regionOptions(value.country);
+  const cities = loc.cityOptions(value.country, value.region);
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
