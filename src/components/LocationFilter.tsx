@@ -67,8 +67,8 @@ export function LocationFilter({
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {regions.map((r) => (
-              <SelectItem key={r.name} value={r.name}>
-                {r.name}
+              <SelectItem key={r.value} value={r.value}>
+                {r.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -92,8 +92,8 @@ export function LocationFilter({
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {cities.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
+              <SelectItem key={c.value} value={c.value}>
+                {c.label}
               </SelectItem>
             ))}
           </SelectContent>
