@@ -3,7 +3,7 @@ import { useState } from "react";
 import { LANGUAGES } from "@/lib/languages";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { translate } from "@/lib/i18n";
+import { translate } from "@/lib/i18n-data";
 
 export function LanguageSelect({
   current,
