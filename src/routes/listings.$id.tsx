@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
 import { fetchListing } from "@/lib/listings";
 import { formatEuro } from "@/lib/property";
-import { getCountry } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import { StarRating } from "@/components/StarRating";
 import { ContactActions } from "@/components/ContactActions";
 import { ChatPanel } from "@/components/ChatPanel";
@@ -124,7 +124,7 @@ function ListingDetails() {
   }
 
   const isAuthor = user?.id === listing.author_id;
-  const country = getCountry(listing.country_code);
+  const loc = useLocationNames();
   const cover = photos[active]?.storage_path;
 
   return (
@@ -197,7 +197,13 @@ function ListingDetails() {
           </h1>
           <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            {[listing.city, listing.region, country?.name].filter(Boolean).join(", ")}
+            {[
+              loc.cityName(listing.country_code, listing.region, listing.city),
+              loc.regionName(listing.country_code, listing.region),
+              loc.countryName(listing.country_code),
+            ]
+              .filter(Boolean)
+              .join(", ")}
           </p>
           {listing.description && (
             <p className="text-sm leading-relaxed whitespace-pre-line text-foreground">

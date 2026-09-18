@@ -1,5 +1,5 @@
 import { Building2, Lock, MapPin, Map } from "lucide-react";
-import { COUNTRIES, regionsFor } from "@/lib/locations";
+import { useLocationNames } from "@/lib/locations";
 import {
   Select,
   SelectContent,
@@ -24,8 +24,10 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const t = useT();
-  const regions = value.country ? regionsFor(value.country) : [];
-  const cities = regions.find((r) => r.name === value.region)?.cities ?? [];
+  const loc = useLocationNames();
+  const countries = loc.countryOptions;
+  const regions = loc.regionOptions(value.country);
+  const cities = loc.cityOptions(value.country, value.region);
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
@@ -38,10 +40,10 @@ export function LocationFilter({
             <SelectValue placeholder={t("filter.selectCountry")} />
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {COUNTRIES.map((c) => (
+            {countries.map((c) => (
               <SelectItem key={c.code} value={c.code}>
                 <span className="mr-2">{c.flag}</span>
-                {c.name}
+                {c.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -65,8 +67,8 @@ export function LocationFilter({
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {regions.map((r) => (
-              <SelectItem key={r.name} value={r.name}>
-                {r.name}
+              <SelectItem key={r.value} value={r.value}>
+                {r.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -90,8 +92,8 @@ export function LocationFilter({
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {cities.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
+              <SelectItem key={c.value} value={c.value}>
+                {c.label}
               </SelectItem>
             ))}
           </SelectContent>
