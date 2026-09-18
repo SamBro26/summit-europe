@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { useT } from "@/lib/i18n";
 
 export type LocationValue = {
   country: string | null;
@@ -22,18 +23,19 @@ export function LocationFilter({
   value: LocationValue;
   onChange: (next: LocationValue) => void;
 }) {
+  const t = useT();
   const regions = value.country ? regionsFor(value.country) : [];
   const cities = regions.find((r) => r.name === value.region)?.cities ?? [];
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      <Field label="Country" icon={<Map className="h-3.5 w-3.5" />} locked={false}>
+      <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a country" />
+            <SelectValue placeholder={t("filter.selectCountry")} />
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {COUNTRIES.map((c) => (
@@ -47,7 +49,7 @@ export function LocationFilter({
       </Field>
 
       <Field
-        label="Region / State"
+        label={t("filter.region")}
         icon={<MapPin className="h-3.5 w-3.5" />}
         locked={!value.country}
       >
@@ -57,7 +59,9 @@ export function LocationFilter({
           onValueChange={(region) => onChange({ ...value, region, city: null })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={value.country ? "Select a region" : "Select country first"} />
+            <SelectValue
+              placeholder={value.country ? t("filter.selectRegion") : t("filter.countryFirst")}
+            />
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {regions.map((r) => (
@@ -70,7 +74,7 @@ export function LocationFilter({
       </Field>
 
       <Field
-        label="City / Municipality"
+        label={t("filter.city")}
         icon={<Building2 className="h-3.5 w-3.5" />}
         locked={!value.region}
       >
@@ -80,7 +84,9 @@ export function LocationFilter({
           onValueChange={(city) => onChange({ ...value, city })}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={value.region ? "Select a city" : "Select region first"} />
+            <SelectValue
+              placeholder={value.region ? t("filter.selectCity") : t("filter.regionFirst")}
+            />
           </SelectTrigger>
           <SelectContent className="max-h-72">
             {cities.map((c) => (

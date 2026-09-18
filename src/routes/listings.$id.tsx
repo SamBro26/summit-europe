@@ -18,6 +18,7 @@ import { AdminListingActions } from "@/components/AdminListingActions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useT, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/listings/$id")({
   head: () => ({
@@ -40,6 +41,7 @@ export const Route = createFileRoute("/listings/$id")({
 });
 
 function ListingDetails() {
+  const t = useT();
   const { id } = useParams({ from: "/listings/$id" });
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -105,15 +107,17 @@ function ListingDetails() {
   }
 
   if (listingQuery.isLoading) {
-    return <p className="p-10 text-center text-sm text-muted-foreground">Loading listing…</p>;
+    return (
+      <p className="p-10 text-center text-sm text-muted-foreground">{t("listing.loading")}</p>
+    );
   }
 
   if (!listing) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-5">
-        <h1 className="text-xl font-semibold">This listing is no longer available</h1>
+        <h1 className="text-xl font-semibold">{t("listing.unavailable")}</h1>
         <Button asChild>
-          <Link to="/">Back to home</Link>
+          <Link to="/">{t("listing.backHome")}</Link>
         </Button>
       </div>
     );
@@ -131,12 +135,12 @@ function ListingDetails() {
             to="/"
             className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> {t("common.back")}
           </Link>
           {isAuthor && (
             <Button asChild variant="ghost" size="sm" className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
               <Link to="/listings/$id/edit" params={{ id }}>
-                <Pencil className="h-4 w-4" /> Edit ad
+                <Pencil className="h-4 w-4" /> {t("listing.edit")}
               </Link>
             </Button>
           )}
@@ -180,12 +184,16 @@ function ListingDetails() {
 
         <section className="shadow-soft space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div className="flex flex-wrap items-center gap-1.5">
-            <Badge variant="secondary">{propertyTypeLabel(listing.property_type)}</Badge>
-            <Badge variant="outline">{transactionLabel(listing.transaction_type)}</Badge>
-            <Badge>{listing.kind === "supply" ? "Offered" : "Wanted"}</Badge>
+            <Badge variant="secondary">
+              {t(`prop.${listing.property_type}` as TranslationKey)}
+            </Badge>
+            <Badge variant="outline">
+              {t(`tx.${listing.transaction_type}` as TranslationKey)}
+            </Badge>
+            <Badge>{listing.kind === "supply" ? t("listing.offered") : t("listing.wanted")}</Badge>
           </div>
           <h1 className="text-2xl font-semibold">
-            {formatEuro(listing.price_eur) ?? "Price on request"}
+            {formatEuro(listing.price_eur) ?? t("listing.priceOnRequest")}
           </h1>
           <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
@@ -199,16 +207,22 @@ function ListingDetails() {
 
           <div className="flex flex-wrap items-center gap-6 border-t border-border pt-4">
             <div>
-              <p className="text-xs tracking-wide text-muted-foreground uppercase">Rating</p>
+              <p className="text-xs tracking-wide text-muted-foreground uppercase">
+                {t("listing.rating")}
+              </p>
               <div className="mt-1.5 flex items-center gap-2">
                 <StarRating value={myRating || average} onRate={rate} />
                 <span className="text-sm text-muted-foreground">
-                  {ratings.length ? `${average.toFixed(1)} (${ratings.length})` : "No ratings yet"}
+                  {ratings.length
+                    ? `${average.toFixed(1)} (${ratings.length})`
+                    : t("listing.noRatings")}
                 </span>
               </div>
             </div>
             <div>
-              <p className="text-xs tracking-wide text-muted-foreground uppercase">Likes</p>
+              <p className="text-xs tracking-wide text-muted-foreground uppercase">
+                {t("listing.likes")}
+              </p>
               <Button
                 variant={liked ? "default" : "outline"}
                 size="sm"
@@ -224,10 +238,8 @@ function ListingDetails() {
 
         <section className="shadow-soft space-y-3 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div>
-            <h2 className="text-base font-semibold">Contact — always free</h2>
-            <p className="text-sm text-muted-foreground">
-              Message in the app, call, or reach the advertiser on WhatsApp.
-            </p>
+            <h2 className="text-base font-semibold">{t("listing.contactTitle")}</h2>
+            <p className="text-sm text-muted-foreground">{t("listing.contactSub")}</p>
           </div>
           <ContactActions
             phone={listing.phone}
@@ -245,7 +257,7 @@ function ListingDetails() {
           />
           {!listing.phone && (
             <p className="text-xs text-muted-foreground">
-              This advertiser has not shared a phone number — use in-app messaging.
+              {t("listing.noPhone")}
             </p>
           )}
         </section>

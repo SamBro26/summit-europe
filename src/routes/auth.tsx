@@ -8,6 +8,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({ redirect: z.string().optional() });
 
@@ -38,6 +39,7 @@ const credentials = z.object({
 });
 
 function AuthPage() {
+  const t = useT();
   const navigate = useNavigate();
   const search = useSearch({ from: "/auth" });
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -117,15 +119,13 @@ function AuthPage() {
 
         <div className="shadow-soft rounded-2xl border border-border bg-card p-6">
           <h1 className="text-xl font-semibold">
-            {mode === "signin" ? "Welcome back" : "Create your free account"}
+            {mode === "signin" ? t("auth.welcomeBack") : t("auth.createAccount")}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Posting ads and messaging are always free.
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("auth.free")}</p>
 
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("auth.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -136,7 +136,7 @@ function AuthPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("auth.password")}</Label>
               <Input
                 id="password"
                 type="password"
@@ -147,26 +147,27 @@ function AuthPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={busy}>
-              {mode === "signin" ? "Sign in" : "Sign up"}
+              {mode === "signin" ? t("common.signIn") : t("auth.signUp")}
             </Button>
           </form>
 
           <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+            <span className="h-px flex-1 bg-border" /> {t("auth.or")}{" "}
+            <span className="h-px flex-1 bg-border" />
           </div>
 
           <Button variant="outline" className="w-full" onClick={google}>
-            Continue with Google
+            {t("auth.google")}
           </Button>
 
           <p className="mt-5 text-center text-sm text-muted-foreground">
-            {mode === "signin" ? "No account yet?" : "Already registered?"}{" "}
+            {mode === "signin" ? t("auth.noAccount") : t("auth.haveAccount")}{" "}
             <button
               type="button"
               className="font-medium text-foreground underline"
               onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             >
-              {mode === "signin" ? "Sign up" : "Sign in"}
+              {mode === "signin" ? t("auth.signUp") : t("common.signIn")}
             </button>
           </p>
         </div>

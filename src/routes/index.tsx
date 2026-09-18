@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SplashScreen } from "@/components/SplashScreen";
 import { LanguageSelect } from "@/components/LanguageSelect";
 import { HomeScreen } from "@/components/HomeScreen";
-import { useLanguagePreference } from "@/lib/preferences";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
 type Stage = "splash" | "language" | "home";
 
 function Index() {
-  const { hydrated, language, setLanguage } = useLanguagePreference();
+  const { hydrated, language, setLanguage } = useI18n();
   const [splashDone, setSplashDone] = useState(false);
   const [changing, setChanging] = useState(false);
 

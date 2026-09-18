@@ -1,6 +1,8 @@
 import { Home } from "lucide-react";
+import { useT } from "@/lib/i18n";
 
 export function SplashScreen() {
+  const t = useT();
   return (
     <div className="bg-brand-gradient fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden">
       <div className="relative flex items-center justify-center">
@@ -22,7 +24,7 @@ export function SplashScreen() {
           FindMe <span className="text-accent">RealEstate</span>
         </h1>
         <p className="mt-3 text-sm tracking-[0.3em] text-primary-foreground/70 uppercase">
-          Eurozone Property Network
+          {t("app.tagline")}
         </p>
       </div>
 

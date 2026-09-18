@@ -3,6 +3,7 @@ import { Flag } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useT } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -33,6 +34,7 @@ const REASONS = [
 ];
 
 export function ReportListingDialog({ listingId }: { listingId: string }) {
+  const t = useT();
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
@@ -73,7 +75,7 @@ export function ReportListingDialog({ listingId }: { listingId: string }) {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
           <Flag className="h-4 w-4" />
-          Report listing <span dir="rtl">(إبلاغ)</span>
+          {t("listing.report")} <span dir="rtl">(إبلاغ)</span>
         </Button>
       </DialogTrigger>
       <DialogContent>

@@ -1,18 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { ImageOff, MapPin } from "lucide-react";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
-import { formatEuro, propertyTypeLabel, transactionLabel } from "@/lib/property";
+import { formatEuro, propertyTypeLabel } from "@/lib/property";
 import { getCountry } from "@/lib/locations";
 import type { ListingWithPhotos } from "@/lib/listings";
 import { Badge } from "@/components/ui/badge";
+import { useT, type TranslationKey } from "@/lib/i18n";
 
 export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
+  const t = useT();
   const photos = [...(listing.listing_photos ?? [])].sort((a, b) => a.sort_order - b.sort_order);
   const first = photos[0]?.storage_path ?? null;
   const urls = usePhotoUrls([first]);
   const cover = first ? urls[first] : undefined;
   const country = getCountry(listing.country_code);
   const price = formatEuro(listing.price_eur);
+  const typeLabel = t(`prop.${listing.property_type}` as TranslationKey);
+  const txLabel = t(`tx.${listing.transaction_type}` as TranslationKey);
 
   return (
     <Link
@@ -36,11 +40,11 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
       </div>
       <div className="space-y-2 p-4">
         <div className="flex flex-wrap items-center gap-1.5">
-          <Badge variant="secondary">{propertyTypeLabel(listing.property_type)}</Badge>
-          <Badge variant="outline">{transactionLabel(listing.transaction_type)}</Badge>
+          <Badge variant="secondary">{typeLabel}</Badge>
+          <Badge variant="outline">{txLabel}</Badge>
         </div>
         <p className="text-base font-semibold text-foreground">
-          {price ?? "Price on request"}
+          {price ?? t("listing.priceOnRequest")}
         </p>
         <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" />

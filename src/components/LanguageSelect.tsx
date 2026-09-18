@@ -3,6 +3,7 @@ import { useState } from "react";
 import { LANGUAGES } from "@/lib/languages";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { translate } from "@/lib/i18n";
 
 export function LanguageSelect({
   current,
@@ -14,6 +15,8 @@ export function LanguageSelect({
   onCancel?: () => void;
 }) {
   const [selected, setSelected] = useState<string | null>(current ?? null);
+  // Preview the chosen language immediately on this screen.
+  const t = (key: Parameters<typeof translate>[1]) => translate(selected ?? current ?? null, key);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -23,11 +26,10 @@ export function LanguageSelect({
             <Globe className="h-3.5 w-3.5" /> FindMe RealEstate
           </div>
           <h1 className="mt-5 text-2xl font-semibold text-primary-foreground sm:text-4xl">
-            Welcome. Choose your language.
+            {t("lang.title")}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-primary-foreground/75 sm:text-base">
-            We speak every language of the Eurozone. Pick yours — we&apos;ll remember it next
-            time.
+            {t("lang.subtitle")}
           </p>
         </div>
       </header>
@@ -66,7 +68,7 @@ export function LanguageSelect({
         <div className="mx-auto flex max-w-4xl gap-3">
           {onCancel && (
             <Button variant="outline" className="flex-1 sm:flex-none" onClick={onCancel}>
-              Cancel
+              {t("lang.cancel")}
             </Button>
           )}
           <Button
@@ -75,7 +77,7 @@ export function LanguageSelect({
             disabled={!selected}
             onClick={() => selected && onConfirm(selected)}
           >
-            Continue
+            {t("lang.continue")}
           </Button>
         </div>
       </div>
