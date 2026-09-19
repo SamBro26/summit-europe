@@ -17,55 +17,35 @@ export type LocationValue = {
 };
 
 type LocationNames = Record<string, string>;
-type Municipality = { names: LocationNames };
-type Region = { names: LocationNames; municipalities: Municipality[] };
-type Country = {
-  iso_3166_1: string;
+
+type GeoItem = {
+  iso_3166_1?: string;
   names: LocationNames;
-  regions: Region[];
+  regions?: GeoItem[];
+  municipalities?: GeoItem[];
 };
 
 const LOCATION_ASSET_URL = "/euro_multilingual.json";
 
-function isNames(value: unknown): value is LocationNames {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    typeof (value as LocationNames)["en"] === "string"
-  );
-}
-
-function isMunicipality(value: unknown): value is Municipality {
-  return typeof value === "object" && value !== null && isNames((value as Municipality).names);
-}
-
-function isRegion(value: unknown): value is Region {
+/** Tolerant shape check: keeps every entry the asset provides instead of dropping partial ones. */
+function isGeoItem(value: unknown): value is GeoItem {
   if (typeof value !== "object" || value === null) return false;
-  const region = value as Region;
-  return (
-    isNames(region.names) &&
-    Array.isArray(region.municipalities) &&
-    region.municipalities.every(isMunicipality)
-  );
+  const names = (value as GeoItem).names;
+  if (typeof names !== "object" || names === null) return false;
+  return Object.values(names).some((name) => typeof name === "string" && name.length > 0);
 }
 
-function isCountry(value: unknown): value is Country {
-  if (typeof value !== "object" || value === null) return false;
-  const country = value as Country;
-  return (
-    typeof country.iso_3166_1 === "string" &&
-    isNames(country.names) &&
-    Array.isArray(country.regions) &&
-    country.regions.every(isRegion)
-  );
+/** names[activeLanguage] → names.en → first available translation. */
+function getLocalizedName(names: LocationNames | undefined, language: string | null | undefined) {
+  if (!names) return "";
+  const active = language ? names[language] : undefined;
+  return active || names["en"] || Object.values(names).find(Boolean) || "";
 }
 
-function localizedName(names: LocationNames, language: string | null | undefined) {
-  return (language ? names[language] : undefined) || names["en"] || "";
-}
-
-function canonicalName(names: LocationNames) {
-  return names["en"] || "";
+/** Stable stored value, independent of the active language. */
+function canonicalName(names: LocationNames | undefined) {
+  if (!names) return "";
+  return names["en"] || Object.values(names).find(Boolean) || "";
 }
 
 export function LocationFilter({
@@ -76,51 +56,43 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<Country[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadFailed, setLoadFailed] = useState(false);
+  const [geoData, setGeoData] = useState<GeoItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    async function loadLocations() {
-      try {
-        const response = await fetch(LOCATION_ASSET_URL, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          throw new Error(`Location data request failed with status ${response.status}`);
-        }
-
-        const parsed: unknown = await response.json();
-        if (!Array.isArray(parsed) || parsed.length === 0 || !parsed.every(isCountry)) {
-          throw new Error("Location data has an invalid structure");
-        }
-
-        setGeoData(parsed);
-        setLoadFailed(false);
-      } catch (error) {
+    fetch(LOCATION_ASSET_URL, { signal: controller.signal, cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Network response was not ok (${res.status})`);
+        return res.json();
+      })
+      .then((data: unknown) => {
+        const list = Array.isArray(data) ? data.filter(isGeoItem) : [];
+        if (list.length === 0) throw new Error("Location asset is empty or malformed");
+        setGeoData(list);
+        setError(false);
+        setLoading(false);
+      })
+      .catch((err) => {
         if (controller.signal.aborted) return;
-        console.error(`Unable to load location data from ${LOCATION_ASSET_URL}`, error);
-        setGeoData([]);
-        setLoadFailed(true);
-      } finally {
-        if (!controller.signal.aborted) setIsLoading(false);
-      }
-    }
+        console.error("Error loading multilingual geo asset:", err);
+        setError(true);
+        setLoading(false);
+      });
 
-    void loadLocations();
     return () => controller.abort();
   }, []);
 
+  // Every derivation is keyed on `language`, so a global language change re-renders all labels.
   const countries = useMemo(
     () =>
       geoData
+        .filter((country) => typeof country.iso_3166_1 === "string")
         .map((country) => ({
-          source: country,
-          value: country.iso_3166_1,
-          label: localizedName(country.names, language),
+          value: country.iso_3166_1 as string,
+          label: getLocalizedName(country.names, language),
         }))
         .sort((left, right) => left.label.localeCompare(right.label, language ?? "en")),
     [geoData, language],
@@ -134,9 +106,8 @@ export function LocationFilter({
   const regions = useMemo(
     () =>
       (selectedCountry?.regions ?? []).map((region) => ({
-        source: region,
         value: canonicalName(region.names),
-        label: localizedName(region.names, language),
+        label: getLocalizedName(region.names, language),
       })),
     [language, selectedCountry],
   );
@@ -153,7 +124,7 @@ export function LocationFilter({
     () =>
       (selectedRegion?.municipalities ?? []).map((municipality) => ({
         value: canonicalName(municipality.names),
-        label: localizedName(municipality.names, language),
+        label: getLocalizedName(municipality.names, language),
       })),
     [language, selectedRegion],
   );
@@ -162,9 +133,9 @@ export function LocationFilter({
   const regionLabel = regions.find((region) => region.value === value.region)?.label;
   const cityLabel = cities.find((city) => city.value === value.city)?.label;
 
+  // Drop selections that no longer exist in the loaded asset.
   useEffect(() => {
-    if (isLoading || loadFailed) return;
-
+    if (loading || error) return;
     if (value.country && !selectedCountry) {
       onChange({ country: null, region: null, city: null });
       return;
@@ -176,16 +147,21 @@ export function LocationFilter({
     if (value.city && !cities.some((city) => city.value === value.city)) {
       onChange({ ...value, city: null });
     }
-  }, [cities, isLoading, loadFailed, onChange, selectedCountry, selectedRegion, value]);
+  }, [cities, error, loading, onChange, selectedCountry, selectedRegion, value]);
 
-  const unavailable = isLoading || loadFailed || geoData.length === 0;
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">{t("common.loading")}</p>;
+  }
+
+  if (error || geoData.length === 0) {
+    return <p className="text-sm text-destructive">{t("errors.loadBody")}</p>;
+  }
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
           key={`country-${language}-${geoData.length}`}
-          disabled={unavailable}
           {...(value.country ? { value: value.country } : {})}
           onValueChange={(country) => onChange({ country, region: null, city: null })}
         >
