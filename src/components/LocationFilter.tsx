@@ -25,7 +25,8 @@ type GeoItem = {
   municipalities?: GeoItem[];
 };
 
-const LOCATION_ASSET_URL = "/euro_multilingual.json";
+const LOCATION_ASSET_URL =
+  "https://sambro26.github.io/Real-estate-Europe-/euro_multilingual_divisions2.json";
 
 /** Tolerant shape check: keeps every entry the asset provides instead of dropping partial ones. */
 function isGeoItem(value: unknown): value is GeoItem {
