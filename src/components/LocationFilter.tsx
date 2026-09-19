@@ -28,6 +28,11 @@ type GeoItem = {
 const LOCATION_ASSET_URL =
   "https://sambro26.github.io/Real-estate-Europe-/euro_multilingual_divisions2.json";
 
+/** CORS-safe proxy wrapper; falls back to the direct URL if the proxy fails. */
+const LOCATION_PROXY_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+  LOCATION_ASSET_URL,
+)}`;
+
 /** Tolerant shape check: keeps every entry the asset provides instead of dropping partial ones. */
 function isGeoItem(value: unknown): value is GeoItem {
   if (typeof value !== "object" || value === null) return false;
@@ -64,11 +69,15 @@ export function LocationFilter({
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(LOCATION_ASSET_URL, { signal: controller.signal, cache: "no-store" })
-      .then((res) => {
+    const load = (url: string) =>
+      fetch(url, { signal: controller.signal, cache: "no-store" }).then((res) => {
         if (!res.ok) throw new Error(`Network response was not ok (${res.status})`);
         return res.json();
-      })
+      });
+
+    // Try the CORS proxy first; if it fails, fall back to the direct asset URL.
+    load(LOCATION_PROXY_URL)
+      .catch(() => load(LOCATION_ASSET_URL))
       .then((data: unknown) => {
         const list = Array.isArray(data) ? data.filter(isGeoItem) : [];
         if (list.length === 0) throw new Error("Location asset is empty or malformed");
