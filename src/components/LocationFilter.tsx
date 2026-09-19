@@ -28,6 +28,11 @@ type GeoItem = {
 const LOCATION_ASSET_URL =
   "https://sambro26.github.io/Real-estate-Europe-/euro_multilingual_divisions2.json";
 
+/** CORS-safe proxy wrapper; falls back to the direct URL if the proxy fails. */
+const LOCATION_PROXY_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+  LOCATION_ASSET_URL,
+)}`;
+
 /** Tolerant shape check: keeps every entry the asset provides instead of dropping partial ones. */
 function isGeoItem(value: unknown): value is GeoItem {
   if (typeof value !== "object" || value === null) return false;
