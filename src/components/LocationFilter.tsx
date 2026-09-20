@@ -18,25 +18,35 @@ export type LocationValue = {
 
 type LocationNames = Record<string, string>;
 
-type GeoItem = {
-  iso_3166_1?: string;
-  names: LocationNames;
-  regions?: GeoItem[];
-  municipalities?: GeoItem[];
+type MunicipalityItem = {
+  municipality_id?: string;
+  name?: string;
 };
 
-const LOCATION_ASSET_URL =
-  "https://sambro26.github.io/Real-estate-Europe-/euro_multilingual_divisions2.json";
+type Level2Division = {
+  names?: LocationNames;
+  municipalities?: MunicipalityItem[];
+};
 
-/** CORS-safe proxy wrapper; falls back to the direct URL if the proxy fails. */
-const LOCATION_PROXY_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-  LOCATION_ASSET_URL,
-)}`;
+type AdminDivision = {
+  names?: LocationNames;
+  level2_divisions?: Level2Division[];
+};
 
-/** Tolerant shape check: keeps every entry the asset provides instead of dropping partial ones. */
-function isGeoItem(value: unknown): value is GeoItem {
+type GeoCountry = {
+  iso_code?: string;
+  name_translations?: LocationNames;
+  administrative_divisions?: AdminDivision[];
+};
+
+const LOCATION_ASSET_URL = "/euro.countries.json";
+
+/** Tolerant shape check: keeps every country entry the asset provides. */
+function isGeoCountry(value: unknown): value is GeoCountry {
   if (typeof value !== "object" || value === null) return false;
-  const names = (value as GeoItem).names;
+  const country = value as GeoCountry;
+  if (typeof country.iso_code !== "string" || country.iso_code.length === 0) return false;
+  const names = country.name_translations;
   if (typeof names !== "object" || names === null) return false;
   return Object.values(names).some((name) => typeof name === "string" && name.length > 0);
 }
@@ -62,24 +72,21 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<GeoItem[]>([]);
+  const [geoData, setGeoData] = useState<GeoCountry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    const load = (url: string) =>
-      fetch(url, { signal: controller.signal, cache: "no-store" }).then((res) => {
+    fetch(LOCATION_ASSET_URL, { signal: controller.signal, cache: "no-store" })
+      .then((res) => {
         if (!res.ok) throw new Error(`Network response was not ok (${res.status})`);
         return res.json();
-      });
-
-    // Try the CORS proxy first; if it fails, fall back to the direct asset URL.
-    load(LOCATION_PROXY_URL)
-      .catch(() => load(LOCATION_ASSET_URL))
+      })
       .then((data: unknown) => {
-        const list = Array.isArray(data) ? data.filter(isGeoItem) : [];
+        const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
+        const list = Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
         if (list.length === 0) throw new Error("Location asset is empty or malformed");
         setGeoData(list);
         setError(false);
@@ -99,45 +106,48 @@ export function LocationFilter({
   const countries = useMemo(
     () =>
       geoData
-        .filter((country) => typeof country.iso_3166_1 === "string")
         .map((country) => ({
-          value: country.iso_3166_1 as string,
-          label: getLocalizedName(country.names, language),
+          value: country.iso_code as string,
+          label: getLocalizedName(country.name_translations, language),
         }))
         .sort((left, right) => left.label.localeCompare(right.label, language ?? "en")),
     [geoData, language],
   );
 
   const selectedCountry = useMemo(
-    () => geoData.find((country) => country.iso_3166_1 === value.country),
+    () => geoData.find((country) => country.iso_code === value.country),
     [geoData, value.country],
   );
 
   const regions = useMemo(
     () =>
-      (selectedCountry?.regions ?? []).map((region) => ({
-        value: canonicalName(region.names),
-        label: getLocalizedName(region.names, language),
+      (selectedCountry?.administrative_divisions ?? []).map((division) => ({
+        value: canonicalName(division.names),
+        label: getLocalizedName(division.names, language),
+        division,
       })),
     [language, selectedCountry],
   );
 
   const selectedRegion = useMemo(
-    () =>
-      (selectedCountry?.regions ?? []).find(
-        (region) => canonicalName(region.names) === value.region,
-      ),
-    [selectedCountry, value.region],
+    () => regions.find((region) => region.value === value.region)?.division,
+    [regions, value.region],
   );
 
-  const cities = useMemo(
-    () =>
-      (selectedRegion?.municipalities ?? []).map((municipality) => ({
-        value: canonicalName(municipality.names),
-        label: getLocalizedName(municipality.names, language),
-      })),
-    [language, selectedRegion],
-  );
+  const cities = useMemo(() => {
+    const level2 = selectedRegion?.level2_divisions ?? [];
+    const names = level2.flatMap((division) => {
+      const municipalities = division.municipalities ?? [];
+      if (municipalities.length > 0) {
+        return municipalities
+          .map((municipality) => municipality.name)
+          .filter((name): name is string => typeof name === "string" && name.length > 0);
+      }
+      const fallback = canonicalName(division.names);
+      return fallback ? [fallback] : [];
+    });
+    return Array.from(new Set(names)).map((name) => ({ value: name, label: name }));
+  }, [selectedRegion]);
 
   const countryLabel = countries.find((country) => country.value === value.country)?.label;
   const regionLabel = regions.find((region) => region.value === value.region)?.label;
