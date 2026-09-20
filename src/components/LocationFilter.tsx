@@ -52,6 +52,15 @@ function isGeoCountry(value: unknown): value is GeoCountry {
   return Object.values(names).some((name) => typeof name === "string" && name.length > 0);
 }
 
+/** Parse the `/euro.countries.json` payload: `{ countries: [...] }`. */
+function parseGeoPayload(data: unknown): GeoCountry[] {
+  const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
+  return Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
+}
+
+// Bundled copy of the same asset: instant first render, immune to network failures.
+const BUNDLED_GEO_DATA = parseGeoPayload(bundledGeo);
+
 /** names[activeLanguage] → names.en → first available translation. */
 function getLocalizedName(names: LocationNames | undefined, language: string | null | undefined) {
   if (!names) return "";
