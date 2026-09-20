@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/lib/i18n";
+import bundledGeo from "@/data/euroCountries.json";
 
 export type LocationValue = {
   country: string | null;
@@ -51,6 +52,15 @@ function isGeoCountry(value: unknown): value is GeoCountry {
   return Object.values(names).some((name) => typeof name === "string" && name.length > 0);
 }
 
+/** Parse the `/euro.countries.json` payload: `{ countries: [...] }`. */
+function parseGeoPayload(data: unknown): GeoCountry[] {
+  const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
+  return Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
+}
+
+// Bundled copy of the same asset: instant first render, immune to network failures.
+const BUNDLED_GEO_DATA = parseGeoPayload(bundledGeo);
+
 /** names[activeLanguage] → names.en → first available translation. */
 function getLocalizedName(names: LocationNames | undefined, language: string | null | undefined) {
   if (!names) return "";
@@ -72,8 +82,8 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<GeoCountry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [geoData, setGeoData] = useState<GeoCountry[]>(BUNDLED_GEO_DATA);
+  const [loading, setLoading] = useState(BUNDLED_GEO_DATA.length === 0);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -85,8 +95,7 @@ export function LocationFilter({
         return res.json();
       })
       .then((data: unknown) => {
-        const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
-        const list = Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
+        const list = parseGeoPayload(data);
         if (list.length === 0) throw new Error("Location asset is empty or malformed");
         setGeoData(list);
         setError(false);
@@ -95,7 +104,8 @@ export function LocationFilter({
       .catch((err) => {
         if (controller.signal.aborted) return;
         console.error("Error loading multilingual geo asset:", err);
-        setError(true);
+        // Keep the bundled data so the selectors stay usable offline.
+        setError(BUNDLED_GEO_DATA.length === 0);
         setLoading(false);
       });
 
