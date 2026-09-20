@@ -52,7 +52,6 @@ export function HomeScreen({
   const scope = [
     loc.countryName(location.country),
     loc.regionName(location.country, location.region),
-    loc.cityName(location.country, location.region, location.city),
   ]
     .filter(Boolean)
     .join(" › ");
