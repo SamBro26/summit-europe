@@ -65,7 +65,7 @@ function PostWizard() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const locationComplete = Boolean(location.country && location.region && location.city);
+  const locationComplete = Boolean(location.country && location.region);
   const detailsValid = detailsSchema.safeParse({ price, description }).success;
 
   const canNext =
@@ -114,7 +114,7 @@ function PostWizard() {
         transaction_type: transaction as never,
         country_code: location.country!,
         region: location.region!,
-        city: location.city!,
+        city: location.city?.trim() || "",
         price_eur: price ? Number(price.replace(",", ".")) : null,
         description: description.trim() || null,
         phone: phone.trim().length > 4 ? phone.trim() : null,
@@ -226,7 +226,7 @@ function PostWizard() {
 
           {step === 2 && (
             <div className="space-y-4">
-              <LocationFilter value={location} onChange={setLocation} />
+              <LocationFilter value={location} onChange={setLocation} cityMode="text" />
               <p className="text-sm text-muted-foreground">
                 {locationComplete ? t("post.locationSet") : t("post.locationPrompt")}
               </p>
