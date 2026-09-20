@@ -82,8 +82,8 @@ export function LocationFilter({
   onChange: (next: LocationValue) => void;
 }) {
   const { language, t } = useI18n();
-  const [geoData, setGeoData] = useState<GeoCountry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [geoData, setGeoData] = useState<GeoCountry[]>(BUNDLED_GEO_DATA);
+  const [loading, setLoading] = useState(BUNDLED_GEO_DATA.length === 0);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -95,8 +95,7 @@ export function LocationFilter({
         return res.json();
       })
       .then((data: unknown) => {
-        const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
-        const list = Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
+        const list = parseGeoPayload(data);
         if (list.length === 0) throw new Error("Location asset is empty or malformed");
         setGeoData(list);
         setError(false);
@@ -105,7 +104,8 @@ export function LocationFilter({
       .catch((err) => {
         if (controller.signal.aborted) return;
         console.error("Error loading multilingual geo asset:", err);
-        setError(true);
+        // Keep the bundled data so the selectors stay usable offline.
+        setError(BUNDLED_GEO_DATA.length === 0);
         setLoading(false);
       });
 
