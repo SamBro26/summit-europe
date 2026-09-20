@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Building2, Lock, Map, MapPin } from "lucide-react";
+import { Lock, Map, MapPin, Building2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,9 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/lib/i18n";
-import bundledGeo from "@/data/euroCountries.json";
+import bundledGeo from "@/data/euroDivisionsSource.json";
 
 export type LocationValue = {
   country: string | null;
@@ -19,19 +20,8 @@ export type LocationValue = {
 
 type LocationNames = Record<string, string>;
 
-type MunicipalityItem = {
-  municipality_id?: string;
-  name?: string;
-};
-
-type Level2Division = {
-  names?: LocationNames;
-  municipalities?: MunicipalityItem[];
-};
-
 type AdminDivision = {
   names?: LocationNames;
-  level2_divisions?: Level2Division[];
 };
 
 type GeoCountry = {
@@ -40,7 +30,7 @@ type GeoCountry = {
   administrative_divisions?: AdminDivision[];
 };
 
-const LOCATION_ASSET_URL = "/euro.countries.json";
+const LOCATION_ASSET_URL = "/euro.divisions.json";
 
 /** Tolerant shape check: keeps every country entry the asset provides. */
 function isGeoCountry(value: unknown): value is GeoCountry {
@@ -52,7 +42,7 @@ function isGeoCountry(value: unknown): value is GeoCountry {
   return Object.values(names).some((name) => typeof name === "string" && name.length > 0);
 }
 
-/** Parse the `/euro.countries.json` payload: `{ countries: [...] }`. */
+/** Parse the `/euro.divisions.json` payload: `{ countries: [...] }`. */
 function parseGeoPayload(data: unknown): GeoCountry[] {
   const raw = typeof data === "object" && data !== null ? (data as { countries?: unknown }).countries : null;
   return Array.isArray(raw) ? raw.filter(isGeoCountry) : [];
@@ -77,9 +67,12 @@ function canonicalName(names: LocationNames | undefined) {
 export function LocationFilter({
   value,
   onChange,
+  cityMode = "none",
 }: {
   value: LocationValue;
   onChange: (next: LocationValue) => void;
+  /** "text" shows an optional free-text city field (ad wizard); "none" hides it (search). */
+  cityMode?: "none" | "text";
 }) {
   const { language, t } = useI18n();
   const [geoData, setGeoData] = useState<GeoCountry[]>(BUNDLED_GEO_DATA);
@@ -134,34 +127,13 @@ export function LocationFilter({
       (selectedCountry?.administrative_divisions ?? []).map((division) => ({
         value: canonicalName(division.names),
         label: getLocalizedName(division.names, language),
-        division,
       })),
     [language, selectedCountry],
   );
 
-  const selectedRegion = useMemo(
-    () => regions.find((region) => region.value === value.region)?.division,
-    [regions, value.region],
-  );
-
-  const cities = useMemo(() => {
-    const level2 = selectedRegion?.level2_divisions ?? [];
-    const names = level2.flatMap((division) => {
-      const municipalities = division.municipalities ?? [];
-      if (municipalities.length > 0) {
-        return municipalities
-          .map((municipality) => municipality.name)
-          .filter((name): name is string => typeof name === "string" && name.length > 0);
-      }
-      const fallback = canonicalName(division.names);
-      return fallback ? [fallback] : [];
-    });
-    return Array.from(new Set(names)).map((name) => ({ value: name, label: name }));
-  }, [selectedRegion]);
-
   const countryLabel = countries.find((country) => country.value === value.country)?.label;
   const regionLabel = regions.find((region) => region.value === value.region)?.label;
-  const cityLabel = cities.find((city) => city.value === value.city)?.label;
+  const hasRegion = Boolean(value.region && regions.some((region) => region.value === value.region));
 
   // Drop selections that no longer exist in the loaded asset.
   useEffect(() => {
@@ -170,14 +142,10 @@ export function LocationFilter({
       onChange({ country: null, region: null, city: null });
       return;
     }
-    if (value.region && !selectedRegion) {
-      onChange({ country: value.country, region: null, city: null });
-      return;
+    if (value.region && !regions.some((region) => region.value === value.region)) {
+      onChange({ country: value.country, region: null, city: value.city });
     }
-    if (value.city && !cities.some((city) => city.value === value.city)) {
-      onChange({ ...value, city: null });
-    }
-  }, [cities, error, loading, onChange, selectedCountry, selectedRegion, value]);
+  }, [error, loading, onChange, regions, selectedCountry, value]);
 
   if (loading) {
     return <p className="text-sm text-muted-foreground">{t("common.loading")}</p>;
@@ -188,12 +156,12 @@ export function LocationFilter({
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className={cityMode === "text" ? "grid gap-4 sm:grid-cols-3" : "grid gap-4 sm:grid-cols-2"}>
       <Field label={t("filter.country")} icon={<Map className="h-3.5 w-3.5" />} locked={false}>
         <Select
           key={`country-${language}-${geoData.length}`}
           {...(value.country ? { value: value.country } : {})}
-          onValueChange={(country) => onChange({ country, region: null, city: null })}
+          onValueChange={(country) => onChange({ country, region: null, city: value.city })}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder={t("filter.selectCountry")}>
@@ -224,8 +192,8 @@ export function LocationFilter({
         <Select
           key={`region-${language}-${value.country ?? "none"}-${regions.length}`}
           disabled={!selectedCountry}
-          {...(value.region ? { value: value.region } : {})}
-          onValueChange={(region) => onChange({ country: value.country, region, city: null })}
+          {...(hasRegion ? { value: value.region as string } : {})}
+          onValueChange={(region) => onChange({ country: value.country, region, city: value.city })}
         >
           <SelectTrigger className="w-full">
             <SelectValue
@@ -244,33 +212,19 @@ export function LocationFilter({
         </Select>
       </Field>
 
-      <Field
-        label={t("filter.city")}
-        icon={<Building2 className="h-3.5 w-3.5" />}
-        locked={!selectedRegion}
-      >
-        <Select
-          key={`city-${language}-${value.country ?? "none"}-${value.region ?? "none"}-${cities.length}`}
-          disabled={!selectedRegion}
-          {...(value.city ? { value: value.city } : {})}
-          onValueChange={(city) => onChange({ ...value, city })}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue
-              placeholder={selectedRegion ? t("filter.selectCity") : t("filter.regionFirst")}
-            >
-              {cityLabel}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent className="max-h-72">
-            {cities.map((city) => (
-              <SelectItem key={city.value} value={city.value}>
-                {city.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </Field>
+      {cityMode === "text" && (
+        <Field label={t("filter.city")} icon={<Building2 className="h-3.5 w-3.5" />} locked={false}>
+          <Input
+            type="text"
+            maxLength={120}
+            value={value.city ?? ""}
+            placeholder={t("filter.selectCity")}
+            onChange={(event) =>
+              onChange({ ...value, city: event.target.value.length ? event.target.value : null })
+            }
+          />
+        </Field>
+      )}
     </div>
   );
 }
