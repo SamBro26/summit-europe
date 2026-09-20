@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/lib/i18n";
+import bundledGeo from "@/data/euroCountries.json";
 
 export type LocationValue = {
   country: string | null;
