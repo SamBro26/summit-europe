@@ -1,0 +1,1353 @@
+{
+  "countries": [
+{
+      "iso_code": "AT",
+      "capital": "Vienna",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Австрия", "ca": "Àustria", "hr": "Austrija", "nl": "Oostenrijk", "en": "Austria",
+        "et": "Austria", "fi": "Itävalta", "fr": "Autriche", "de": "Österreich", "el": "Αυστρία",
+        "ga": "An Ostair", "it": "Austria", "lv": "Austrija", "lt": "Austrija", "lb": "Éisträich",
+        "mt": "Awstrija", "pt": "Áustria", "sk": "Rakúsko", "sl": "Avstrija", "es": "Austria",
+        "tr": "Avusturya", "la": "Austria", "sv": "Österrike"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "AT-9",
+          "type": "Bundesland",
+          "names": {
+            "bg": "Виена", "ca": "Viena", "hr": "Beč", "nl": "Wenen", "en": "Vienna",
+            "et": "Viin", "fi": "Wien", "fr": "Vienne", "de": "Wien", "el": "Βιέννη",
+            "ga": "Vín", "it": "Vienna", "lv": "Vīne", "lt": "Viena", "lb": "Wien",
+            "mt": "Vjenna", "pt": "Viena", "sk": "Viedeň", "sl": "Dunaj", "es": "Viena",
+            "tr": "Viyana", "la": "Vindobona", "sv": "Wien"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "AT-901",
+              "type": "Bezirk",
+              "names": {
+                "bg": "Виена (Град)", "ca": "Viena (Ciutat)", "hr": "Beč (Grad)", "nl": "Wenen (Stad)", "en": "Vienna City",
+                "et": "Viini linn", "fi": "Wienin kaupunki", "fr": "Vienne Ville", "de": "Wien Stadt", "el": "Βιέννη (Πόλη)",
+                "ga": "Cathair Vín", "it": "Vienna Città", "lv": "Vīnes pilsēta", "lt": "Vienos miestas", "lb": "Wien Stad",
+                "mt": "Belt ta' Vjenna", "pt": "Viena Cidade", "sk": "Viedeň-mesto", "sl": "Dunaj-mesto", "es": "Viena Ciudad",
+                "tr": "Viyana Şehri", "la": "Vindobona Urbs", "sv": "Wien Stad"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "AT-M-1010",
+                  "name": "Innere Stadt",
+                  "postal_codes": ["1010"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "BE",
+      "capital": "Brussels",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Белгия", "ca": "Bèlgica", "hr": "Belgija", "nl": "België", "en": "Belgium",
+        "et": "Belgia", "fi": "Belgia", "fr": "Belgique", "de": "Belgien", "el": "Βέλγιο",
+        "ga": "An Bheilg", "it": "Belgio", "lv": "Beļģija", "lt": "Belgija", "lb": "Belsch",
+        "mt": "Belġju", "pt": "Bélgica", "sk": "Belgicko", "sl": "Belgija", "es": "Bélgica",
+        "tr": "Belçika", "la": "Belgica", "sv": "Belgien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "BE-VLG",
+          "type": "Gewest",
+          "names": {
+            "bg": "Фландрия", "ca": "Flandes", "hr": "Flandrija", "nl": "Vlaanderen", "en": "Flanders",
+            "et": "Flandria", "fi": "Flanderi", "fr": "Flandre", "de": "Flandern", "el": "Φλάνδρα",
+            "ga": "An Flandras", "it": "Fiandre", "lv": "Flandrija", "lt": "Flandrija", "lb": "Flandern",
+            "mt": "Flandra", "pt": "Flandres", "sk": "Flámsko", "sl": "Flandrija", "es": "Flandes",
+            "tr": "Flanş", "la": "Flandria", "sv": "Flandern"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "BE-VAN",
+              "type": "Provincie",
+              "names": {
+                "bg": "Антверпен", "ca": "Anvers", "hr": "Antwerpen", "nl": "Antwerpen", "en": "Antwerp",
+                "et": "Antwerpen", "fi": "Antwerpen", "fr": "Anvers", "de": "Antwerpen", "el": "Антверпен",
+                "ga": "Antuairp", "it": "Anversa", "lv": "Antverpene", "lt": "Antverpenas", "lb": "Antwerpen",
+                "mt": "Antwerp", "pt": "Antuérpia", "sk": "Antverpy", "sl": "Antwerpen", "es": "Amberes",
+                "tr": "Antwerp", "la": "Antverpia", "sv": "Antwerpen"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "BE-M-2000",
+                  "name": "Antwerpen",
+                  "postal_codes": ["2000"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "BG",
+      "capital": "Sofia",
+      "currency": "BGN",
+      "name_translations": {
+        "bg": "България", "ca": "Bulgària", "hr": "Bugarska", "nl": "Bulgarije", "en": "Bulgaria",
+        "et": "Bulgaaria", "fi": "Bulgaria", "fr": "Bulgarie", "de": "Bulgarien", "el": "Βουλγαρία",
+        "ga": "An Bhulgáir", "it": "Bulgaria", "lv": "Bulgārija", "lt": "Bulgarija", "lb": "Bulgarien",
+        "mt": "Bulgarija", "pt": "Bulgária", "sk": "Bulharsko", "sl": "Bolgarija", "es": "Bulgaria",
+        "tr": "Bulgaristan", "la": "Bulgaria", "sv": "Bulgarien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "BG-22",
+          "type": "Oblast",
+          "names": {
+            "bg": "София-град", "ca": "Sofia-ciutat", "hr": "Sofija-grad", "nl": "Sofia-stad", "en": "Sofia City",
+            "et": "Sofia linn", "fi": "Sofia kaupunki", "fr": "Sofia-ville", "de": "Sofia-Stadt", "el": "Σόφια (Πόλη)",
+            "ga": "Cathair Shóifia", "it": "Sofia Città", "lv": "Sofijas pilsēta", "lt": "Sofijos miestas", "lb": "Sofia Stad",
+            "mt": "Belt ta' Sofija", "pt": "Sófia Cidade", "sk": "Sofia-mesto", "sl": "Sofija-mesto", "es": "Sofía Ciudad",
+            "tr": "Sofya Şehri", "la": "Sofia Urbs", "sv": "Sofia Stad"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "BG-22-S",
+              "type": "Obshtina",
+              "names": {
+                "bg": "Столична", "ca": "Stolichna", "hr": "Stolichna", "nl": "Stolichna", "en": "Stolichna",
+                "et": "Stolichna", "fi": "Stolichna", "fr": "Stolichna", "de": "Stolichna", "el": "Στολίτσна",
+                "ga": "Stolichna", "it": "Stolichna", "lv": "Stolična", "lt": "Stolična", "lb": "Stolichna",
+                "mt": "Stolichna", "pt": "Stolichna", "sk": "Stolichna", "sl": "Stolichna", "es": "Stolichna",
+                "tr": "Stolichna", "la": "Stolichna", "sv": "Stolichna"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "BG-M-1000",
+                  "name": "Sofia Centro",
+                  "postal_codes": ["1000"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "HR",
+      "capital": "Zagreb",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Хърватия", "ca": "Croàcia", "hr": "Hrvatska", "nl": "Kroatië", "en": "Croatia",
+        "et": "Horvaatia", "fi": "Kroatia", "fr": "Croatie", "de": "Kroatien", "el": "Κροατία",
+        "ga": "An Chróit", "it": "Croazia", "lv": "Horvātija", "lt": "Kroatija", "lb": "Kroatien",
+        "mt": "Kroazja", "pt": "Croácia", "sk": "Chorvátsko", "sl": "Hrvaška", "es": "Croacia",
+        "tr": "Hırvatistan", "la": "Croatia", "sv": "Kroatien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "HR-21",
+          "type": "Županija",
+          "names": {
+            "bg": "Град Загреб", "ca": "Ciutat de Zagreb", "hr": "Grad Zagreb", "nl": "Stad Zagreb", "en": "City of Zagreb",
+            "et": "Zagrebi linn", "fi": "Zagrebin kaupunki", "fr": "Ville de Zagreb", "de": "Stadt Zagreb", "el": "Ζάγκρεμπ (Πόλη)",
+            "ga": "Cathair Ghaidreabh", "it": "Zagabria Città", "lv": "Zagrebas pilsēta", "lt": "Zagrebo miestas", "lb": "Zagreb Stad",
+            "mt": "Belt ta' Zagreb", "pt": "Zagreb Cidade", "sk": "Záhreb-mesto", "sl": "Zagreb-mesto", "es": "Zagreb Ciudad",
+            "tr": "Zagreb Şehri", "la": "Zagrabia Urbs", "sv": "Zagreb Stad"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "HR-21-1",
+              "type": "Gradska četvrt",
+              "names": {
+                "bg": "Дони Град", "ca": "Donji Grad", "hr": "Donji Grad", "nl": "Donji Grad", "en": "Donji Grad",
+                "et": "Donji Grad", "fi": "Donji Grad", "fr": "Donji Grad", "de": "Donji Grad", "el": "Ντόνι Γκραντ",
+                "ga": "Donji Grad", "it": "Donji Grad", "lv": "Donji Grad", "lt": "Donji Grad", "lb": "Donji Grad",
+                "mt": "Donji Grad", "pt": "Donji Grad", "sk": "Donji Grad", "sl": "Donji Grad", "es": "Donji Grad",
+                "tr": "Donji Grad", "la": "Donji Grad", "sv": "Donji Grad"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "HR-M-10000",
+                  "name": "Zagreb Centar",
+                  "postal_codes": ["10000"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+  "iso_code": "CY",
+  "capital": "Nicosia",
+  "currency": "EUR",
+  "name_translations": {
+    "bg": "Кипър",
+    "ca": "Xipre",
+    "hr": "Cipar",
+    "nl": "Cyprus",
+    "en": "Cyprus",
+    "et": "Küpros",
+    "fi": "Kypros",
+    "fr": "Chypre",
+    "de": "Zypern",
+    "el": "Κύπρος",
+    "ga": "An Chipir",
+    "it": "Cipro",
+    "lv": "Kipra",
+    "lt": "Kipras",
+    "lb": "Zypern",
+    "mt": "Ċipru",
+    "pt": "Chipre",
+    "sk": "Cyprus",
+    "sl": "Ciper",
+    "es": "Chipre",
+    "tr": "Kıbrıs",
+    "la": "Cyprus",
+    "sv": "Cypern"
+  },
+  "administrative_divisions": [
+    {
+      "level1_id": "CY-01",
+      "type": "Eparchia",
+      "names": {
+        "bg": "Никозия",
+        "ca": "Nicòsia",
+        "hr": "Nikozija",
+        "nl": "Nicosia",
+        "en": "Nicosia",
+        "et": "Nicosia",
+        "fi": "Nikosia",
+        "fr": "Nicosie",
+        "de": "Nikosia",
+        "el": "Λευκωσία",
+        "ga": "Nicosia",
+        "it": "Nicosia",
+        "lv": "Nikosija",
+        "lt": "Nikosija",
+        "lb": "Nikosia",
+        "mt": "Nikosija",
+        "pt": "Nicosia",
+        "sk": "Nikózia",
+        "sl": "Nikozija",
+        "es": "Nicosia",
+        "tr": "Lefkoşa",
+        "la": "Nicosia",
+        "sv": "Nikosia"
+      },
+      "level2_divisions": [
+        {
+          "level2_id": "CY-01-M",
+          "type": "Dimos",
+          "names": {
+            "bg": "Община Никозия",
+            "ca": "Municipi de Nicòsia",
+            "hr": "Općina Nikozija",
+            "nl": "Gemeente Nicosia",
+            "en": "Nicosia Municipality",
+            "et": "Nicosia vald",
+            "fi": "Nikosian kunta",
+            "fr": "Municipalité de Nicosie",
+            "de": "Gemeinde Nikosia",
+            "el": "Δήμος Λευκωσίας",
+            "ga": "Bardas Nicosia",
+            "it": "Comune di Nicosia",
+            "lv": "Nikosijas pašvaldība",
+            "lt": "Nikosijos savivaldybė",
+            "lb": "Gemeng Nikosia",
+            "mt": "Muniċipalità ta' Nikosija",
+            "pt": "Município de Nicósia",
+            "sk": "Mesto Nikózia",
+            "sl": "Občina Nikozija",
+            "es": "Municipio de Nicosia",
+            "tr": "Lefkoşa Belediyesi",
+            "la": "Municipium Nicosia",
+            "sv": "Nikosia kommun"
+          },
+          "municipalities": [
+            {
+              "municipality_id": "CY-M-2300",
+              "name": "Ayios Dhometios",
+              "postal_codes": [
+                "2300"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+},
+    {
+      "iso_code": "EE",
+      "capital": "Tallinn",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Естония", "ca": "Estònia", "hr": "Estonija", "nl": "Estland", "en": "Estonia",
+        "et": "Eesti", "fi": "Viro", "fr": "Estonie", "de": "Estland", "el": "Εσθονία",
+        "ga": "An Eastóin", "it": "Estonia", "lv": "Igaunija", "lt": "Estija", "lb": "Estland",
+        "mt": "Estonja", "pt": "Estónia", "sk": "Estónsko", "sl": "Estonija", "es": "Estonia",
+        "tr": "Estonya", "la": "Estonia", "sv": "Estland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "EE-37",
+          "type": "Maakond",
+          "names": {
+            "bg": "Харю", "ca": "Harju", "hr": "Harju", "nl": "Harju", "en": "Harju",
+            "et": "Harjumaa", "fi": "Harjumaa", "fr": "Harju", "de": "Harju", "el": "Χάριου",
+            "ga": "Harju", "it": "Harju", "lv": "Harju", "lt": "Harju", "lb": "Harju",
+            "mt": "Harju", "pt": "Harju", "sk": "Harju", "sl": "Harju", "es": "Harju",
+            "tr": "Harju", "la": "Harria", "sv": "Harjumaa"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "EE-37-T",
+              "type": "Omavalitsus",
+              "names": {
+                "bg": "Талин", "ca": "Tallinn", "hr": "Tallinn", "nl": "Tallinn", "en": "Tallinn",
+                "et": "Tallinn", "fi": "Tallinna", "fr": "Tallinn", "de": "Tallinn", "el": "Τάλιν",
+                "ga": "Tallinn", "it": "Tallinn", "lv": "Tallina", "lt": "Talinas", "lb": "Tallinn",
+                "mt": "Tallinn", "pt": "Tallinn", "sk": "Tallinn", "sl": "Talin", "es": "Tallín",
+                "tr": "Tallinn", "la": "Revalia", "sv": "Tallinn"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "EE-M-10111",
+                  "name": "Kesklinna",
+                  "postal_codes": ["10111"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "FI",
+      "capital": "Helsinki",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Финландия", "ca": "Finlàndia", "hr": "Finska", "nl": "Finland", "en": "Finland",
+        "et": "Soome", "fi": "Suomi", "fr": "Finlande", "de": "Finnland", "el": "Φινλανδία",
+        "ga": "An Fhionlann", "it": "Finlandia", "lv": "Somija", "lt": "Suomija", "lb": "Finnland",
+        "mt": "Finlandja", "pt": "Finlândia", "sk": "Fínsko", "sl": "Finska", "es": "Finlandia",
+        "tr": "Finlandiya", "la": "Finnia", "sv": "Finland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "FI-18",
+          "type": "Maakunta",
+          "names": {
+            "bg": "Уусимаа", "ca": "Uusimaa", "hr": "Uusimaa", "nl": "Uusimaa", "en": "Uusimaa",
+            "et": "Uusimaa", "fi": "Uusimaa", "fr": "Uusimaa", "de": "Uusimaa", "el": "Ούσιμαα",
+            "ga": "Uusimaa", "it": "Uusimaa", "lv": "Ūsimā", "lt": "Ūsima", "lb": "Uusimaa",
+            "mt": "Uusimaa", "pt": "Uusimaa", "sk": "Uusimaa", "sl": "Uusimaa", "es": "Uusimaa",
+            "tr": "Uusimaa", "la": "Nylandia", "sv": "Nyland"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "FI-181",
+              "type": "Seutukunta",
+              "names": {
+                "bg": "Хелзинки", "ca": "Helsinki", "hr": "Helsinki", "nl": "Helsinki", "en": "Helsinki",
+                "et": "Helsingi", "fi": "Helsinki", "fr": "Helsinki", "de": "Helsinki", "el": "Ελσίνκι",
+                "ga": "Helsinki", "it": "Helsinki", "lv": "Helsinki", "lt": "Helsinkis", "lb": "Helsinki",
+                "mt": "Helsinki", "pt": "Helsínquia", "sk": "Helsinki", "sl": "Helsinki", "es": "Helsinki",
+                "tr": "Helsinki", "la": "Helsingforsia", "sv": "Helsingfors"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "FI-M-00100",
+                  "name": "Helsinki Centrum",
+                  "postal_codes": ["00100"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "FR",
+      "capital": "Paris",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Франция", "ca": "França", "hr": "Francuska", "nl": "Frankrijk", "en": "France",
+        "et": "Prantsusmaa", "fi": "Ranska", "fr": "France", "de": "Frankreich", "el": "Γαλλία",
+        "ga": "An Fhrainc", "it": "Francia", "lv": "Francija", "lt": "Prancūzija", "lb": "Fransöösh",
+        "mt": "Franza", "pt": "França", "sk": "Francúzsko", "sl": "Francija", "es": "Francia",
+        "tr": "Fransa", "la": "Francia", "sv": "Frankrike"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "FR-IDF",
+          "type": "Région",
+          "names": {
+            "bg": "Ил дьо Франс", "ca": "Illa de França", "hr": "Île-de-France", "nl": "Île-de-France", "en": "Île-de-France",
+            "et": "Île-de-France", "fi": "Île-de-France", "fr": "Île-de-France", "de": "Île-de-France", "el": "Ιλ-ντε-Φρανς",
+            "ga": "Île-de-France", "it": "Isola de Francia", "lv": "Ildefransa", "lt": "Il de Fransas", "lb": "Île-de-France",
+            "mt": "Île-de-France", "pt": "Ilha de França", "sk": "Île-de-France", "sl": "Île-de-France", "es": "Isla de Francia",
+            "tr": "Île-de-France", "la": "Insula Franciae", "sv": "Île-de-France"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "FR-75",
+              "type": "Département",
+              "names": {
+                "bg": "Париж", "ca": "París", "hr": "Pariz", "nl": "Parijs", "en": "Paris",
+                "et": "Pariis", "fi": "Pariisi", "fr": "Paris", "de": "Paris", "el": "Παρίσι",
+                "ga": "Pariz", "it": "Parigi", "lv": "Parīze", "lt": "Paryžius", "lb": "Paräis",
+                "mt": "Pariġi", "pt": "Paris", "sk": "Paríž", "sl": "Pariz", "es": "París",
+                "tr": "Paris", "la": "Lutetia", "sv": "Paris"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "FR-M-75001",
+                  "name": "Paris 1er Arrondissement",
+                  "postal_codes": ["75001"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "DE",
+      "capital": "Berlin",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Германия", "ca": "Alemanya", "hr": "Njemačka", "nl": "Duitsland", "en": "Germany",
+        "et": "Saksamaa", "fi": "Saksa", "fr": "Allemagne", "de": "Deutschland", "el": "Γερμανία",
+        "ga": "An Ghearmáin", "it": "Germania", "lv": "Vācija", "lt": "Vokietija", "lb": "Däitschland",
+        "mt": "Ġermanja", "pt": "Alemanha", "sk": "Nemecko", "sl": "Nemčija", "es": "Alemania",
+        "tr": "Almanya", "la": "Germania", "sv": "Tyskland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "DE-BY",
+          "type": "Bundesland",
+          "names": {
+            "bg": "Бавария", "ca": "Baviera", "hr": "Bavarska", "nl": "Beieren", "en": "Bavaria",
+            "et": "Baieri", "fi": "Baijeri", "fr": "Bavière", "de": "Bayern", "el": "Βαυαρία",
+            "ga": "An Bhaváir", "it": "Baviera", "lv": "Bavārija", "lt": "Bavarija", "lb": "Bayern",
+            "mt": "Baviera", "pt": "Baviera", "sk": "Bavorsko", "sl": "Bavarska", "es": "Baviera",
+            "tr": "Bavyera", "la": "Bavaria", "sv": "Bayern"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "DE-DE2",
+              "type": "Regierungsbezirk",
+              "names": {
+                "bg": "Горна Бавария", "ca": "Alta Baviera", "hr": "Gornja Bavarska", "nl": "Opper-Beieren", "en": "Upper Bavaria",
+                "et": "Ülem-Baieri", "fi": "Ylä-Baijeri", "fr": "Haute-Bavière", "de": "Oberbayern", "el": "Άνω Βαυαρία",
+                "ga": "An Uachtar-Bhaváir", "it": "Alta Baviera", "lv": "Augšbavārija", "lt": "Aukštutinė Bavarija", "lb": "Oberbayern",
+                "mt": "Alta Baviera", "pt": "Alta Baviera", "sk": "Horné Bavorsko", "sl": "Zgornja Bavarska", "es": "Alta Baviera",
+                "tr": "Yukarı Bavyera", "la": "Bavaria Superior", "sv": "Övre Bayern"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "DE-M-80331",
+                  "name": "München",
+                  "postal_codes": ["80331"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "GR",
+      "capital": "Athens",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Гърция", "ca": "Grècia", "hr": "Grčka", "nl": "Griekenland", "en": "Greece",
+        "et": "Kreeka", "fi": "Kreikka", "fr": "Grèce", "de": "Griechenland", "el": "Ελλάδα",
+        "ga": "An Ghréig", "it": "Grecia", "lv": "Grieķija", "lt": "Graikija", "lb": "Griechenland",
+        "mt": "Greċja", "pt": "Grécia", "sk": "Grecko", "sl": "Grčija", "es": "Grecia",
+        "tr": "Yunanistan", "la": "Graecia", "sv": "Grekland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "GR-I",
+          "type": "Perifereia",
+          "names": {
+            "bg": "Атика", "ca": "Àtica", "hr": "Atika", "nl": "Attica", "en": "Attica",
+            "et": "Atika", "fi": "Attika", "fr": "Attique", "de": "Attika", "el": "Αττική",
+            "ga": "Attica", "it": "Attica", "lv": "Atika", "lt": "Atika", "lb": "Attika",
+            "mt": "Attika", "pt": "Ática", "sk": "Attika", "sl": "Atika", "es": "Ática",
+            "tr": "Attika", "la": "Attica", "sv": "Attika"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "GR-I-ATH",
+              "type": "Perifereiaki Enotita",
+              "names": {
+                "bg": "Централна Атина", "ca": "Atenes Central", "hr": "Središnja Atena", "nl": "Centraal-Athene", "en": "Central Athens",
+                "et": "Kesk-Ateena", "fi": "Keski-Ateena", "fr": "Athènes-Centre", "de": "Zentrum-Athen", "el": "Κεντρικός Τομέας Αθηνών",
+                "ga": "Lár na hAithne", "it": "Atene Centrale", "lv": "Centrālā Atēnas", "lt": "Centrinis Atėnai", "lb": "Zentral Athen",
+                "mt": "Atene Ċentrali", "pt": "Atenas Central", "sk": "Centrálne Atény", "sl": "Osrednja Atene", "es": "Atenas Central",
+                "tr": "Merkez Atina", "la": "Athenae Centralis", "sv": "Centralathen"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "GR-M-10431",
+                  "name": "Dimos Athinaion",
+                  "postal_codes": ["10431"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "IE",
+      "capital": "Dublin",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Ирландия", "ca": "Irlanda", "hr": "Irska", "nl": "Ierland", "en": "Ireland",
+        "et": "Iirimaa", "fi": "Irlanti", "fr": "Irlande", "de": "Irland", "el": "Ιρλανδία",
+        "ga": "Éire", "it": "Irlanda", "lv": "Īrija", "lt": "Airija", "lb": "Irland",
+        "mt": "Irlanda", "pt": "Irlanda", "sk": "Írsko", "sl": "Irska", "es": "Irlanda",
+        "tr": "İrlanda", "la": "Hibernia", "sv": "Irland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "IE-L",
+          "type": "Cúige",
+          "names": {
+            "bg": "Ленстър", "ca": "Leinster", "hr": "Leinster", "nl": "Leinster", "en": "Leinster",
+            "et": "Leinster", "fi": "Leinster", "fr": "Leinster", "de": "Leinster", "el": "Λένστερ",
+            "ga": "Laighin", "it": "Leinster", "lv": "Lenstera", "lt": "Lensteris", "lb": "Leinster",
+            "mt": "Leinster", "pt": "Leinster", "sk": "Leinster", "sl": "Leinster", "es": "Leinster",
+            "tr": "Leinster", "la": "Lagenia", "sv": "Leinster"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "IE-D",
+              "type": "Contae",
+              "names": {
+                "bg": "Дъблин", "ca": "Dublín", "hr": "Dublin", "nl": "Dublin", "en": "Dublin",
+                "et": "Dublin", "fi": "Dublin", "fr": "Dublin", "de": "Dublin", "el": "Δουβλίνο",
+                "ga": "Baile Átha Cliath", "it": "Dublino", "lv": "Dublina", "lt": "Dublinas", "lb": "Dublin",
+                "mt": "Dublin", "pt": "Dublin", "sk": "Dublin", "sl": "Dublin", "es": "Dublín",
+                "tr": "Dublin", "la": "Dublinum", "sv": "Dublin"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "IE-M-D01",
+                  "name": "Dublin City Council",
+                  "postal_codes": ["D01"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "IT",
+      "capital": "Rome",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Италия", "ca": "Itàlia", "hr": "Italija", "nl": "Italië", "en": "Italy",
+        "et": "Itaalia", "fi": "Italia", "fr": "Italie", "de": "Italien", "el": "Ιταλία",
+        "ga": "An Iodáil", "it": "Italia", "lv": "Itālija", "lt": "Italija", "lb": "Italien",
+        "mt": "Italja", "pt": "Itália", "sk": "Taliansko", "sl": "Italija", "es": "Italia",
+        "tr": "İtalya", "la": "Italia", "sv": "Italien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "IT-25",
+          "type": "Regione",
+          "names": {
+            "bg": "Ломбардия", "ca": "Llombardia", "hr": "Lombardija", "nl": "Lombardije", "en": "Lombardy",
+            "et": "Lombardia", "fi": "Lombardia", "fr": "Lombardie", "de": "Lombardei", "el": "Λομβαρδία",
+            "ga": "An Lombaird", "it": "Lombardia", "lv": "Lombardija", "lt": "Lombardija", "lb": "Lombardei",
+            "mt": "Lombardija", "pt": "Lombardia", "sk": "Lombardsko", "sl": "Lombardija", "es": "Lombardía",
+            "tr": "Lombardiya", "la": "Longobardia", "sv": "Lombardiet"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "IT-MI",
+              "type": "Provincia",
+              "names": {
+                "bg": "Милано", "ca": "Milà", "hr": "Milano", "nl": "Milaan", "en": "Milan",
+                "et": "Milano", "fi": "Milano", "fr": "Milan", "de": "Mailand", "el": "Μιλάνο",
+                "ga": "Milano", "it": "Milano", "lv": "Milāna", "lt": "Milanas", "lb": "Mailand",
+                "mt": "Milan", "pt": "Milão", "sk": "Miláno", "sl": "Milano", "es": "Milán",
+                "tr": "Milano", "la": "Mediolanum", "sv": "Milano"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "IT-M-20121",
+                  "name": "Comune di Milano",
+                  "postal_codes": ["20121"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "LV",
+      "capital": "Riga",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Латвия", "ca": "Letònia", "hr": "Latvija", "nl": "Letland", "en": "Latvia",
+        "et": "Läti", "fi": "Latvia", "fr": "Lettonie", "de": "Lettland", "el": "Λετονία",
+        "ga": "An Laitvia", "it": "Lettonia", "lv": "Latvija", "lt": "Latvija", "lb": "Lettland",
+        "mt": "Latvja", "pt": "Letónia", "sk": "Lotyšsko", "sl": "Latvija", "es": "Letonia",
+        "tr": "Letonya", "la": "Lettonia", "sv": "Lettland"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "LV-R",
+          "type": "Plānošanas reģions",
+          "names": {
+            "bg": "Рига Регион", "ca": "Regió de Riga", "hr": "Regija Riga", "nl": "Regio Riga", "en": "Riga Region",
+            "et": "Riia regioon", "fi": "Riian alue", "fr": "Région de Riga", "de": "Region Riga", "el": "Περιφέρεια Ρίγας",
+            "ga": "Réigiún Ríge", "it": "Regione di Riga", "lv": "Rīgas reģions", "lt": "Rygos regionas", "lb": "Regioun Riga",
+            "mt": "Reġjun ta' Riga", "pt": "Região de Riga", "sk": "Región Riga", "sl": "Regija Riga", "es": "Región de Riga",
+            "tr": "Riga Bölgesi", "la": "Regio Riga", "sv": "Rigaregionen"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "LV-RIX",
+              "type": "Valstspilsēta",
+              "names": {
+                "bg": "Рига", "ca": "Riga", "hr": "Riga", "nl": "Riga", "en": "Riga",
+                "et": "Riia", "fi": "Riika", "fr": "Riga", "de": "Riga", "el": "Ρίγα",
+                "ga": "Ríge", "it": "Riga", "lv": "Rīga", "lt": "Ryga", "lb": "Riga",
+                "mt": "Riga", "pt": "Riga", "sk": "Riga", "sl": "Riga", "es": "Riga",
+                "tr": "Riga", "la": "Riga", "sv": "Riga"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "LV-M-1050",
+                  "name": "Centra rajons",
+                  "postal_codes": ["LV-1050"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "LT",
+      "capital": "Vilnius",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Литва", "ca": "Lituània", "hr": "Litva", "nl": "Litouwen", "en": "Lithuania",
+        "et": "Leedu", "fi": "Liettua", "fr": "Lituanie", "de": "Litauen", "el": "Λιθουανία",
+        "ga": "An Liotuáin", "it": "Lituania", "lv": "Lietuva", "lt": "Lietuva", "lb": "Litauen",
+        "mt": "Litwanja", "pt": "Lituânia", "sk": "Litva", "sl": "Litva", "es": "Lituania",
+        "tr": "Litvanya", "la": "Lituania", "sv": "Litauen"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "LT-VL",
+          "type": "Apskritis",
+          "names": {
+            "bg": "Вилнюс Окръг", "ca": "Comtat de Vílnius", "hr": "Vilniusska županija", "nl": "Vilnius District", "en": "Vilnius County",
+            "et": "Vilniuse maakond", "fi": "Vilnan lääni", "fr": "Apskritis de Vilnius", "de": "Bezirk Vilnius", "el": "Βίλνιους (Επαρχία)",
+            "ga": "Contae Vilnias", "it": "Contea di Vilnius", "lv": "Viļņas apriņķis", "lt": "Vilniaus apskritis", "lb": "Bezirk Vilnius",
+            "mt": "Kontea ta' Vilnius", "pt": "Distrito de Vilnius", "sk": "Vilniuský kraj", "sl": "Okrožje Vilnius", "es": "Provincia de Vilna",
+            "tr": "Vilnius Bölgesi", "la": "Palatinatus Vilnensis", "sv": "Vilnius län"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "LT-VL-M",
+              "type": "Savivaldybė",
+              "names": {
+                "bg": "Вилнюс (Град)", "ca": "Vílnius", "hr": "Vilnius (Grad)", "nl": "Vilnius Stad", "en": "Vilnius City Municipality",
+                "et": "Vilniuse linn", "fi": "Vilnan kaupunki", "fr": "Vilnius Ville", "de": "Vilnius Stadt", "el": "Δήμος Βίλνιους",
+                "ga": "Cathair Vilnias", "it": "Comune di Vilnius", "lv": "Viļņas pilsēта", "lt": "Vilniaus miesto savivaldybė", "lb": "Vilnius Stad",
+                "mt": "Muniċipalità ta' Vilnius", "pt": "Município de Vilnius", "sk": "Bratislava I", "sl": "Mestna občina Vilnius", "es": "Municipio de Vilna",
+                "tr": "Vilnius Şehri", "la": "Vilna Urbs", "sv": "Vilnius stad"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "LT-M-01100",
+                  "name": "Senamiestis",
+                  "postal_codes": ["LT-01100"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "LU",
+      "capital": "Luxembourg",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Люксембург", "ca": "Luxemburg", "hr": "Luksemburg", "nl": "Luxemburg", "en": "Luxembourg",
+        "et": "Luksemburg", "fi": "Luxembourg", "fr": "Luxembourg", "de": "Luxemburg", "el": "Λουξεμβούργο",
+        "ga": "Lucsamburg", "it": "Lussemburgo", "lv": "Luksemburga", "lt": "Liuksemburgas", "lb": "Lëtzebuerg",
+        "mt": "Lussemburgu", "pt": "Luxemburgo", "sk": "Luxembursko", "sl": "Luksemburg", "es": "Luxemburgo",
+        "tr": "Lüksemburg", "la": "Luxemburgum", "sv": "Luxemburg"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "LU-LU",
+          "type": "Canton",
+          "names": {
+            "bg": "Люксембург (Кантон)", "ca": "Cantó de Luxemburg", "hr": "Kanton Luksemburg", "nl": "Kanton Luxemburg", "en": "Luxembourg Canton",
+            "et": "Luxembourgi kanton", "fi": "Luxemburgin kantoni", "fr": "Canton de Luxembourg", "de": "Kanton Luxemburg", "el": "Καντόνι Λουξεμβούργου",
+            "ga": "Canton Lucsamburg", "it": "Cantone di Lussemburgo", "lv": "Luksemburgas kantons", "lt": "Liuksemburgo kantonas", "lb": "Kanton Lëtzebuerg",
+            "mt": "Kanton ta' Lussemburgu", "pt": "Cantão de Luxemburgo", "sk": "Kantón Luxemburg", "sl": "Kanton Luksemburg", "es": "Cantón de Luxemburgo",
+            "tr": "Lüksemburg Kantonu", "la": "Pagus Luxemburgum", "sv": "Luxemburg kanton"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "LU-LU-C",
+              "type": "Commune",
+              "names": {
+                "bg": "Люксембург (Град)", "ca": "Ciutat de Luxemburg", "hr": "Luxembourg Ville", "nl": "Luxemburg Stad", "en": "Luxembourg City",
+                "et": "Luxembourgi linn", "fi": "Luxemburgin kaupunki", "fr": "Ville de Luxembourg", "de": "Luxemburg Stadt", "el": "Πόλη του Λουξεμβούργου",
+                "ga": "Cathair Lucsamburg", "it": "Città di Lussemburgo", "lv": "Luksemburgas pilsēta", "lt": "Liuksemburgo miestas", "lb": "Stad Lëtzebuerg",
+                "mt": "Belt ta' Lussemburgu", "pt": "Cidade de Luxemburgo", "sk": "Mesto Luxemburg", "sl": "Mesto Luksemburg", "es": "Ciudad de Luxemburgo",
+                "tr": "Lüksemburg Şehri", "la": "Luxemburgum Urbs", "sv": "Luxemburg stad"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "LU-M-1110",
+                  "name": "Ville Haute",
+                  "postal_codes": ["1110"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "MT",
+      "capital": "Valletta",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Малта", "ca": "Malta", "hr": "Malta", "nl": "Malta", "en": "Malta",
+        "et": "Malta", "fi": "Malta", "fr": "Malte", "de": "Malta", "el": "Μάλτα",
+        "ga": "Málta", "it": "Malta", "lv": "Malta", "lt": "Malta", "lb": "Malta",
+        "mt": "Malta", "pt": "Malta", "sk": "Malta", "sl": "Malta", "es": "Malta",
+        "tr": "Malta", "la": "Melita", "sv": "Malta"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "MT-SE",
+          "type": "Reġjun",
+          "names": {
+            "bg": "Югоизточен Регион", "ca": "Regió de Xlokk", "hr": "Jugoistočna regija", "nl": "Regio Zuidoost", "en": "South Eastern Region",
+            "et": "Kagu-Malta piirkond", "fi": "Kaakkoisalue", "fr": "Région Sud-Est", "de": "Region Südost", "el": "Νοτιοανατολική Περιφέρεια",
+            "ga": "Réigiún Oirdheisceart", "it": "Regione Sud-Orientale", "lv": "Dienvidaustrumu reģions", "lt": "Pietryčių regionas", "lb": "Regioun Südost",
+            "mt": "Reġjun Xlokk", "pt": "Região Sudeste", "sk": "Juhovýchodný región", "sl": "Jugovzhodna regija", "es": "Región Sudeste",
+            "tr": "Güneydoğu Bölgesi", "la": "Regio Euro-Anatolia", "sv": "Sydöstregionen"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "MT-VAL",
+              "type": "Kunsill Lokali",
+              "names": {
+                "bg": "Валета", "ca": "La Valletta", "hr": "Valletta", "nl": "Valletta", "en": "Valletta",
+                "et": "Valletta", "fi": "Valletta", "fr": "La Valette", "de": "Valletta", "el": "Βαλέτα",
+                "ga": "Valletta", "it": "La Valletta", "lv": "Valleta", "lt": "Valeta", "lb": "Valletta",
+                "mt": "Valletta", "pt": "Valeta", "sk": "Valletta", "sl": "Valletta", "es": "La Valeta",
+                "tr": "Valletta", "la": "Valetta", "sv": "Valletta"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "MT-M-VLT",
+                  "name": "Valletta City",
+                  "postal_codes": ["VLT"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "NL",
+      "capital": "Amsterdam",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Нидерландия", "ca": "Països Baixos", "hr": "Nizozemska", "nl": "Nederland", "en": "Netherlands",
+        "et": "Madalmaad", "fi": "Alankomaat", "fr": "Pays-Bas", "de": "Niederlande", "el": "Κάτω Χώρες",
+        "ga": "An Ísiltír", "it": "Paesi Bassi", "lv": "Nīderlande", "lt": "Nyderlandai", "lb": "Holland",
+        "mt": "Pajjiżi l-Baxxi", "pt": "Países Baixos", "sk": "Holandsko", "sl": "Nizozemska", "es": "Países Bajos",
+        "tr": "Hollanda", "la": "Neerlandia", "sv": "Nederländerna"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "NL-NH",
+          "type": "Provincie",
+          "names": {
+            "bg": "Северна Холандия", "ca": "Holanda Septentrional", "hr": "Sjeverna Holandija", "nl": "Noord-Holland", "en": "North Holland",
+            "et": "Põhja-Holland", "fi": "Pohjois-Hollanti", "fr": "Hollande-Septentrionale", "de": "Nordholland", "el": "Βόρεια Ολλανδία",
+            "ga": "An Ollainn Thuaidh", "it": "Olanda Settentrionale", "lv": "Ziemeļholande", "lt": "Šiaurės Olandija", "lb": "Nordholland",
+            "mt": "Olanda tat-Tramuntana", "pt": "Holanda Septentrional", "sk": "Severné Holandsko", "sl": "Severna Holandija", "es": "Holanda Septentrional",
+            "tr": "Kuzey Hollanda", "la": "Hollandia Septentrionalis", "sv": "Nordholland"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "NL-AMS",
+              "type": "Gemeente",
+              "names": {
+                "bg": "Амстердам", "ca": "Amsterdam", "hr": "Amsterdam", "nl": "Amsterdam", "en": "Amsterdam",
+                "et": "Amsterdam", "fi": "Amsterdam", "fr": "Amsterdam", "de": "Amsterdam", "el": "Άμστερνταμ",
+                "ga": "Amstardam", "it": "Amsterdam", "lv": "Amsterdama", "lt": "Amsterdamas", "lb": "Amsterdam",
+                "mt": "Amsterdam", "pt": "Amesterdão", "sk": "Amsterdam", "sl": "Amsterdam", "es": "Ámsterdam",
+                "tr": "Amsterdam", "la": "Amstelodamum", "sv": "Amsterdam"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "NL-M-1012",
+                  "name": "Amsterdam Centrum",
+                  "postal_codes": ["1012"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "PT",
+      "capital": "Lisbon",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Португалия", "ca": "Portugal", "hr": "Portugal", "nl": "Portugal", "en": "Portugal",
+        "et": "Portugal", "fi": "Portugali", "fr": "Portugal", "de": "Portugal", "el": "Πορτογαλία",
+        "ga": "An Phortaingéil", "it": "Portogallo", "lv": "Portugāle", "lt": "Portugalija", "lb": "Portugal",
+        "mt": "Portugall", "pt": "Portugal", "sk": "Portugalsko", "sl": "Portugalska", "es": "Portugal",
+        "tr": "Portekiz", "la": "Portugallia", "sv": "Portugal"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "PT-11",
+          "type": "Distrito",
+          "names": {
+            "bg": "Лисабон", "ca": "Lisboa", "hr": "Lisabon", "nl": "Lissabon", "en": "Lisbon",
+            "et": "Lissabon", "fi": "Lissabon", "fr": "Lisbonne", "de": "Lissabon", "el": "Λισαβόνα",
+            "ga": "Liospóin", "it": "Lisbona", "lv": "Lisabona", "lt": "Lisabona", "lb": "Lissabon",
+            "mt": "Liżbona", "pt": "Lisboa", "sk": "Lisabon", "sl": "Lizbona", "es": "Lisboa",
+            "tr": "Lizbon", "la": "Olisipo", "sv": "Lissabon"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "PT-1106",
+              "type": "Município",
+              "names": {
+                "bg": "Лисабон (Община)", "ca": "Lisboa (Municipi)", "hr": "Lisabon (Općina)", "nl": "Lissabon (Gemeente)", "en": "Lisbon Municipality",
+                "et": "Lissaboni vald", "fi": "Lissabonin kunta", "fr": "Municipalité de Lisbonne", "de": "Gemeinde Lissabon", "el": "Δήμος Λισαβόνας",
+                "ga": "Bardas Liospóin", "it": "Comune di Lisbona", "lv": "Lisabonas pašvaldība", "lt": "Lisabonos savivaldybė", "lb": "Gemeng Lissabon",
+                "mt": "Muniċipalità ta' Liżbona", "pt": "Município de Lisboa", "sk": "Mesto Lisabon", "sl": "Občina Lizbona", "es": "Municipio de Lisboa",
+                "tr": "Lizbon Belediyesi", "la": "Municipium Olisipo", "sv": "Lissabons kommun"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "PT-M-1100",
+                  "name": "Santa Maria Maior",
+                  "postal_codes": ["1100"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "SK",
+      "capital": "Bratislava",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Словакия", "ca": "Eslovàquia", "hr": "Slovačka", "nl": "Slowakije", "en": "Slovakia",
+        "et": "Slovakkia", "fi": "Slovakia", "fr": "Slovaquie", "de": "Slowakei", "el": "Σλοβακία",
+        "ga": "An tSlóvac", "it": "Slovacchia", "lv": "Slovākija", "lt": "Slovakija", "lb": "Slowakei",
+        "mt": "Slovakkja", "pt": "Eslováquia", "sk": "Slovensko", "sl": "Slovaška", "es": "Eslovaquia",
+        "tr": "Slovakya", "la": "Slovacia", "sv": "Slovakien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "SK-BL",
+          "type": "Kraj",
+          "names": {
+            "bg": "Братислава", "ca": "Bratislava", "hr": "Bratislava", "nl": "Bratislava", "en": "Bratislava",
+            "et": "Bratislava", "fi": "Bratislava", "fr": "Bratislava", "de": "Bratislava", "el": "Μπρατισλάβα",
+            "ga": "Bratislava", "it": "Bratislava", "lv": "Bratislava", "lt": "Bratislava", "lb": "Bratislava",
+            "mt": "Bratislava", "pt": "Bratislava", "sk": "Bratislavský kraj", "sl": "Bratislava", "es": "Bratislava",
+            "tr": "Bratislava", "la": "Posonium", "sv": "Bratislava"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "SK-BL-1",
+              "type": "Okres",
+              "names": {
+                "bg": "Братислава I", "ca": "Bratislava I", "hr": "Bratislava I", "nl": "Bratislava I", "en": "Bratislava I",
+                "et": "Bratislava I", "fi": "Bratislava I", "fr": "Bratislava I", "de": "Bratislava I", "el": "Μπρατισλάβα Ι",
+                "ga": "Bratislava I", "it": "Bratislava I", "lv": "Bratislava I", "lt": "Bratislava I", "lb": "Bratislava I",
+                "mt": "Bratislava I", "pt": "Bratislava I", "sk": "Okres Bratislava I", "sl": "Bratislava I", "es": "Bratislava I",
+                "tr": "Bratislava I", "la": "Posonium I", "sv": "Bratislava I"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "SK-M-81101",
+                  "name": "Staré Mesto",
+                  "postal_codes": ["81101"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "SI",
+      "capital": "Ljubljana",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Словения", "ca": "Eslovènia", "hr": "Slovenija", "nl": "Slovenië", "en": "Slovenia",
+        "et": "Sloveenia", "fi": "Slovenia", "fr": "Slovénie", "de": "Slowenien", "el": "Σλοβενία",
+        "ga": "An tSlóivéin", "it": "Slovenia", "lv": "Slovēnija", "lt": "Slovėnija", "lb": "Slowenien",
+        "mt": "Slovenja", "pt": "Eslovénia", "sk": "Slovinsko", "sl": "Slovenija", "es": "Eslovenia",
+        "tr": "Slovenya", "la": "Slovenia", "sv": "Slovenien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "SI-061",
+          "type": "Statistična regija",
+          "names": {
+            "bg": "Централна Словения", "ca": "Eslovènia Central", "hr": "Središnja Slovenija", "nl": "Centraal-Slovenië", "en": "Central Slovenia",
+            "et": "Kesk-Sloveenia", "fi": "Keski-Slovenia", "fr": "Slovénie centrale", "de": "Zentralslowenien", "el": "Κεντρική Σλοβενία",
+            "ga": "Lár na Slóivéine", "it": "Slovenia Centrale", "lv": "Centrālslovēnija", "lt": "Centrinė Slovėnija", "lb": "Zentralslowenien",
+            "mt": "Slovenja Ċentrali", "pt": "Eslovénia Central", "sk": "Centrálne Slovinsko", "sl": "Osrednjeslovenska", "es": "Eslovenia Central",
+            "tr": "Merkez Slovenya", "la": "Slovenia Centralis", "sv": "Centralslovenien"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "SI-061-LJ",
+              "type": "Občina",
+              "names": {
+                "bg": "Любляна", "ca": "Ljubljana", "hr": "Ljubljana", "nl": "Ljubljana", "en": "Ljubljana",
+                "et": "Ljubljana", "fi": "Ljubljana", "fr": "Ljubljana", "de": "Ljubljana", "el": "Λιουμπλιάνα",
+                "ga": "Ljubljana", "it": "Lubiana", "lv": "Ļubļana", "lt": "Liublijana", "lb": "Ljubljana",
+                "mt": "Ljubljana", "pt": "Liubliana", "sk": "Ľubľana", "sl": "Mestna občina Ljubljana", "es": "Liubliana",
+                "tr": "Ljubljana", "la": "Labacum", "sv": "Ljubljana"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "SI-M-1000",
+                  "name": "Ljubljana Center",
+                  "postal_codes": ["1000"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iso_code": "ES",
+      "capital": "Madrid",
+      "currency": "EUR",
+      "name_translations": {
+        "bg": "Испания", "ca": "Espanya", "hr": "Španjolska", "nl": "Spanje", "en": "Spain",
+        "et": "Hispaania", "fi": "Espanja", "fr": "Espagne", "de": "Spanien", "el": "Ισπανία",
+        "ga": "An Spáinn", "it": "Spagna", "lv": "Spānija", "lt": "Ispanija", "lb": "Spuenien",
+        "mt": "Spanja", "pt": "Espanha", "sk": "Španielsko", "sl": "Španija", "es": "España",
+        "tr": "İspanya", "la": "Hispania", "sv": "Spanien"
+      },
+      "administrative_divisions": [
+        {
+          "level1_id": "ES-MD",
+          "type": "Comunidad Autónoma",
+          "names": {
+            "bg": "Мадрид (Област)", "ca": "Comunitat de Madrid", "hr": "Madrid (Zajednica)", "nl": "Madrid (Regio)", "en": "Community of Madrid",
+            "et": "Madridi autonoomne piirkond", "fi": "Madridin itsehallintoalue", "fr": "Communauté de Madrid", "de": "Autोनेome Gemeinschaft Madrid", "el": "Περιφέρεια Μαδρίτης",
+            "ga": "Comhphobal Maidrid", "it": "Comunità di Madrid", "lv": "Madridas apgabals", "lt": "Madrido regionas", "lb": "Regioun Madrid",
+            "mt": "Komunità ta' Madrid", "pt": "Comunidade de Madrid", "sk": "Madridský kraj", "sl": "Skupnost Madrid", "es": "Comunidad de Madrid",
+            "tr": "Madrid Özerk Topluluğu", "la": "Communitas Matriti", "sv": "Madrid region"
+          },
+          "level2_divisions": [
+            {
+              "level2_id": "ES-M",
+              "type": "Provincia",
+              "names": {
+                "bg": "Мадрид", "ca": "Madrid", "hr": "Madrid", "nl": "Madrid", "en": "Madrid",
+                "et": "Madrid", "fi": "Madrid", "fr": "Madrid", "de": "Madrid", "el": "Μαδρίτη",
+                "ga": "Maidrid", "it": "Madrid", "lv": "Madride", "lt": "Madridas", "lb": "Madrid",
+                "mt": "Madrid", "pt": "Madrid", "sk": "Madrid", "sl": "Madrid", "es": "Madrid",
+                "tr": "Madrid", "la": "Matritum", "sv": "Madrid"
+              },
+              "municipalities": [
+                {
+                  "municipality_id": "ES-M-28001",
+                  "name": "Madrid Centro",
+                  "postal_codes": ["28001"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+    "iso_code": "AD",
+    "capital": "Andorra la Vella",
+    "currency": "EUR",
+    "name_translations": {
+      "bg": "Андора", "ca": "Andorra", "hr": "Andora", "nl": "Andorra", "en": "Andorra",
+      "et": "Andorra", "fi": "Andorra", "fr": "Andorre", "de": "Andorra", "el": "Ανδόρα",
+      "ga": "Andorra", "it": "Andorra", "lv": "Andora", "lt": "Andora", "lb": "Andorra",
+      "mt": "Andorra", "pt": "Andorra", "sk": "Andorra", "sl": "Andora", "es": "Andorra",
+      "tr": "Andorra", "la": "Andorra", "sv": "Andorra"
+    },
+    "administrative_divisions": [
+      {
+        "level1_id": "AD-07",
+        "type": "Parròquia",
+        "names": {
+          "bg": "Андора ла Веля",
+          "ca": "Andorra la Vella",
+          "hr": "Andorra la Vella",
+          "nl": "Andorra la Vella",
+          "en": "Andorra la Vella",
+          "et": "Andorra la Vella",
+          "fi": "Andorra la Vella",
+          "fr": "Andorre-la-Vieille",
+          "de": "Andorra la Vella",
+          "el": "Ανδόρα λα Βέγια",
+          "ga": "Andorra la Vella",
+          "it": "Andorra la Vella",
+          "lv": "Andora la Velja",
+          "lt": "Andora la Velja",
+          "lb": "Andorra la Vella",
+          "mt": "Andorra la Vella",
+          "pt": "Andorra-a-Velha",
+          "sk": "Andorra la Vella",
+          "sl": "Andorra la Vella",
+          "es": "Andorra la Vella",
+          "tr": "Andorra la Vella",
+          "la": "Andorra la Vella",
+          "sv": "Andorra la Vella"
+        },
+        "level2_divisions": [
+          {
+            "level2_id": "AD-07-Q",
+            "type": "Quart",
+            "names": {
+              "bg": "Андора Град",
+              "ca": "Andorra la Vella (Vila)",
+              "hr": "Andora (Grad)",
+              "nl": "Andorra Stad",
+              "en": "Andorra la Vella Town",
+              "et": "Andorra linn",
+              "fi": "Andorran kaupunki",
+              "fr": "Quartier d'Andorre",
+              "de": "Andorra Stadt",
+              "el": "Πόλη της Ανδόρας",
+              "ga": "Baile Andorra",
+              "it": "Andorra Centro",
+              "lv": "Andoras pilsēta",
+              "lt": "Andoros miestas",
+              "lb": "Andorra Stad",
+              "mt": "Belt ta' Andorra",
+              "pt": "Vila de Andorra",
+              "sk": "Mesto Andorra",
+              "sl": "Mesto Andorra",
+              "es": "Villa de Andorra",
+              "tr": "Andorra Şehri",
+              "la": "Andorra Urbs",
+              "sv": "Andorra stad"
+            },
+            "municipalities": [
+              {
+                "municipality_id": "AD-M-500",
+                "name": "Andorra la Vella Centro",
+                "postal_codes": ["AD500"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "iso_code": "MC",
+    "capital": "Monaco",
+    "currency": "EUR",
+    "name_translations": {
+      "bg": "Монако", "ca": "Mònaco", "hr": "Monako", "nl": "Monaco", "en": "Monaco",
+      "et": "Monaco", "fi": "Monaco", "fr": "Monaco", "de": "Monaco", "el": "Μονακό",
+      "ga": "Monaco", "it": "Monaco", "lv": "Monako", "lt": "Monakas", "lb": "Monako",
+      "mt": "Monako", "pt": "Mónaco", "sk": "Monako", "sl": "Monako", "es": "Mónaco",
+      "tr": "Monako", "la": "Monacus", "sv": "Monaco"
+    },
+    "administrative_divisions": [
+      {
+        "level1_id": "MC-MC",
+        "type": "Quartier",
+        "names": {
+          "bg": "Монте Карло",
+          "ca": "Montcarles",
+          "hr": "Monte Carlo",
+          "nl": "Monte Carlo",
+          "en": "Monte Carlo",
+          "et": "Monte Carlo",
+          "fi": "Monte Carlo",
+          "fr": "Monte-Carlo",
+          "de": "Monte Carlo",
+          "el": "Μόντε Κάρλο",
+          "ga": "Monte Carlo",
+          "it": "Monte Carlo",
+          "lv": "Montekarlo",
+          "lt": "Monte Karlas",
+          "lb": "Monte Carlo",
+          "mt": "Monte Carlo",
+          "pt": "Monte Carlo",
+          "sk": "Monte Carlo",
+          "sl": "Monte Carlo",
+          "es": "Montecarlo",
+          "tr": "Monte Carlo",
+          "la": "Mons Caroli",
+          "sv": "Monte Carlo"
+        },
+        "level2_divisions": [
+          {
+            "level2_id": "MC-CAS",
+            "type": "Secteur",
+            "names": {
+              "bg": "Казино",
+              "ca": "Casino",
+              "hr": "Casino",
+              "nl": "Casino",
+              "en": "Casino Sector",
+              "et": "Casino",
+              "fi": "Casino",
+              "fr": "Secteur du Casino",
+              "de": "Casino Sektor",
+              "el": "Καζίνο",
+              "ga": "Casino",
+              "it": "Casino",
+              "lv": "Kazino",
+              "lt": "Kazino",
+              "lb": "Casino",
+              "mt": "Casino",
+              "pt": "Casino",
+              "sk": "Casino",
+              "sl": "Kazino",
+              "es": "Casino",
+              "tr": "Casino",
+              "la": "Casino",
+              "sv": "Casino"
+            },
+            "municipalities": [
+              {
+                "municipality_id": "MC-M-98000",
+                "name": "Monte Carlo Commune",
+                "postal_codes": ["98000"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "iso_code": "SM",
+    "capital": "San Marino",
+    "currency": "EUR",
+    "name_translations": {
+      "bg": "Сан Марино", "ca": "San Marino", "hr": "San Marino", "nl": "San Marino", "en": "San Marino",
+      "et": "San Marino", "fi": "San Marino", "fr": "Saint-Marin", "de": "San Marino", "el": "Άγιος Μαρίνος",
+      "ga": "San Mairíneo", "it": "San Marino", "lv": "Sanmarīno", "lt": "San Marinas", "lb": "San Marino",
+      "mt": "San Marino", "pt": "San Marino", "sk": "San Maríno", "sl": "San Marino", "es": "San Marino",
+      "tr": "San Marino", "la": "Sancti Marini", "sv": "San Marino"
+    },
+    "administrative_divisions": [
+      {
+        "level1_id": "SM-01",
+        "type": "Castello",
+        "names": {
+          "bg": "Сан Марино (Кастело)",
+          "ca": "Ciutat de San Marino",
+          "hr": "Città di San Marino",
+          "nl": "Città di San Marino",
+          "en": "San Marino City",
+          "et": "San Marino linn",
+          "fi": "San Marinon kaupunki",
+          "fr": "Ville de Saint-Marin",
+          "de": "San Marino Stadt",
+          "el": "Πόλη του Αγίου Μαρίνου",
+          "ga": "Cathair San Mairíneo",
+          "it": "Città di San Marino",
+          "lv": "Sanmarīno pilsēta",
+          "lt": "San Marino miestas",
+          "lb": "San Marino Stad",
+          "mt": "Belt ta' San Marino",
+          "pt": "Cidade de San Marino",
+          "sk": "Mesto San Maríno",
+          "sl": "Mesto San Marino",
+          "es": "Ciudad de San Marino",
+          "tr": "San Marino Şehri",
+          "la": "Sanctus Marinus Urbs",
+          "sv": "San Marino stad"
+        },
+        "level2_divisions": [
+          {
+            "level2_id": "SM-01-P",
+            "type": "Parrocchia",
+            "names": {
+              "bg": "Сан Марино",
+              "ca": "San Marino",
+              "hr": "San Marino",
+              "nl": "San Marino",
+              "en": "San Marino",
+              "et": "San Marino",
+              "fi": "San Marino",
+              "fr": "Saint-Marin",
+              "de": "San Marino",
+              "el": "Άγιος Μαρίνος",
+              "ga": "San Mairíneo",
+              "it": "San Marino",
+              "lv": "Sanmarīno",
+              "lt": "San Marinas",
+              "lb": "San Marino",
+              "mt": "San Marino",
+              "pt": "San Marino",
+              "sk": "San Maríno",
+              "sl": "San Marino",
+              "es": "San Marino",
+              "tr": "San Marino",
+              "la": "Sanctus Marinus",
+              "sv": "San Marino"
+            },
+            "municipalities": [
+              {
+                "municipality_id": "SM-M-47890",
+                "name": "Città di San Marino Centro",
+                "postal_codes": ["47890"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+    {
+  "iso_code": "VA",
+  "capital": "Vatican City",
+  "currency": "EUR",
+  "name_translations": {
+    "bg": "Ватикан",
+    "ca": "Vaticà",
+    "hr": "Vatikan",
+    "nl": "Vaticaanstad",
+    "en": "Vatican City",
+    "et": "Vatikan",
+    "fi": "Vatikaani",
+    "fr": "Vatican",
+    "de": "Vatikanstadt",
+    "el": "Βατικανό",
+    "ga": "Cathair na Vatacáine",
+    "it": "Città del Vaticano",
+    "lv": "Vatikāns",
+    "lt": "Vatikanas",
+    "lb": "Vatikanstad",
+    "mt": "Belt tal-Vatikan",
+    "pt": "Vaticano",
+    "sk": "Vatikán",
+    "sl": "Vatikan",
+    "es": "Vaticano",
+    "tr": "Vatikan",
+    "la": "Civitas Vaticana",
+    "sv": "Vatikanstaten"
+  },
+  "administrative_divisions": [
+    {
+      "level1_id": "VA-01",
+      "type": "Stato",
+      "names": {
+        "bg": "Ватикан (Държава)",
+        "ca": "Estat del Vaticà",
+        "hr": "Država Vatikan",
+        "nl": "Staat Vaticaanstad",
+        "en": "Vatican State",
+        "et": "Vatikani riik",
+        "fi": "Vatikaanin valtio",
+        "fr": "État du Vatican",
+        "de": "Vatikan Staat",
+        "el": "Κράτος του Βατικανού",
+        "ga": "Stát na Vatacáine",
+        "it": "Stato della Città del Vaticano",
+        "lv": "Vatikāna valsts",
+        "lt": "Vatikano valstybė",
+        "lb": "Vatikan Staat",
+        "mt": "Stat tal-Vatikan",
+        "pt": "Estado do Vaticano",
+        "sk": "Štát Vatikán",
+        "sl": "Država Vatikan",
+        "es": "Estado del Vaticano",
+        "tr": "Vatikan Devleti",
+        "la": "Status Civitatis Vaticanae",
+        "sv": "Vatikanstaten"
+      },
+      "level2_divisions": [
+        {
+          "level2_id": "VA-01-Z",
+          "type": "Zona",
+          "names": {
+            "bg": "Ватикан",
+            "ca": "Vaticà",
+            "hr": "Vatikan",
+            "nl": "Vaticaan",
+            "en": "Vatican Zone",
+            "et": "Vatikan",
+            "fi": "Vatikaani",
+            "fr": "Vatican",
+            "de": "Vatikan",
+            "el": "Βατικανό",
+            "ga": "Vatacáin",
+            "it": "Vaticano",
+            "lv": "Vatikāns",
+            "lt": "Vatikanas",
+            "lb": "Vatikan",
+            "mt": "Vatikan",
+            "pt": "Vaticano",
+            "sk": "Vatikán",
+            "sl": "Vatikan",
+            "es": "Vaticano",
+            "tr": "Vatikan",
+            "la": "Vaticanus",
+            "sv": "Vatikanen"
+          },
+          "municipalities": [
+            {
+              "municipality_id": "VA-M-00120",
+              "name": "Vatican City Centro",
+              "postal_codes": [
+                "00120"
+              ]
+                              }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+
+
