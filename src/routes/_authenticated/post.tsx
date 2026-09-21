@@ -9,7 +9,7 @@ import { uploadListingPhoto } from "@/lib/listings";
 import { LocationFilter, type LocationValue } from "@/components/LocationFilter";
 import { PhoneInput } from "@/components/PhoneInput";
 import { PhotoUploader } from "@/components/PhotoUploader";
-import { AD_KINDS, PROPERTY_TYPES, TRANSACTION_TYPES, type AdKind } from "@/lib/property";
+import { AD_KINDS, PROPERTY_TYPES, type AdKind } from "@/lib/property";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -176,7 +176,10 @@ function PostWizard() {
                 <button
                   key={k.value}
                   type="button"
-                  onClick={() => setKind(k.value)}
+                  onClick={() => {
+                    setKind(k.value);
+                    setTransaction(null);
+                  }}
                   className={cn(
                     "rounded-xl border p-4 text-left transition-colors",
                     kind === k.value ? "border-primary bg-secondary/60" : "border-border hover:bg-secondary/40",
@@ -211,12 +214,21 @@ function PostWizard() {
                   {t("post.transaction")}
                 </Label>
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {TRANSACTION_TYPES.map((transactionOption) => (
+                  {(kind === "demand"
+                    ? [
+                        { option: "purchase" as const, stored: "sale" },
+                        { option: "rent" as const, stored: "rent" },
+                      ]
+                    : [
+                        { option: "sale" as const, stored: "sale" },
+                        { option: "rent" as const, stored: "rent" },
+                      ]
+                  ).map((transactionOption) => (
                     <Choice
-                      key={transactionOption.value}
-                      label={t(`tx.${transactionOption.value}` as TranslationKey)}
-                      active={transaction === transactionOption.value}
-                      onClick={() => setTransaction(transactionOption.value)}
+                      key={transactionOption.option}
+                      label={t(`tx.${transactionOption.option}` as TranslationKey)}
+                      active={transaction === transactionOption.stored}
+                      onClick={() => setTransaction(transactionOption.stored)}
                     />
                   ))}
                 </div>
