@@ -185,14 +185,22 @@ export function HomeScreen({
       </header>
 
       <main className="mx-auto -mt-8 w-full max-w-5xl px-5 sm:px-10">
-        <section className="shadow-soft rounded-2xl border border-border bg-card p-5 sm:p-6">
-          <h2 className="flex items-center gap-2 text-sm font-semibold tracking-wide text-foreground uppercase">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-            {t("filter.title")}
-          </h2>
-          <div className="mt-4">
-            <LocationFilter value={location} onChange={setLocation} />
-          </div>
+        <Tabs
+          value={tab}
+          onValueChange={(next) => setTab(next as "supply" | "demand")}
+        >
+          <section className="shadow-soft rounded-2xl border border-border bg-card p-5 sm:p-6">
+            <h2 className="flex items-center gap-2 text-sm font-semibold tracking-wide text-foreground uppercase">
+              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+              {t("filter.title")}
+            </h2>
+            <TabsList className="mt-4 grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+              <TabsTrigger value="offers">{t("home.tabs.offers")}</TabsTrigger>
+              <TabsTrigger value="requests">{t("home.tabs.requests")}</TabsTrigger>
+            </TabsList>
+            <div className="mt-5">
+              <LocationFilter value={location} onChange={setLocation} />
+            </div>
           <div className="mt-4 space-y-1.5">
             <Label className="text-xs tracking-wide text-muted-foreground uppercase">
               {t("filter.transaction")}
