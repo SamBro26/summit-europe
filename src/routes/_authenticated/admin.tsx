@@ -167,10 +167,15 @@ function AdminDashboard() {
 
       <main className="mx-auto -mt-8 w-full max-w-4xl px-5 pb-10 sm:px-10">
         <Tabs defaultValue="reports">
-          <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+          <TabsList className="grid w-full grid-cols-3 sm:inline-grid sm:w-auto">
             <TabsTrigger value="reports">{t("admin.reportedAds")}</TabsTrigger>
             <TabsTrigger value="people">{t("admin.accounts")}</TabsTrigger>
+            <TabsTrigger value="broadcast">{t("admin.broadcast")}</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="broadcast" className="mt-5">
+            <BroadcastPanel />
+          </TabsContent>
 
           <TabsContent value="reports" className="mt-5 space-y-3">
             {reports.isLoading && (

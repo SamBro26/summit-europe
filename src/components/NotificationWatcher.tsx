@@ -31,6 +31,7 @@ export function NotificationWatcher() {
         (payload) => {
           const row = payload.new as { body: string; listing_id: string };
           queryClient.invalidateQueries({ queryKey: ["inbox"] });
+          queryClient.invalidateQueries({ queryKey: ["unread", user.id] });
           toast(t("chat.newMessage"), {
             description: row.body.slice(0, 90),
             action: {
