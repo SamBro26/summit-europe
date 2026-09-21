@@ -7,7 +7,6 @@ import {
   LogOut,
   MessageSquare,
   Plus,
-  Search,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
@@ -37,11 +36,6 @@ export function HomeScreen({
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
   const [location, setLocation] = useState<LocationValue>({
-    country: null,
-    region: null,
-    city: null,
-  });
-  const [applied, setApplied] = useState<LocationValue>({
     country: null,
     region: null,
     city: null,
@@ -149,7 +143,7 @@ export function HomeScreen({
       <main className="mx-auto -mt-8 w-full max-w-5xl px-5 sm:px-10">
         <section className="shadow-soft rounded-2xl border border-border bg-card p-5 sm:p-6">
           <LocationFilter value={location} onChange={setLocation} />
-          <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-5 border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {scope ? (
                 <>
@@ -160,9 +154,6 @@ export function HomeScreen({
                 t("home.selectCountryFirst")
               )}
             </p>
-            <Button disabled={!location.country} onClick={() => setApplied(location)} className="gap-2">
-              <Search className="h-4 w-4" /> {t("common.search")}
-            </Button>
           </div>
         </section>
 
@@ -173,11 +164,11 @@ export function HomeScreen({
           </TabsList>
 
           <TabsContent value="offers" className="mt-5">
-            <ListingGrid kind="supply" filter={applied} />
+            <ListingGrid kind="supply" filter={location} />
           </TabsContent>
 
           <TabsContent value="requests" className="mt-5">
-            <ListingGrid kind="demand" filter={applied} />
+            <ListingGrid kind="demand" filter={location} />
           </TabsContent>
         </Tabs>
       </main>
