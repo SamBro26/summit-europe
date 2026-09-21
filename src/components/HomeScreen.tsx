@@ -194,7 +194,7 @@ export function HomeScreen({
               <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
               {t("filter.title")}
             </h2>
-            <TabsList className="mt-4 grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+            <TabsList className="mt-4 flex w-full gap-2 sm:w-auto sm:gap-3">
               <TabsTrigger value="supply">{t("home.tabs.offers")}</TabsTrigger>
               <TabsTrigger value="demand">{t("home.tabs.requests")}</TabsTrigger>
             </TabsList>
