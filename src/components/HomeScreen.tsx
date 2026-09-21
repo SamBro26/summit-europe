@@ -84,11 +84,29 @@ export function HomeScreen({
                 asChild
                 variant="ghost"
                 size="sm"
-                className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                className="relative gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
                 <Link to="/inbox">
-                  <MessageSquare className="h-4 w-4" />
+                  <span className="relative">
+                    <MessageSquare className="h-4 w-4" />
+                    {unread > 0 && (
+                      <span className="absolute -top-1.5 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+                        {unread > 99 ? "99+" : unread}
+                      </span>
+                    )}
+                  </span>
                   <span className="hidden sm:inline">{t("common.inbox")}</span>
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <Link to="/account">
+                  <UserRound className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t("common.account")}</span>
                 </Link>
               </Button>
               {isAdmin && (
