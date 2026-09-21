@@ -47,6 +47,7 @@ function ListingDetails() {
   const queryClient = useQueryClient();
   const [chatOpen, setChatOpen] = useState(false);
   const [active, setActive] = useState(0);
+  const loc = useLocationNames();
 
   const listingQuery = useQuery({ queryKey: ["listing", id], queryFn: () => fetchListing(id) });
   const listing = listingQuery.data;
@@ -134,7 +135,6 @@ function ListingDetails() {
   }
 
   const isAuthor = user?.id === listing.author_id;
-  const loc = useLocationNames();
   const cover = photos[active]?.storage_path;
 
   return (
