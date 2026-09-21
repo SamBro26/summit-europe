@@ -7,7 +7,6 @@ import {
   LogOut,
   MessageSquare,
   Plus,
-  Search,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
