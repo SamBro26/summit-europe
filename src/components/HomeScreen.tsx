@@ -9,8 +9,10 @@ import {
   Plus,
   ShieldCheck,
   Sparkles,
+  UserRound,
 } from "lucide-react";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,6 +37,7 @@ export function HomeScreen({
   const t = useT();
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { count: unread } = useUnreadCount();
   const [location, setLocation] = useState<LocationValue>({
     country: null,
     region: null,
