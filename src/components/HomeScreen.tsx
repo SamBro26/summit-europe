@@ -41,11 +41,6 @@ export function HomeScreen({
     region: null,
     city: null,
   });
-  const [applied, setApplied] = useState<LocationValue>({
-    country: null,
-    region: null,
-    city: null,
-  });
   const language = getLanguage(languageCode);
   const loc = useLocationNames();
 
@@ -149,7 +144,7 @@ export function HomeScreen({
       <main className="mx-auto -mt-8 w-full max-w-5xl px-5 sm:px-10">
         <section className="shadow-soft rounded-2xl border border-border bg-card p-5 sm:p-6">
           <LocationFilter value={location} onChange={setLocation} />
-          <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-5 border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {scope ? (
                 <>
@@ -160,9 +155,6 @@ export function HomeScreen({
                 t("home.selectCountryFirst")
               )}
             </p>
-            <Button disabled={!location.country} onClick={() => setApplied(location)} className="gap-2">
-              <Search className="h-4 w-4" /> {t("common.search")}
-            </Button>
           </div>
         </section>
 
