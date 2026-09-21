@@ -195,8 +195,8 @@ export function HomeScreen({
               {t("filter.title")}
             </h2>
             <TabsList className="mt-4 grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
-              <TabsTrigger value="offers">{t("home.tabs.offers")}</TabsTrigger>
-              <TabsTrigger value="requests">{t("home.tabs.requests")}</TabsTrigger>
+              <TabsTrigger value="supply">{t("home.tabs.offers")}</TabsTrigger>
+              <TabsTrigger value="demand">{t("home.tabs.requests")}</TabsTrigger>
             </TabsList>
             <div className="mt-5">
               <LocationFilter value={location} onChange={setLocation} />
@@ -236,11 +236,11 @@ export function HomeScreen({
             </div>
           </section>
 
-          <TabsContent value="offers" className="mt-6">
+          <TabsContent value="supply" className="mt-6">
             <ListingGrid kind="supply" filter={location} transaction={transaction} />
           </TabsContent>
 
-          <TabsContent value="requests" className="mt-6">
+          <TabsContent value="demand" className="mt-6">
             <ListingGrid kind="demand" filter={location} transaction={transaction} />
           </TabsContent>
         </Tabs>
