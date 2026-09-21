@@ -9,7 +9,7 @@ import { uploadListingPhoto } from "@/lib/listings";
 import { LocationFilter, type LocationValue } from "@/components/LocationFilter";
 import { PhoneInput } from "@/components/PhoneInput";
 import { PhotoUploader } from "@/components/PhotoUploader";
-import { AD_KINDS, PROPERTY_TYPES, TRANSACTION_TYPES, type AdKind } from "@/lib/property";
+import { AD_KINDS, PROPERTY_TYPES, type AdKind } from "@/lib/property";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
