@@ -165,11 +165,11 @@ export function HomeScreen({
           </TabsList>
 
           <TabsContent value="offers" className="mt-5">
-            <ListingGrid kind="supply" filter={applied} />
+            <ListingGrid kind="supply" filter={location} />
           </TabsContent>
 
           <TabsContent value="requests" className="mt-5">
-            <ListingGrid kind="demand" filter={applied} />
+            <ListingGrid kind="demand" filter={location} />
           </TabsContent>
         </Tabs>
       </main>
