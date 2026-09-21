@@ -246,6 +246,10 @@ const en = {
 
   "tx.sale": "For Sale",
   "tx.rent": "For Rent",
+  "filter.title": "Filters",
+  "filter.transaction": "Transaction type",
+  "filter.selectTransaction": "All transactions",
+  "tx.purchase": "For Purchase",
 };
 
 export type TranslationKey = keyof typeof en;
@@ -744,6 +748,10 @@ const fr: Dict = {
   "prop.agricultural_land": "Terrain agricole",
   "tx.sale": "À vendre",
   "tx.rent": "À louer",
+  "filter.title": "Filtres",
+  "filter.transaction": "Type de transaction",
+  "filter.selectTransaction": "Toutes les transactions",
+  "tx.purchase": "Pour achat",
 };
 
 const de: Dict = {
@@ -847,6 +855,10 @@ const de: Dict = {
   "prop.agricultural_land": "Agrarland",
   "tx.sale": "Zu verkaufen",
   "tx.rent": "Zu vermieten",
+  "filter.title": "Filter",
+  "filter.transaction": "Transaktionsart",
+  "filter.selectTransaction": "Alle Transaktionen",
+  "tx.purchase": "Zum Kauf",
 };
 
 const it: Dict = {
@@ -918,6 +930,10 @@ const it: Dict = {
   "prop.agricultural_land": "Terreno agricolo",
   "tx.sale": "In vendita",
   "tx.rent": "In affitto",
+  "filter.title": "Filtri",
+  "filter.transaction": "Tipo di transazione",
+  "filter.selectTransaction": "Tutte le transazioni",
+  "tx.purchase": "Per acquisto",
 };
 
 const es: Dict = {
@@ -1021,6 +1037,10 @@ const es: Dict = {
   "prop.agricultural_land": "Terreno agrícola",
   "tx.sale": "En venta",
   "tx.rent": "En alquiler",
+  "filter.title": "Filtros",
+  "filter.transaction": "Tipo de transacción",
+  "filter.selectTransaction": "Todas las transacciones",
+  "tx.purchase": "Para compra",
 };
 
 const pt: Dict = {
@@ -1092,6 +1112,10 @@ const pt: Dict = {
   "prop.agricultural_land": "Terreno agrícola",
   "tx.sale": "Para venda",
   "tx.rent": "Para arrendar",
+  "filter.title": "Filtros",
+  "filter.transaction": "Tipo de transação",
+  "filter.selectTransaction": "Todas as transações",
+  "tx.purchase": "Para compra",
 };
 
 const nl: Dict = {
@@ -1162,6 +1186,10 @@ const nl: Dict = {
   "prop.agricultural_land": "Landbouwgrond",
   "tx.sale": "Te koop",
   "tx.rent": "Te huur",
+  "filter.title": "Filters",
+  "filter.transaction": "Transactietype",
+  "filter.selectTransaction": "Alle transacties",
+  "tx.purchase": "Om te kopen",
 };
 
 const el: Dict = {
@@ -1233,6 +1261,10 @@ const el: Dict = {
   "prop.agricultural_land": "Αγροτεμάχιο",
   "tx.sale": "Προς πώληση",
   "tx.rent": "Προς ενοικίαση",
+  "filter.title": "Φίλτρα",
+  "filter.transaction": "Τύπος συναλλαγής",
+  "filter.selectTransaction": "Όλες οι συναλλαγές",
+  "tx.purchase": "Για αγορά",
 };
 
 const ga: Dict = {
@@ -1302,6 +1334,10 @@ const ga: Dict = {
   "prop.agricultural_land": "Talamh talmhaíochta",
   "tx.sale": "Le díol",
   "tx.rent": "Ar cíos",
+  "filter.title": "Scagairí",
+  "filter.transaction": "Cineál idirbhirt",
+  "filter.selectTransaction": "Gach idirbheart",
+  "tx.purchase": "Le ceannach",
 };
 
 const fi: Dict = {
@@ -1371,6 +1407,10 @@ const fi: Dict = {
   "prop.agricultural_land": "Maatalousmaa",
   "tx.sale": "Myytävänä",
   "tx.rent": "Vuokrattavana",
+  "filter.title": "Suodattimet",
+  "filter.transaction": "Kauppatyyppi",
+  "filter.selectTransaction": "Kaikki kaupat",
+  "tx.purchase": "Ostoa varten",
 };
 
 const et: Dict = {
@@ -1440,6 +1480,10 @@ const et: Dict = {
   "prop.agricultural_land": "Põllumaa",
   "tx.sale": "Müügiks",
   "tx.rent": "Üürile",
+  "filter.title": "Filtrid",
+  "filter.transaction": "Tehingu tüüp",
+  "filter.selectTransaction": "Kõik tehingud",
+  "tx.purchase": "Ostmiseks",
 };
 
 const lv: Dict = {
@@ -1509,6 +1553,10 @@ const lv: Dict = {
   "prop.agricultural_land": "Lauksaimniecības zeme",
   "tx.sale": "Pārdod",
   "tx.rent": "Izīrē",
+  "filter.title": "Filtri",
+  "filter.transaction": "Darījuma veids",
+  "filter.selectTransaction": "Visi darījumi",
+  "tx.purchase": "Pirkšanai",
 };
 
 const lt: Dict = {
@@ -1578,6 +1626,10 @@ const lt: Dict = {
   "prop.agricultural_land": "Žemės ūkio sklypas",
   "tx.sale": "Parduodama",
   "tx.rent": "Nuomojama",
+  "filter.title": "Filtrai",
+  "filter.transaction": "Sandorio tipas",
+  "filter.selectTransaction": "Visi sandoriai",
+  "tx.purchase": "Pirkimui",
 };
 
 const mt: Dict = {
@@ -1647,6 +1699,10 @@ const mt: Dict = {
   "prop.agricultural_land": "Art agrikola",
   "tx.sale": "Għall-bejgħ",
   "tx.rent": "Għall-kiri",
+  "filter.title": "Filtri",
+  "filter.transaction": "Tip ta' tranżazzjoni",
+  "filter.selectTransaction": "Kull tranżazzjoni",
+  "tx.purchase": "Għall-xiri",
 };
 
 const sk: Dict = {
@@ -1716,6 +1772,10 @@ const sk: Dict = {
   "prop.agricultural_land": "Poľnohospodárska pôda",
   "tx.sale": "Na predaj",
   "tx.rent": "Na prenájom",
+  "filter.title": "Filtre",
+  "filter.transaction": "Typ transakcie",
+  "filter.selectTransaction": "Všetky transakcie",
+  "tx.purchase": "Na kúpu",
 };
 
 const sl: Dict = {
@@ -1785,6 +1845,10 @@ const sl: Dict = {
   "prop.agricultural_land": "Kmetijsko zemljišče",
   "tx.sale": "Naprodaj",
   "tx.rent": "V najem",
+  "filter.title": "Filtri",
+  "filter.transaction": "Vrsta transakcije",
+  "filter.selectTransaction": "Vse transakcije",
+  "tx.purchase": "Za nakup",
 };
 
 const bg: Dict = {
@@ -1854,6 +1918,10 @@ const bg: Dict = {
   "prop.agricultural_land": "Земеделска земя",
   "tx.sale": "Продава се",
   "tx.rent": "Дава се под наем",
+  "filter.title": "Филтри",
+  "filter.transaction": "Тип сделка",
+  "filter.selectTransaction": "Всички сделки",
+  "tx.purchase": "За покупка",
 };
 
 const sv: Dict = {
@@ -1923,6 +1991,10 @@ const sv: Dict = {
   "prop.agricultural_land": "Jordbruksmark",
   "tx.sale": "Till salu",
   "tx.rent": "Uthyres",
+  "filter.title": "Filter",
+  "filter.transaction": "Transaktionstyp",
+  "filter.selectTransaction": "Alla transaktioner",
+  "tx.purchase": "Till köp",
 };
 
 const tr: Dict = {
@@ -1992,6 +2064,10 @@ const tr: Dict = {
   "prop.agricultural_land": "Tarım arazisi",
   "tx.sale": "Satılık",
   "tx.rent": "Kiralık",
+  "filter.title": "Filtreler",
+  "filter.transaction": "İşlem türü",
+  "filter.selectTransaction": "Tüm işlemler",
+  "tx.purchase": "Satın alma için",
 };
 
 const lb: Dict = {
@@ -2061,6 +2137,10 @@ const lb: Dict = {
   "prop.agricultural_land": "Landwirtschaftlecht Land",
   "tx.sale": "Ze verkafen",
   "tx.rent": "Ze verlounen",
+  "filter.title": "Filter",
+  "filter.transaction": "Transaktiounstyp",
+  "filter.selectTransaction": "All Transaktiounen",
+  "tx.purchase": "Fir ze kafen",
 };
 
 const ca: Dict = {
@@ -2130,6 +2210,10 @@ const ca: Dict = {
   "prop.agricultural_land": "Terreny agrícola",
   "tx.sale": "En venda",
   "tx.rent": "De lloguer",
+  "filter.title": "Filtres",
+  "filter.transaction": "Tipus de transacció",
+  "filter.selectTransaction": "Totes les transaccions",
+  "tx.purchase": "Per compra",
 };
 
 const hr: Dict = {
@@ -2199,6 +2283,10 @@ const hr: Dict = {
   "prop.agricultural_land": "Poljoprivredno zemljište",
   "tx.sale": "Na prodaju",
   "tx.rent": "Za najam",
+  "filter.title": "Filtri",
+  "filter.transaction": "Vrsta transakcije",
+  "filter.selectTransaction": "Sve transakcije",
+  "tx.purchase": "Za kupnju",
 };
 
 const DICTIONARIES: Record<string, Dict> = {

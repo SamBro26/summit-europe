@@ -27,6 +27,7 @@ export async function fetchListings(params: {
   country?: string | null;
   region?: string | null;
   city?: string | null;
+  transaction?: "sale" | "rent" | null;
 }) {
   let q = supabase
     .from("listings")
@@ -37,6 +38,7 @@ export async function fetchListings(params: {
   if (params.country) q = q.eq("country_code", params.country);
   if (params.region) q = q.eq("region", params.region);
   if (params.city) q = q.eq("city", params.city);
+  if (params.transaction) q = q.eq("transaction_type", params.transaction);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as unknown as ListingWithPhotos[];

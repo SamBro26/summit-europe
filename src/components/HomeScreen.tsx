@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Plus,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   UserRound,
 } from "lucide-react";
@@ -17,6 +18,14 @@ import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { LocationFilter, type LocationValue } from "@/components/LocationFilter";
 import { ListingCard } from "@/components/ListingCard";
 import { fetchListings } from "@/lib/listings";
@@ -43,6 +52,8 @@ export function HomeScreen({
     region: null,
     city: null,
   });
+  const [tab, setTab] = useState<"supply" | "demand">("supply");
+  const [transaction, setTransaction] = useState<"sale" | "rent" | null>(null);
   const language = getLanguage(languageCode);
   const loc = useLocationNames();
 
@@ -52,6 +63,18 @@ export function HomeScreen({
   ]
     .filter(Boolean)
     .join(" › ");
+
+  // Same stored value: shown as "For Sale" on the offers tab, "For Purchase" on the requests tab.
+  const transactionOptions =
+    tab === "supply"
+      ? [
+          { value: "sale", label: t("tx.sale") },
+          { value: "rent", label: t("tx.rent") },
+        ]
+      : [
+          { value: "sale", label: t("tx.purchase") },
+          { value: "rent", label: t("tx.rent") },
+        ];
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -163,7 +186,34 @@ export function HomeScreen({
 
       <main className="mx-auto -mt-8 w-full max-w-5xl px-5 sm:px-10">
         <section className="shadow-soft rounded-2xl border border-border bg-card p-5 sm:p-6">
-          <LocationFilter value={location} onChange={setLocation} />
+          <h2 className="flex items-center gap-2 text-sm font-semibold tracking-wide text-foreground uppercase">
+            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+            {t("filter.title")}
+          </h2>
+          <div className="mt-4">
+            <LocationFilter value={location} onChange={setLocation} />
+          </div>
+          <div className="mt-4 space-y-1.5">
+            <Label className="text-xs tracking-wide text-muted-foreground uppercase">
+              {t("filter.transaction")}
+            </Label>
+            <Select
+              key={`transaction-${tab}-${language ?? "en"}`}
+              {...(transaction ? { value: transaction } : {})}
+              onValueChange={(next) => setTransaction(next as "sale" | "rent")}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("filter.selectTransaction")} />
+              </SelectTrigger>
+              <SelectContent>
+                {transactionOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="mt-5 border-t border-border pt-4">
             <p className="text-sm text-muted-foreground">
               {scope ? (
@@ -178,18 +228,22 @@ export function HomeScreen({
           </div>
         </section>
 
-        <Tabs defaultValue="offers" className="mt-8">
+        <Tabs
+          value={tab}
+          onValueChange={(next) => setTab(next as "supply" | "demand")}
+          className="mt-8"
+        >
           <TabsList className="grid w-full grid-cols-2 sm:w-auto sm:inline-grid">
             <TabsTrigger value="offers">{t("home.tabs.offers")}</TabsTrigger>
             <TabsTrigger value="requests">{t("home.tabs.requests")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="offers" className="mt-5">
-            <ListingGrid kind="supply" filter={location} />
+            <ListingGrid kind="supply" filter={location} transaction={transaction} />
           </TabsContent>
 
           <TabsContent value="requests" className="mt-5">
-            <ListingGrid kind="demand" filter={location} />
+            <ListingGrid kind="demand" filter={location} transaction={transaction} />
           </TabsContent>
         </Tabs>
       </main>
@@ -202,19 +256,22 @@ export function HomeScreen({
 function ListingGrid({
   kind,
   filter,
+  transaction,
 }: {
   kind: "supply" | "demand";
   filter: LocationValue;
+  transaction: "sale" | "rent" | null;
 }) {
   const t = useT();
   const { data, isLoading } = useQuery({
-    queryKey: ["listings", kind, filter.country, filter.region, filter.city],
+    queryKey: ["listings", kind, filter.country, filter.region, filter.city, transaction],
     queryFn: () =>
       fetchListings({
         kind,
         country: filter.country,
         region: filter.region,
         city: filter.city,
+        transaction,
       }),
   });
 
