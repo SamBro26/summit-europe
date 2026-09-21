@@ -31,8 +31,29 @@ export function NotificationWatcher() {
         (payload) => {
           const row = payload.new as { body: string; listing_id: string };
           queryClient.invalidateQueries({ queryKey: ["inbox"] });
+          queryClient.invalidateQueries({ queryKey: ["unread", user.id] });
           toast(t("chat.newMessage"), {
             description: row.body.slice(0, 90),
+            action: {
+              label: t("chat.open"),
+              onClick: () => navigate({ to: "/inbox" }),
+            },
+          });
+        },
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const row = payload.new as { title: string; body: string | null };
+          queryClient.invalidateQueries({ queryKey: ["unread", user.id] });
+          toast(row.title || t("notif.new"), {
+            description: row.body?.slice(0, 120),
             action: {
               label: t("chat.open"),
               onClick: () => navigate({ to: "/inbox" }),

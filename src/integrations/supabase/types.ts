@@ -160,6 +160,7 @@ export type Database = {
           region: string
           transaction_type: Database["public"]["Enums"]["transaction_type"]
           updated_at: string
+          views_count: number
         }
         Insert: {
           author_id: string
@@ -175,6 +176,7 @@ export type Database = {
           region: string
           transaction_type: Database["public"]["Enums"]["transaction_type"]
           updated_at?: string
+          views_count?: number
         }
         Update: {
           author_id?: string
@@ -190,6 +192,7 @@ export type Database = {
           region?: string
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
           updated_at?: string
+          views_count?: number
         }
         Relationships: []
       }
@@ -230,6 +233,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -284,12 +317,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      broadcast_notification: {
+        Args: { _body: string; _title: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_listing_views: {
+        Args: { _listing_id: string }
+        Returns: undefined
       }
       is_banned: { Args: { _user_id: string }; Returns: boolean }
     }

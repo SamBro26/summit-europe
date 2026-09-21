@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Inbox as InboxIcon, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +56,7 @@ function InboxPage() {
   const t = useT();
   const loc = useLocationNames();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState<Thread | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
@@ -128,8 +129,22 @@ function InboxPage() {
       .eq("listing_id", open.listingId)
       .eq("recipient_id", user.id)
       .is("read_at", null)
-      .then(() => refetch());
-  }, [open, user, refetch]);
+      .then(() => {
+        refetch();
+        queryClient.invalidateQueries({ queryKey: ["unread", user.id] });
+      });
+  }, [open, user, refetch, queryClient]);
+
+  // Entering the inbox clears pending admin announcements.
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("notifications")
+      .update({ read_at: new Date().toISOString() })
+      .eq("user_id", user.id)
+      .is("read_at", null)
+      .then(() => queryClient.invalidateQueries({ queryKey: ["unread", user.id] }));
+  }, [user, queryClient]);
 
   return (
     <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>

@@ -15,6 +15,7 @@ export type Listing = {
   description: string | null;
   phone: string | null;
   created_at: string;
+  views_count?: number | null;
 };
 
 export type ListingWithPhotos = Listing & { listing_photos: Photo[] };

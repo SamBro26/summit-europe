@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowLeft, Ban, Flag, ShieldCheck, Trash2, Undo2 } from "lucide-react";
+import { ArrowLeft, Ban, Flag, Megaphone, ShieldCheck, Trash2, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
@@ -12,6 +12,7 @@ import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useT, type TranslationKey } from "@/lib/i18n";
@@ -167,10 +168,15 @@ function AdminDashboard() {
 
       <main className="mx-auto -mt-8 w-full max-w-4xl px-5 pb-10 sm:px-10">
         <Tabs defaultValue="reports">
-          <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+          <TabsList className="grid w-full grid-cols-3 sm:inline-grid sm:w-auto">
             <TabsTrigger value="reports">{t("admin.reportedAds")}</TabsTrigger>
             <TabsTrigger value="people">{t("admin.accounts")}</TabsTrigger>
+            <TabsTrigger value="broadcast">{t("admin.broadcast")}</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="broadcast" className="mt-5">
+            <BroadcastPanel />
+          </TabsContent>
 
           <TabsContent value="reports" className="mt-5 space-y-3">
             {reports.isLoading && (
@@ -351,6 +357,50 @@ function AdminDashboard() {
       </main>
 
       <AdBanner />
+    </div>
+  );
+}
+
+function BroadcastPanel() {
+  const t = useT();
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [sending, setSending] = useState(false);
+
+  async function send() {
+    setSending(true);
+    const { error } = await supabase.rpc("broadcast_notification", {
+      _title: title.trim(),
+      _body: body.trim(),
+    });
+    setSending(false);
+    if (error) {
+      toast.error(t("common.actionFailed"));
+      return;
+    }
+    toast.success(t("admin.broadcastSent"));
+    setTitle("");
+    setBody("");
+  }
+
+  return (
+    <div className="shadow-soft space-y-3 rounded-2xl border border-border bg-card p-5">
+      <Input
+        value={title}
+        maxLength={120}
+        placeholder={t("admin.broadcastTitle")}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <Textarea
+        value={body}
+        rows={4}
+        maxLength={1000}
+        placeholder={t("admin.broadcastBody")}
+        onChange={(e) => setBody(e.target.value)}
+      />
+      <Button onClick={send} disabled={sending || !title.trim()} className="gap-1.5">
+        <Megaphone className="h-4 w-4" /> {t("admin.broadcastSend")}
+      </Button>
     </div>
   );
 }

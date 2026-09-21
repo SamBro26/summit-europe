@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Heart, ImageOff, MapPin, Pencil } from "lucide-react";
+import { ArrowLeft, Eye, Heart, ImageOff, MapPin, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -47,6 +47,7 @@ function ListingDetails() {
   const queryClient = useQueryClient();
   const [chatOpen, setChatOpen] = useState(false);
   const [active, setActive] = useState(0);
+  const loc = useLocationNames();
 
   const listingQuery = useQuery({ queryKey: ["listing", id], queryFn: () => fetchListing(id) });
   const listing = listingQuery.data;
@@ -81,6 +82,16 @@ function ListingDetails() {
     : 0;
 
   useEffect(() => setActive(0), [id]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const key = `findme.viewed.${id}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    supabase
+      .rpc("increment_listing_views", { _listing_id: id })
+      .then(() => queryClient.invalidateQueries({ queryKey: ["listing", id] }));
+  }, [id, queryClient]);
 
   async function toggleLike() {
     if (!user) {
@@ -124,7 +135,6 @@ function ListingDetails() {
   }
 
   const isAuthor = user?.id === listing.author_id;
-  const loc = useLocationNames();
   const cover = photos[active]?.storage_path;
 
   return (
@@ -204,6 +214,10 @@ function ListingDetails() {
             ]
               .filter(Boolean)
               .join(", ")}
+          </p>
+          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <Eye className="h-4 w-4" />
+            {listing.views_count ?? 0} {t("listing.views")}
           </p>
           {listing.description && (
             <p className="text-sm leading-relaxed whitespace-pre-line text-foreground">

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ImageOff, MapPin } from "lucide-react";
+import { Eye, ImageOff, MapPin } from "lucide-react";
 import { usePhotoUrls } from "@/hooks/usePhotoUrls";
 import { formatEuro } from "@/lib/property";
 import { useLocationNames } from "@/lib/locations";
@@ -55,6 +55,10 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
           ]
             .filter(Boolean)
             .join(", ")}
+        </p>
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Eye className="h-3.5 w-3.5" />
+          {listing.views_count ?? 0} {t("listing.views")}
         </p>
         {listing.description && (
           <p className="line-clamp-2 text-sm text-muted-foreground">{listing.description}</p>
