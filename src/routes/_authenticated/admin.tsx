@@ -371,7 +371,7 @@ function BroadcastPanel() {
     setSending(true);
     const { error } = await supabase.rpc("broadcast_notification", {
       _title: title.trim(),
-      _body: body.trim() || null,
+      _body: body.trim(),
     });
     setSending(false);
     if (error) {
