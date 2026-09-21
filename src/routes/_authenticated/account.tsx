@@ -1,0 +1,214 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Heart, Pencil, Trash2, UserRound } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { ListingCard } from "@/components/ListingCard";
+import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
+import type { ListingWithPhotos } from "@/lib/listings";
+
+export const Route = createFileRoute("/_authenticated/account")({
+  head: () => ({
+    meta: [
+      { title: "My account — FindMe RealEstate" },
+      {
+        name: "description",
+        content: "Manage your published property ads and the listings you saved as favorites.",
+      },
+      { property: "og:title", content: "My account — FindMe RealEstate" },
+      {
+        property: "og:description",
+        content: "Manage your published property ads and the listings you saved as favorites.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
+  component: AccountPage,
+});
+
+const SELECT = "*, listing_photos(id, url, storage_path, sort_order)";
+
+function AccountPage() {
+  const t = useT();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const mine = useQuery({
+    queryKey: ["my-listings", user?.id],
+    enabled: Boolean(user),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("listings")
+        .select(SELECT)
+        .eq("author_id", user!.id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as ListingWithPhotos[];
+    },
+  });
+
+  const favorites = useQuery({
+    queryKey: ["my-favorites", user?.id],
+    enabled: Boolean(user),
+    queryFn: async () => {
+      const { data: likes } = await supabase
+        .from("listing_likes")
+        .select("listing_id")
+        .eq("user_id", user!.id);
+      const ids = (likes ?? []).map((l) => l.listing_id);
+      if (!ids.length) return [] as ListingWithPhotos[];
+      const { data, error } = await supabase.from("listings").select(SELECT).in("id", ids);
+      if (error) throw error;
+      return (data ?? []) as unknown as ListingWithPhotos[];
+    },
+  });
+
+  async function remove(id: string) {
+    const { error } = await supabase.from("listings").delete().eq("id", id);
+    if (error) {
+      toast.error(t("common.actionFailed"));
+      return;
+    }
+    toast.success(t("account.deleted"));
+    queryClient.invalidateQueries({ queryKey: ["my-listings", user?.id] });
+    queryClient.invalidateQueries({ queryKey: ["listings"] });
+  }
+
+  return (
+    <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
+      <header className="bg-brand-gradient px-5 pt-6 pb-14 sm:px-10">
+        <div className="mx-auto max-w-5xl">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("common.home")}
+          </Link>
+          <h1 className="mt-6 flex items-center gap-2 text-2xl font-semibold text-primary-foreground">
+            <UserRound className="h-6 w-6" /> {t("account.title")}
+          </h1>
+          <p className="mt-1 text-sm text-primary-foreground/75">{t("account.subtitle")}</p>
+        </div>
+      </header>
+
+      <main className="mx-auto -mt-8 w-full max-w-5xl px-5 pb-10 sm:px-10">
+        <Tabs defaultValue="listings">
+          <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
+            <TabsTrigger value="listings">{t("account.myListings")}</TabsTrigger>
+            <TabsTrigger value="favorites">{t("account.myFavorites")}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="listings" className="mt-5">
+            {mine.isLoading && (
+              <p className="py-10 text-center text-sm text-muted-foreground">
+                {t("common.loading")}
+              </p>
+            )}
+            {!mine.isLoading && (mine.data?.length ?? 0) === 0 && (
+              <EmptyState title={t("account.noListings")} body={t("account.noListingsBody")}>
+                <Button asChild className="mt-5">
+                  <Link to="/post">{t("home.post")}</Link>
+                </Button>
+              </EmptyState>
+            )}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {(mine.data ?? []).map((listing) => (
+                <div key={listing.id} className="space-y-2">
+                  <ListingCard listing={listing} />
+                  <div className="flex gap-2">
+                    <Button asChild variant="outline" size="sm" className="flex-1 gap-1.5">
+                      <Link to="/listings/$id/edit" params={{ id: listing.id }}>
+                        <Pencil className="h-4 w-4" /> {t("account.edit")}
+                      </Link>
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="text-destructive flex-1 gap-1.5">
+                          <Trash2 className="h-4 w-4" /> {t("common.delete")}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t("account.deleteTitle")}</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {t("account.deleteBody")}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => remove(listing.id)}>
+                            {t("common.delete")}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="favorites" className="mt-5">
+            {favorites.isLoading && (
+              <p className="py-10 text-center text-sm text-muted-foreground">
+                {t("common.loading")}
+              </p>
+            )}
+            {!favorites.isLoading && (favorites.data?.length ?? 0) === 0 && (
+              <EmptyState title={t("account.noFavorites")} body={t("account.noFavoritesBody")}>
+                <Button asChild className="mt-5">
+                  <Link to="/">{t("inbox.browse")}</Link>
+                </Button>
+              </EmptyState>
+            )}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {(favorites.data ?? []).map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      <AdBanner />
+    </div>
+  );
+}
+
+function EmptyState({
+  title,
+  body,
+  children,
+}: {
+  title: string;
+  body: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-10 text-center">
+      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/25">
+        <Heart className="h-5 w-5 text-accent-foreground" />
+      </span>
+      <h2 className="mt-4 text-base font-semibold text-foreground">{title}</h2>
+      <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">{body}</p>
+      {children}
+    </div>
+  );
+}
