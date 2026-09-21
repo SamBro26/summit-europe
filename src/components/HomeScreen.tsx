@@ -194,9 +194,9 @@ export function HomeScreen({
               <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
               {t("filter.title")}
             </h2>
-            <TabsList className="mt-4 grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
-              <TabsTrigger value="supply">{t("home.tabs.offers")}</TabsTrigger>
-              <TabsTrigger value="demand">{t("home.tabs.requests")}</TabsTrigger>
+            <TabsList className="mt-4 flex h-auto w-full gap-2 bg-transparent p-0 sm:w-auto">
+              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-primary sm:flex-none" value="supply">{t("home.tabs.offers")}</TabsTrigger>
+              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-primary sm:flex-none" value="demand">{t("home.tabs.requests")}</TabsTrigger>
             </TabsList>
             <div className="mt-5">
               <LocationFilter value={location} onChange={setLocation} />
