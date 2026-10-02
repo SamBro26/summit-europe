@@ -4,6 +4,19 @@ import { SplashScreen } from "@/components/SplashScreen";
 import { LanguageSelect } from "@/components/LanguageSelect";
 import { HomeScreen } from "@/components/HomeScreen";
 import { useI18n } from "@/lib/i18n";
+import { LANGUAGES } from "@/lib/languages";
+
+const SUPPORTED_CODES = new Set(LANGUAGES.map((l) => l.code));
+
+function detectSystemLanguage(): string {
+  if (typeof navigator === "undefined") return "en";
+  const candidates = navigator.languages?.length ? navigator.languages : [navigator.language];
+  for (const tag of candidates) {
+    const prefix = (tag ?? "").toLowerCase().split("-")[0];
+    if (prefix && SUPPORTED_CODES.has(prefix)) return prefix;
+  }
+  return "en";
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
