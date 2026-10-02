@@ -4,6 +4,19 @@ import { SplashScreen } from "@/components/SplashScreen";
 import { LanguageSelect } from "@/components/LanguageSelect";
 import { HomeScreen } from "@/components/HomeScreen";
 import { useI18n } from "@/lib/i18n";
+import { LANGUAGES } from "@/lib/languages";
+
+const SUPPORTED_CODES = new Set(LANGUAGES.map((l) => l.code));
+
+function detectSystemLanguage(): string {
+  if (typeof navigator === "undefined") return "en";
+  const candidates = navigator.languages?.length ? navigator.languages : [navigator.language];
+  for (const tag of candidates) {
+    const prefix = (tag ?? "").toLowerCase().split("-")[0];
+    if (prefix && SUPPORTED_CODES.has(prefix)) return prefix;
+  }
+  return "en";
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,21 +52,17 @@ function Index() {
     return () => clearTimeout(t);
   }, []);
 
-  const stage: Stage = !hydrated || !splashDone ? "splash" : !language ? "language" : "home";
+  // First visit: auto-detect the device/browser language once and lock it in,
+  // skipping the manual onboarding screen entirely.
+  useEffect(() => {
+    if (hydrated && !language) {
+      setLanguage(detectSystemLanguage());
+    }
+  }, [hydrated, language, setLanguage]);
+
+  const stage: Stage = !hydrated || !splashDone || !language ? "splash" : "home";
 
   if (stage === "splash") return <SplashScreen />;
-
-  if (stage === "language")
-    return (
-      <LanguageSelect
-        current={language}
-        onConfirm={(code) => {
-          setLanguage(code);
-          setChanging(false);
-        }}
-        {...(language ? { onCancel: () => setChanging(false) } : {})}
-      />
-    );
 
   return (
     <>
