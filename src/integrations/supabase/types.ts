@@ -271,7 +271,10 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_premium: boolean
           phone: string | null
+          subscription_status: string
+          trial_start_date: string
         }
         Insert: {
           ban_reason?: string | null
@@ -279,7 +282,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          is_premium?: boolean
           phone?: string | null
+          subscription_status?: string
+          trial_start_date?: string
         }
         Update: {
           ban_reason?: string | null
@@ -287,7 +293,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_premium?: boolean
           phone?: string | null
+          subscription_status?: string
+          trial_start_date?: string
         }
         Relationships: []
       }
