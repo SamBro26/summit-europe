@@ -7,10 +7,13 @@
  * padding (`pb-[var(--ad-banner-h)]`-style spacing) so nothing is covered.
  */
 import { useT } from "@/lib/i18n";
+import { useAdStatus } from "@/hooks/useAdStatus";
 
 export function AdBanner({ label }: { label?: string }) {
   const t = useT();
+  const { show_ads } = useAdStatus();
   const visibleLabel = label ?? t("common.advertisement");
+  if (!show_ads) return null;
   return (
     <div
       aria-label={visibleLabel}
