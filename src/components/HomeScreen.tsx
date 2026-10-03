@@ -15,6 +15,7 @@ import {
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
 import { AdBanner, AD_BANNER_SPACING } from "@/components/AdBanner";
+import { GoogleBannerAd } from "@/components/GoogleBannerAd";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -83,6 +84,7 @@ export function HomeScreen({
 
   return (
     <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
+      <GoogleBannerAd />
       <header className="bg-brand-gradient px-5 pt-8 pb-14 sm:px-10">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div className="flex items-center gap-2.5">
