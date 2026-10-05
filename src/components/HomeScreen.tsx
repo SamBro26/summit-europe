@@ -224,18 +224,14 @@ export function HomeScreen({
                 </SelectContent>
               </Select>
             </div>
-            <div className="mt-5 border-t border-border pt-4">
-              <p className="text-sm text-muted-foreground">
-                {scope ? (
-                  <>
-                    {t("home.searchingIn")}{" "}
-                    <span className="font-medium text-foreground">{scope}</span>
-                  </>
-                ) : (
-                  t("home.selectCountryFirst")
-                )}
-              </p>
-            </div>
+            {scope && (
+              <div className="mt-5 border-t border-border pt-4">
+                <p className="text-sm text-muted-foreground">
+                  {t("home.searchingIn")}{" "}
+                  <span className="font-medium text-foreground">{scope}</span>
+                </p>
+              </div>
+            )}
           </section>
 
           <TabsContent value="supply" className="mt-6">
