@@ -56,30 +56,34 @@ function ListingDetails() {
   const urls = usePhotoUrls(photos.map((p) => p.storage_path));
 
   const likesQuery = useQuery({
-    queryKey: ["likes", id],
+    queryKey: ["likes", id, user?.id ?? null],
     queryFn: async () => {
-      const { data } = await supabase.from("listing_likes").select("user_id").eq("listing_id", id);
-      return data ?? [];
-    },
-  });
-  const ratingsQuery = useQuery({
-    queryKey: ["ratings", id],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("listing_ratings")
-        .select("user_id, stars")
-        .eq("listing_id", id);
-      return data ?? [];
+      const [{ data: stats }, mine] = await Promise.all([
+        supabase.rpc("get_listing_engagement", { _listing_id: id }),
+        user
+          ? supabase.from("listing_ratings").select("stars").eq("listing_id", id).eq("user_id", user.id).maybeSingle()
+          : Promise.resolve({ data: null }),
+      ]);
+      const myLike = user
+        ? (await supabase.from("listing_likes").select("user_id").eq("listing_id", id).eq("user_id", user.id).maybeSingle()).data
+        : null;
+      const s = (stats as { like_count: number; rating_count: number; rating_avg: number }[] | null)?.[0];
+      return {
+        likeCount: Number(s?.like_count ?? 0),
+        ratingCount: Number(s?.rating_count ?? 0),
+        average: Number(s?.rating_avg ?? 0),
+        liked: Boolean(myLike),
+        myRating: (mine.data as { stars: number } | null)?.stars ?? 0,
+      };
     },
   });
 
-  const likes = likesQuery.data ?? [];
-  const ratings = ratingsQuery.data ?? [];
-  const liked = Boolean(user && likes.some((l) => l.user_id === user.id));
-  const myRating = ratings.find((r) => user && r.user_id === user.id)?.stars ?? 0;
-  const average = ratings.length
-    ? ratings.reduce((sum, r) => sum + r.stars, 0) / ratings.length
-    : 0;
+  const stats = likesQuery.data;
+  const likes = { length: stats?.likeCount ?? 0 };
+  const ratings = { length: stats?.ratingCount ?? 0 };
+  const liked = stats?.liked ?? false;
+  const myRating = stats?.myRating ?? 0;
+  const average = stats?.average ?? 0;
 
   useEffect(() => setActive(0), [id]);
 
@@ -114,7 +118,7 @@ function ListingDetails() {
     await supabase
       .from("listing_ratings")
       .upsert({ listing_id: id, user_id: user.id, stars }, { onConflict: "listing_id,user_id" });
-    queryClient.invalidateQueries({ queryKey: ["ratings", id] });
+    queryClient.invalidateQueries({ queryKey: ["likes", id] });
   }
 
   if (listingQuery.isLoading) {
