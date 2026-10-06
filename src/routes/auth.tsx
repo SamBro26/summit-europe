@@ -8,6 +8,13 @@ import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({ redirect: z.string().optional() });
@@ -41,6 +48,28 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
+  async function sendReset(e: React.FormEvent) {
+    e.preventDefault();
+    const parsed = z.string().trim().email(t("auth.invalidEmail")).max(255).safeParse(resetEmail);
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]!.message);
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(parsed.data, {
+      redirectTo: window.location.origin + "/reset-password",
+    });
+    setBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(t("auth.resetSent"));
+    setResetOpen(false);
+  }
 
   const target = search.redirect && search.redirect.startsWith("/") ? search.redirect : "/";
 
@@ -144,6 +173,20 @@ function AuthPage() {
                 maxLength={72}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {mode === "signin" && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="text-xs font-medium text-muted-foreground underline hover:text-foreground"
+                    onClick={() => {
+                      setResetEmail(email);
+                      setResetOpen(true);
+                    }}
+                  >
+                    {t("auth.forgot")}
+                  </button>
+                </div>
+              )}
             </div>
             <Button type="submit" className="w-full" disabled={busy}>
               {mode === "signin" ? t("common.signIn") : t("auth.signUp")}
@@ -171,6 +214,31 @@ function AuthPage() {
           </p>
         </div>
       </div>
+
+      <Dialog open={resetOpen} onOpenChange={setResetOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("auth.resetTitle")}</DialogTitle>
+            <DialogDescription>{t("auth.resetBody")}</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={sendReset} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="reset-email">{t("auth.email")}</Label>
+              <Input
+                id="reset-email"
+                type="email"
+                autoComplete="email"
+                value={resetEmail}
+                maxLength={255}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={busy}>
+              {t("auth.sendLink")}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
