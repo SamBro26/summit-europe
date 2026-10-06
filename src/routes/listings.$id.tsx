@@ -77,7 +77,6 @@ function ListingDetails() {
       };
     },
   });
-  const ratingsQuery = likesQuery;
 
   const stats = likesQuery.data;
   const likes = { length: stats?.likeCount ?? 0 };
@@ -119,7 +118,7 @@ function ListingDetails() {
     await supabase
       .from("listing_ratings")
       .upsert({ listing_id: id, user_id: user.id, stars }, { onConflict: "listing_id,user_id" });
-    queryClient.invalidateQueries({ queryKey: ["ratings", id] });
+    queryClient.invalidateQueries({ queryKey: ["likes", id] });
   }
 
   if (listingQuery.isLoading) {
