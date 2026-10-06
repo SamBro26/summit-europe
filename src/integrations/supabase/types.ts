@@ -330,6 +330,21 @@ export type Database = {
         Args: { _body: string; _title: string }
         Returns: number
       }
+      get_display_names: {
+        Args: { _ids: string[] }
+        Returns: {
+          display_name: string
+          id: string
+        }[]
+      }
+      get_listing_engagement: {
+        Args: { _listing_id: string }
+        Returns: {
+          like_count: number
+          rating_avg: number
+          rating_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
