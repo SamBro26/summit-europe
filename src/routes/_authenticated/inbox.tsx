@@ -85,7 +85,7 @@ function InboxPage() {
               .in("id", listingIds)
           : Promise.resolve({ data: [] as never[] }),
         partnerIds.length
-          ? supabase.from("profiles").select("id, display_name").in("id", partnerIds)
+          ? supabase.rpc("get_display_names", { _ids: partnerIds })
           : Promise.resolve({ data: [] as never[] }),
       ]);
 
