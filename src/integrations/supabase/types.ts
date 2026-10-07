@@ -330,6 +330,11 @@ export type Database = {
         Args: { _body: string; _title: string }
         Returns: number
       }
+      choose_free_plan: { Args: never; Returns: undefined }
+      ensure_trial_warning: {
+        Args: { _body: string; _title: string }
+        Returns: boolean
+      }
       get_display_names: {
         Args: { _ids: string[] }
         Returns: {
