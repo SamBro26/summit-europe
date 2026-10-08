@@ -51,18 +51,21 @@ export async function fetchListing(id: string) {
 }
 
 export async function signedPhotoUrl(path: string) {
-  const { data } = await supabase.storage.from("listing-photos").createSignedUrl(path, 60 * 60);
-  return data?.signedUrl ?? "";
+  const map = await signedPhotoUrls([path]);
+  return map[path] ?? "";
 }
 
+// Published photos are signed server-side; own unpublished uploads via own-folder access.
 export async function signedPhotoUrls(paths: string[]) {
   if (!paths.length) return {} as Record<string, string>;
-  const { data } = await supabase.storage
-    .from("listing-photos")
-    .createSignedUrls(paths, 60 * 60);
-  const map: Record<string, string> = {};
-  for (const item of data ?? []) {
-    if (item.path && item.signedUrl) map[item.path] = item.signedUrl;
+  const { signPublishedPhotos } = await import("./photos.functions");
+  const map: Record<string, string> = { ...(await signPublishedPhotos({ data: { paths } })) };
+  const missing = paths.filter((p) => !map[p]);
+  if (missing.length) {
+    const { data } = await supabase.storage.from("listing-photos").createSignedUrls(missing, 60 * 60);
+    for (const item of data ?? []) {
+      if (item.path && item.signedUrl) map[item.path] = item.signedUrl;
+    }
   }
   return map;
 }
