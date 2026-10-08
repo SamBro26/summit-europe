@@ -22,6 +22,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 import type { ListingWithPhotos } from "@/lib/listings";
+import { useState } from "react";
+import { Crown } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { PlanSelection, TrialBanner } from "@/components/PlanSelection";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -49,6 +53,7 @@ function AccountPage() {
   const t = useT();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [plansOpen, setPlansOpen] = useState(false);
 
   const mine = useQuery({
     queryKey: ["my-listings", user?.id],
@@ -109,6 +114,19 @@ function AccountPage() {
       </header>
 
       <main className="mx-auto -mt-8 w-full max-w-5xl px-5 pb-10 sm:px-10">
+        <TrialBanner className="mb-4" onChoose={() => setPlansOpen(true)} />
+        <div className="mb-5 flex justify-end">
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setPlansOpen(true)}>
+            <Crown className="h-4 w-4" /> {t("plan.manage")}
+          </Button>
+        </div>
+        <Dialog open={plansOpen} onOpenChange={setPlansOpen}>
+          <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+            <DialogTitle className="sr-only">{t("plan.chooseTitle")}</DialogTitle>
+            <DialogDescription className="sr-only">{t("plan.subtitle")}</DialogDescription>
+            <PlanSelection onDone={() => setPlansOpen(false)} />
+          </DialogContent>
+        </Dialog>
         <Tabs defaultValue="listings">
           <TabsList className="grid w-full grid-cols-2 sm:inline-grid sm:w-auto">
             <TabsTrigger value="listings">{t("account.myListings")}</TabsTrigger>

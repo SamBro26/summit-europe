@@ -1,4 +1,4 @@
-
+import { PLAN_EN, PLAN_I18N } from "./i18n-plans";
 const en = {
   "app.tagline": "Eurozone Property Network",
 
