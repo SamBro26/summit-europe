@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   Globe,
   Home,
@@ -32,6 +32,7 @@ import { LocationFilter, type LocationValue } from "@/components/LocationFilter"
 import { ListingCard } from "@/components/ListingCard";
 import { fetchListings } from "@/lib/listings";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdStatus } from "@/hooks/useAdStatus";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocationNames } from "@/lib/locations";
 import { getLanguage } from "@/lib/languages";
@@ -47,6 +48,7 @@ export function HomeScreen({
   const navigate = useNavigate();
   const t = useT();
   const { user } = useAuth();
+  const { show_ads } = useAdStatus();
   const { isAdmin } = useIsAdmin();
   const { count: unread } = useUnreadCount();
   const [location, setLocation] = useState<LocationValue>({
@@ -84,24 +86,27 @@ export function HomeScreen({
   }
 
   return (
-    <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
+    <div className={cn("min-h-screen bg-background", show_ads && AD_BANNER_SPACING)}>
       <GoogleBannerAd />
-      <TrialBanner className="mx-auto my-2 w-[calc(100%-2rem)] max-w-5xl" onChoose={() => navigate({ to: "/account" })} />
-      <header className="bg-brand-gradient px-5 pt-8 pb-14 sm:px-10">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-foreground/10">
+      <div className="mx-auto w-full max-w-5xl px-5 sm:px-10">
+        <TrialBanner className="my-3" onChoose={() => navigate({ to: "/account" })} />
+      </div>
+      <header className="bg-brand-gradient px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-14 sm:px-10">
+        <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-4 sm:flex sm:flex-wrap sm:justify-between">
+          <div className="col-span-2 flex min-w-0 items-center gap-2.5 sm:col-span-1">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-foreground/10">
               <Home className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={1.6} />
             </span>
-            <span className="font-display text-lg font-semibold text-primary-foreground">
+            <span className="min-w-0 truncate font-display text-lg font-semibold text-primary-foreground">
               FindMe <span className="text-accent">RealEstate</span>
             </span>
           </div>
-          <div className="flex items-center gap-1">
+          <nav aria-label={t("common.home")} className="col-span-2 flex min-w-0 items-center gap-1 [&>button]:shrink-0 [&>a]:shrink-0 sm:col-span-1">
             <Button
               variant="ghost"
               size="sm"
               onClick={onChangeLanguage}
+              aria-label={language.native}
               className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <Globe className="h-4 w-4" />
@@ -116,7 +121,7 @@ export function HomeScreen({
                 size="sm"
                 className="relative gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                <Link to="/inbox">
+                 <Link to="/inbox" aria-label={t("common.inbox")}>
                   <span className="relative">
                     <MessageSquare className="h-4 w-4" />
                     {unread > 0 && (
@@ -134,7 +139,7 @@ export function HomeScreen({
                 size="sm"
                 className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                <Link to="/account">
+                 <Link to="/account" aria-label={t("common.account")}>
                   <UserRound className="h-4 w-4" />
                   <span className="hidden sm:inline">{t("common.account")}</span>
                 </Link>
@@ -146,7 +151,7 @@ export function HomeScreen({
                   size="sm"
                   className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 >
-                  <Link to="/admin">
+                   <Link to="/admin" aria-label={t("common.admin")}>
                     <ShieldCheck className="h-4 w-4" />
                     <span className="hidden sm:inline">{t("common.admin")}</span>
                   </Link>
@@ -156,6 +161,7 @@ export function HomeScreen({
                 variant="ghost"
                 size="sm"
                 onClick={signOut}
+                aria-label={t("common.signOut")}
                 className="gap-1.5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
                 <LogOut className="h-4 w-4" />
@@ -172,7 +178,7 @@ export function HomeScreen({
                 <Link to="/auth">{t("common.signIn")}</Link>
               </Button>
             )}
-          </div>
+          </nav>
         </div>
 
         <div className="mx-auto mt-10 max-w-5xl">
@@ -261,21 +267,33 @@ function ListingGrid({
   transaction: "sale" | "rent" | null;
 }) {
   const t = useT();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["listings", kind, filter.country, filter.region, filter.city, transaction],
-    queryFn: () =>
+    queryFn: ({ signal }) =>
       fetchListings({
         kind,
         country: filter.country,
         region: filter.region,
         city: filter.city,
         transaction,
+        signal,
       }),
+    staleTime: 60_000,
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
     return (
       <p className="py-10 text-center text-sm text-muted-foreground">{t("home.loadingAds")}</p>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div role="alert" className="py-10 text-center">
+        <p className="text-sm text-muted-foreground">{t("errors.loadBody")}</p>
+        <Button variant="outline" className="mt-3" onClick={() => refetch()}>{t("errors.tryAgain")}</Button>
+      </div>
     );
   }
 

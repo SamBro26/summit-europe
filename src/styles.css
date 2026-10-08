@@ -167,6 +167,19 @@
   font-family: var(--font-display);
 }
 
+/* One native scroll surface keeps pricing dialogs usable on touch browsers. */
+.plan-dialog {
+  display: block;
+  width: calc(100% - 2rem);
+  max-width: 48rem;
+  max-height: calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
 @layer base {
   body {
     font-family: var(--font-sans);
