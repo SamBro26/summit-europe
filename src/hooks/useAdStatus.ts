@@ -1,47 +1,62 @@
+import { createContext, createElement, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-export const TRIAL_DAYS = 30;
-const DAY_MS = 24 * 60 * 60 * 1000;
+import { computeShowAds, DAY_MS, TRIAL_DAYS, type AdStatusReason } from "@/lib/ad-status";
+export { computeShowAds, TRIAL_DAYS } from "@/lib/ad-status";
+export type { AdStatusReason } from "@/lib/ad-status";
 
-export type AdStatusReason = "loading" | "guest" | "trial" | "premium" | "free_with_ads";
-
-export function computeShowAds(
-  profile: { trial_start_date: string; is_premium: boolean } | null,
-  now = Date.now(),
-): { show_ads: boolean; reason: AdStatusReason; trialDaysLeft: number } {
-  if (!profile) return { show_ads: true, reason: "guest", trialDaysLeft: 0 };
-  if (profile.is_premium) return { show_ads: false, reason: "premium", trialDaysLeft: 0 };
-  const elapsed = now - new Date(profile.trial_start_date).getTime();
-  if (elapsed < TRIAL_DAYS * DAY_MS) {
-    return {
-      show_ads: false,
-      reason: "trial",
-      trialDaysLeft: Math.ceil((TRIAL_DAYS * DAY_MS - elapsed) / DAY_MS),
-    };
-  }
-  return { show_ads: true, reason: "free_with_ads", trialDaysLeft: 0 };
-}
+type AdStatus = ReturnType<typeof computeShowAds> & { subscription_status?: string | null };
+const AdStatusContext = createContext<AdStatus | null>(null);
 
 /** Whether ads should be shown to the current visitor. */
-export function useAdStatus() {
+export function AdStatusProvider({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
+  const userId = user?.id;
+  const [now, setNow] = useState(0);
   const { data, isLoading } = useQuery({
-    queryKey: ["ad-status", user?.id],
-    enabled: !!user,
-    queryFn: async () => {
+    queryKey: ["ad-status", userId],
+    enabled: Boolean(userId),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    retry: 1,
+    queryFn: async ({ signal }) => {
+      if (!userId) return null;
       const { data, error } = await supabase
         .from("profiles")
         .select("trial_start_date, is_premium, subscription_status")
-        .eq("id", user!.id)
+        .eq("id", userId)
+        .abortSignal(signal)
         .maybeSingle();
       if (error) throw error;
       return data;
     },
   });
-  if (loading || (user && isLoading)) {
-    return { show_ads: false, reason: "loading" as const, trialDaysLeft: 0 };
-  }
-  return { ...computeShowAds(user ? (data ?? null) : null), subscription_status: data?.subscription_status };
+  useEffect(() => { setNow(Date.now()); }, [userId]);
+
+  // Wake only when the displayed day count changes, not on scroll or every render.
+  useEffect(() => {
+    if (!data || data.is_premium || !now) return;
+    const remaining = Date.parse(data.trial_start_date) + TRIAL_DAYS * DAY_MS - now;
+    if (!Number.isFinite(remaining) || remaining <= 0) return;
+    const delay = remaining - (Math.ceil(remaining / DAY_MS) - 1) * DAY_MS;
+    const timer = setTimeout(() => setNow(Date.now()), delay + 20);
+    return () => clearTimeout(timer);
+  }, [data, now]);
+
+  const value = useMemo<AdStatus>(() => {
+    // Profile errors never gate the feed or misclassify a signed-in trial as a guest.
+    if (loading || (userId && (isLoading || !data || !now))) {
+      return { show_ads: false, reason: "loading" as AdStatusReason, trialDaysLeft: 0 };
+    }
+    return { ...computeShowAds(userId ? (data ?? null) : null, now), subscription_status: data?.subscription_status };
+  }, [loading, userId, isLoading, data, now]);
+  return createElement(AdStatusContext.Provider, { value }, children);
+}
+
+export function useAdStatus() {
+  const status = useContext(AdStatusContext);
+  if (!status) throw new Error("useAdStatus must be used inside <AdStatusProvider>");
+  return status;
 }
