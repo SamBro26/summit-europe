@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationWatcher } from "@/components/NotificationWatcher";
+import { PlanGate } from "@/components/PlanSelection";
 import { I18nProvider, useT } from "@/lib/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -135,6 +136,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <NotificationWatcher />
+        <PlanGate />
         <Toaster richColors position="top-center" />
       </I18nProvider>
     </QueryClientProvider>
