@@ -12,7 +12,9 @@ import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationWatcher } from "@/components/NotificationWatcher";
-import { PlanGate } from "@/components/PlanSelection";
+import { PlanGate, TrialWarning } from "@/components/PlanSelection";
+import { AuthProvider } from "@/hooks/useAuth";
+import { AdStatusProvider } from "@/hooks/useAdStatus";
 import { I18nProvider, useT } from "@/lib/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -133,11 +135,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
+        <AuthProvider>
+        <AdStatusProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <NotificationWatcher />
         <PlanGate />
+        <TrialWarning />
         <Toaster richColors position="top-center" />
+        </AdStatusProvider>
+        </AuthProvider>
       </I18nProvider>
     </QueryClientProvider>
   );

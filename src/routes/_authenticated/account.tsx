@@ -121,7 +121,7 @@ function AccountPage() {
           </Button>
         </div>
         <Dialog open={plansOpen} onOpenChange={setPlansOpen}>
-          <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+          <DialogContent className="plan-dialog">
             <DialogTitle className="sr-only">{t("plan.chooseTitle")}</DialogTitle>
             <DialogDescription className="sr-only">{t("plan.subtitle")}</DialogDescription>
             <PlanSelection onDone={() => setPlansOpen(false)} />

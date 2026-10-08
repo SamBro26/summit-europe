@@ -28,6 +28,7 @@ export async function fetchListings(params: {
   region?: string | null;
   city?: string | null;
   transaction?: "sale" | "rent" | null;
+  signal?: AbortSignal;
 }) {
   let q = supabase
     .from("listings")
@@ -39,6 +40,7 @@ export async function fetchListings(params: {
   if (params.region) q = q.eq("region", params.region);
   if (params.city) q = q.eq("city", params.city);
   if (params.transaction) q = q.eq("transaction_type", params.transaction);
+  if (params.signal) q = q.abortSignal(params.signal);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as unknown as ListingWithPhotos[];
