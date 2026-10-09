@@ -50,7 +50,7 @@ export function AdStatusProvider({ children }: { children: ReactNode }) {
     if (loading || (userId && (isLoading || !data || !now))) {
       return { show_ads: false, reason: "loading" as AdStatusReason, trialDaysLeft: 0 };
     }
-    return { ...computeShowAds(userId ? (data ?? null) : null, now), subscription_status: data?.subscription_status };
+    return { ...computeShowAds(userId ? (data ?? null) : null, now), subscription_status: data?.subscription_status ?? null };
   }, [loading, userId, isLoading, data, now]);
   return createElement(AdStatusContext.Provider, { value }, children);
 }
