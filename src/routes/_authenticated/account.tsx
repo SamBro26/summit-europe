@@ -24,6 +24,9 @@ import { useT } from "@/lib/i18n";
 import type { ListingWithPhotos } from "@/lib/listings";
 import { useState } from "react";
 import { Crown } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteMyAccount } from "@/lib/account.functions";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PlanSelection, TrialBanner } from "@/components/PlanSelection";
 
@@ -54,6 +57,24 @@ function AccountPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [plansOpen, setPlansOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const navigate = useNavigate();
+  const deleteAccountFn = useServerFn(deleteMyAccount);
+
+  async function deleteAccount() {
+    setDeleting(true);
+    try {
+      await deleteAccountFn();
+      await queryClient.cancelQueries();
+      queryClient.clear();
+      await supabase.auth.signOut({ scope: "local" });
+      toast.success(t("delAcc.success"));
+      navigate({ to: "/", replace: true });
+    } catch {
+      toast.error(t("common.actionFailed"));
+      setDeleting(false);
+    }
+  }
 
   const mine = useQuery({
     queryKey: ["my-listings", user?.id],
@@ -203,6 +224,32 @@ function AccountPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        <div className="mt-12 flex justify-center border-t border-border pt-6">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="gap-1.5 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive">
+                <Trash2 className="h-4 w-4" /> {t("delAcc.button")}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("delAcc.title")}</AlertDialogTitle>
+                <AlertDialogDescription className="text-destructive">{t("delAcc.body")}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={deleting}>{t("common.cancel")}</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={deleting}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  onClick={(e) => { e.preventDefault(); deleteAccount(); }}
+                >
+                  {deleting ? t("common.loading") : t("delAcc.confirm")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </main>
 
       <AdBanner />
