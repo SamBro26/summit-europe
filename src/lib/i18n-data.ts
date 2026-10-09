@@ -1,4 +1,5 @@
 import { PLAN_EN, PLAN_I18N } from "./i18n-plans";
+import { DELETE_EN, DELETE_I18N } from "./i18n-delete";
 const en = {
   "app.tagline": "Eurozone Property Network",
 
@@ -262,6 +263,7 @@ const en = {
   "filter.selectTransaction": "All transactions",
   "tx.purchase": "For Purchase",
   ...PLAN_EN,
+  ...DELETE_EN,
 };
 
 export type TranslationKey = keyof typeof en;
@@ -2560,6 +2562,7 @@ const DICTIONARIES: Record<string, Dict> = {
 export function translate(language: string | null, key: TranslationKey): string {
   const dict = language ? DICTIONARIES[language] : undefined;
   const planValue = language ? (PLAN_I18N[language] as Record<string, string> | undefined)?.[key] : undefined;
+  const delValue = language ? (DELETE_I18N[language] as Record<string, string> | undefined)?.[key] : undefined;
   const screenValue = language ? screenTranslations[language]?.[key] : undefined;
-  return planValue ?? screenValue ?? dict?.[key] ?? en[key];
+  return planValue ?? delValue ?? screenValue ?? dict?.[key] ?? en[key];
 }
