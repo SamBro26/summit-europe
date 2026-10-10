@@ -56,7 +56,7 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
           </Button>
         </div>
         <div className="flex flex-col rounded-2xl border-2 border-primary bg-card p-5">
-          <Crown className="h-6 w-6 text-primary" />
+          <Crown className="h-6 w-6 text-primary-ink" />
           <h3 className="mt-3 font-semibold text-foreground">{t("plan.premiumName")}</h3>
           <p className="mt-1.5 text-sm text-muted-foreground">{t("plan.premiumDesc")}</p>
           <div role="radiogroup" className="mt-4 space-y-2">
@@ -145,11 +145,11 @@ export function TrialBanner({ onChoose, className }: { onChoose?: () => void; cl
   return (
     <div className={cn("grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-2.5 text-sm", days <= 5 && "border-primary", className)}>
       <div className="flex min-w-0 items-center gap-2">
-        <Clock className="h-4 w-4 shrink-0 text-primary" />
+        <Clock className="h-4 w-4 shrink-0 text-primary-ink" />
         <span className="min-w-0 text-foreground">{t("plan.trialBanner").replace("{n}", String(days))}</span>
       </div>
       {onChoose && (
-        <Button type="button" variant="link" onClick={onChoose} className="h-auto max-w-28 shrink-0 whitespace-normal p-0 text-right font-medium text-primary">
+        <Button type="button" variant="link" onClick={onChoose} className="h-auto max-w-28 shrink-0 whitespace-normal p-0 text-right font-medium text-primary-ink">
           {t("plan.manage")}
         </Button>
       )}
