@@ -119,14 +119,39 @@ function AccountPage() {
 
   return (
     <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
-      <header className="bg-brand-gradient px-5 pt-6 pb-14 sm:px-10">
+      <header className="bg-brand-gradient px-5 pt-6 pb-6 sm:px-10">
         <div className="mx-auto max-w-5xl">
+          <nav className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
           <Link
             to="/"
-            className="flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
+            className="flex min-w-0 items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> {t("common.home")}
+            <ArrowLeft className="h-4 w-4 shrink-0" /> {t("common.home")}
           </Link>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-auto min-h-9 max-w-48 gap-1.5 whitespace-normal border-destructive/50 bg-card text-destructive hover:bg-destructive/10 hover:text-destructive">
+                <Trash2 className="h-4 w-4" /> {t("delAcc.button")}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("delAcc.title")}</AlertDialogTitle>
+                <AlertDialogDescription className="text-destructive">{t("delAcc.body")}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={deleting}>{t("common.cancel")}</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={deleting}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  onClick={(e) => { e.preventDefault(); deleteAccount(); }}
+                >
+                  {deleting ? t("common.loading") : t("delAcc.confirm")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          </nav>
           <h1 className="mt-6 flex items-center gap-2 text-2xl font-semibold text-primary-foreground">
             <UserRound className="h-6 w-6" /> {t("account.title")}
           </h1>
@@ -134,8 +159,8 @@ function AccountPage() {
         </div>
       </header>
 
-      <main className="mx-auto -mt-8 w-full max-w-5xl px-5 pb-10 sm:px-10">
-        <TrialBanner className="mb-4" onChoose={() => setPlansOpen(true)} />
+      <main className="mx-auto w-full max-w-5xl px-5 pt-5 pb-10 sm:px-10">
+        <TrialBanner className="mb-4 bg-secondary text-center [&>div]:justify-center" onChoose={() => setPlansOpen(true)} />
         <div className="mb-5 flex justify-end">
           <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setPlansOpen(true)}>
             <Crown className="h-4 w-4" /> {t("plan.manage")}
@@ -225,31 +250,7 @@ function AccountPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-12 flex justify-center border-t border-border pt-6">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" className="gap-1.5 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive">
-                <Trash2 className="h-4 w-4" /> {t("delAcc.button")}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t("delAcc.title")}</AlertDialogTitle>
-                <AlertDialogDescription className="text-destructive">{t("delAcc.body")}</AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={deleting}>{t("common.cancel")}</AlertDialogCancel>
-                <AlertDialogAction
-                  disabled={deleting}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  onClick={(e) => { e.preventDefault(); deleteAccount(); }}
-                >
-                  {deleting ? t("common.loading") : t("delAcc.confirm")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+
       </main>
 
       <AdBanner />
