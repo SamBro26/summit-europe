@@ -62,7 +62,7 @@ function ResetPasswordPage() {
             <Home className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={1.6} />
           </span>
           <span className="font-display text-lg font-semibold">
-            FindMe <span className="text-accent">RealEstate</span>
+            FindMe <span className="text-primary-ink">RealEstate</span>
           </span>
         </Link>
         <div className="shadow-soft rounded-2xl border border-border bg-card p-6">

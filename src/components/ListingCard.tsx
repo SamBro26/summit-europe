@@ -41,7 +41,7 @@ export function ListingCard({ listing }: { listing: ListingWithPhotos }) {
       <div className="space-y-2 p-4">
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge variant="secondary">{typeLabel}</Badge>
-          <Badge variant="outline">{txLabel}</Badge>
+          <Badge>{txLabel}</Badge>
         </div>
         <p className="text-base font-semibold text-foreground">
           {price ?? t("listing.priceOnRequest")}

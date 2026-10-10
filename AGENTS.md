@@ -12,3 +12,4 @@
 - Mount AuthProvider and AdStatusProvider once in the root; all consumers share one session listener and cached profile query to keep billing reads independent of listing reads.
 - Compute trial status in the shared provider and schedule only countdown-boundary updates; mount TrialWarning once to avoid duplicate notification requests across page banners.
 - Use the shared plan-dialog scroll surface for both account plans and the expired-trial gate so mobile touch scrolling has one viewport-constrained owner.
+- Keep brand fills and readable standalone primary text as separate global semantic tokens; dark surfaces need lighter text without changing branded buttons or header contrast.

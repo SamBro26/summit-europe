@@ -46,7 +46,7 @@ export function LanguageSelect({
                 className={cn(
                   "group relative flex flex-col items-start gap-1 rounded-xl border bg-card p-3.5 text-left transition-all",
                   active
-                    ? "border-primary shadow-soft ring-2 ring-primary/25"
+                    ? "border-accent shadow-soft ring-2 ring-accent/50"
                     : "border-border hover:border-primary/40 hover:-translate-y-0.5",
                 )}
               >
@@ -54,8 +54,8 @@ export function LanguageSelect({
                 <span className="text-sm font-semibold text-card-foreground">{lang.native}</span>
                 <span className="text-xs text-muted-foreground">{lang.name}</span>
                 {active && (
-                  <span className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
-                    <Check className="h-3 w-3 text-primary-foreground" />
+                  <span className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent">
+                    <Check className="h-3 w-3 text-accent-foreground" />
                   </span>
                 )}
               </button>

@@ -28,7 +28,7 @@ export function StarRating({
             className={cn(
               px,
               n <= Math.round(value)
-                ? "fill-accent text-accent"
+                ? "fill-accent text-primary-ink"
                 : "text-muted-foreground/40",
             )}
           />

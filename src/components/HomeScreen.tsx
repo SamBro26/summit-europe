@@ -186,7 +186,7 @@ export function HomeScreen({
             {t("home.headline")}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-primary-foreground/75">{t("home.sub")}</p>
-          <Button asChild className="mt-6 gap-2">
+          <Button asChild className="mt-6 gap-2 bg-accent text-accent-foreground hover:bg-accent/90">
             <Link to="/post">
               <Plus className="h-4 w-4" /> {t("home.post")}
             </Link>
@@ -205,8 +205,8 @@ export function HomeScreen({
               {t("filter.title")}
             </h2>
             <TabsList className="mt-4 flex h-auto w-full gap-2 bg-transparent p-0 sm:w-auto">
-              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-primary sm:flex-none" value="supply">{t("home.tabs.offers")}</TabsTrigger>
-              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-primary sm:flex-none" value="demand">{t("home.tabs.requests")}</TabsTrigger>
+              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-accent data-[state=active]:bg-accent data-[state=active]:text-accent-foreground sm:flex-none" value="supply">{t("home.tabs.offers")}</TabsTrigger>
+              <TabsTrigger className="h-10 flex-1 flex-grow rounded-md border border-border bg-background px-3 data-[state=active]:border-accent data-[state=active]:bg-accent data-[state=active]:text-accent-foreground sm:flex-none" value="demand">{t("home.tabs.requests")}</TabsTrigger>
             </TabsList>
             <div className="mt-5">
               <LocationFilter value={location} onChange={setLocation} />
