@@ -1,6 +1,6 @@
-# Performance and layout repair
+# Account layout and plan scrolling
 
-- [x] Share session and memoized trial status without repeated subscriptions or profile requests.
-- [x] Keep listing loading independent and surface request failures.
-- [x] Separate trial banner and stabilize mobile header controls.
-- [x] Repair plans dialog scrolling and verify signed-in flows.
+- [x] Move Delete Account to the header opposite Home, preserving confirmation.
+- [x] Place the trial countdown fully below the header within the content area.
+- [x] Enable contained native scrolling in both plan dialogs without touch restrictions.
+- [x] Verify signed-in account layout and plan scrolling.

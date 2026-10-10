@@ -174,8 +174,8 @@
   max-width: 48rem;
   max-height: calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   overflow-y: auto;
-  overscroll-behavior-y: contain;
-  touch-action: pan-y;
+  overscroll-behavior: contain;
+  touch-action: auto;
   scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
