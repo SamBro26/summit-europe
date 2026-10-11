@@ -13,8 +13,8 @@
 
 # Stripe premium subscriptions
 
-- [ ] Confirm and enable built-in Stripe payments.
-- [ ] Create the three recurring Euro prices and connect Subscribe Now to secure checkout.
-- [ ] Verify payment notifications and synchronize premium status with localized return confirmation.
-- [ ] Add paid-user subscription management through Stripe's customer portal in all 22 languages.
-- [ ] Test pricing rules and the signed-in checkout and portal flows.
+- [ ] Enable built-in Stripe payments (approved; blocked by unsupported prefilled seller country, awaiting actual business/residence country).
+- [ ] Create the three recurring Euro prices and connect Subscribe Now to secure checkout (blocked by Stripe activation).
+- [ ] Verify payment notifications and synchronize premium status with localized return confirmation (blocked by Stripe activation).
+- [ ] Add paid-user subscription management through Stripe's customer portal in all 22 languages (blocked by Stripe activation).
+- [ ] Test pricing rules and the signed-in checkout and portal flows (blocked by Stripe activation).
