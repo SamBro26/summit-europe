@@ -7,6 +7,6 @@
 
 # Eurozone global theme
 
-- [ ] Replace green theme tokens with EU royal blue and star gold in light and dark themes.
-- [ ] Update selection accents, listing badges and contrasting text where needed.
-- [ ] Verify the updated colors and interactions on desktop and mobile.
+- [x] Replace green theme tokens with EU royal blue and star gold in light and dark themes.
+- [x] Update selection accents, listing badges and contrasting text where needed.
+- [x] Verify the updated colors and interactions on desktop and mobile.
