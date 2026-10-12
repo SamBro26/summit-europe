@@ -178,20 +178,14 @@ function AccountPage() {
 
       <main className="mx-auto w-full max-w-5xl px-5 pt-5 pb-10 sm:px-10">
         <TrialBanner className="mb-4 bg-secondary text-center [&>div]:justify-center" onChoose={() => setPlansOpen(true)} />
-        <div className="mb-5 flex flex-wrap items-center justify-end gap-2">
-          {isPaid ? (
-            <>
-              <span className="text-sm font-medium text-primary-ink">{t("billing.premiumActive")}</span>
-              <Button variant="outline" size="sm" className="h-auto min-h-9 gap-1.5 whitespace-normal" onClick={manageSubscription}>
-                <Crown className="h-4 w-4" /> {t("billing.manageSub")}
-              </Button>
-            </>
-          ) : (
-            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setPlansOpen(true)}>
-              <Crown className="h-4 w-4" /> {t("plan.manage")}
+        {isPaid && (
+          <div className="mb-5 flex flex-wrap items-center justify-end gap-2">
+            <span className="text-sm font-medium text-primary-ink">{t("billing.premiumActive")}</span>
+            <Button variant="outline" size="sm" className="h-auto min-h-9 gap-1.5 whitespace-normal" onClick={manageSubscription}>
+              <Crown className="h-4 w-4" /> {t("billing.manageSub")}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
         <Dialog open={plansOpen} onOpenChange={setPlansOpen}>
           <DialogContent className="plan-dialog">
             <DialogTitle className="sr-only">{t("plan.chooseTitle")}</DialogTitle>
