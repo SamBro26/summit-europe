@@ -8,6 +8,10 @@ import { useAdStatus } from "@/hooks/useAdStatus";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { useServerFn } from "@tanstack/react-start";
+import { createCheckoutSession } from "@/lib/payments.functions";
+import { getStripe, getStripeEnvironment, isTestPayments } from "@/lib/stripe";
 import { useT } from "@/lib/i18n";
 
 export const PLAN_TIERS = [
@@ -22,6 +26,8 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
   const queryClient = useQueryClient();
   const [tier, setTier] = useState<(typeof PLAN_TIERS)[number]["id"]>("monthly");
   const status = useAdStatus();
+  const [checkoutTier, setCheckoutTier] = useState<typeof tier | null>(null);
+  const startCheckout = useServerFn(createCheckoutSession);
 
   const freePlan = useMutation({
     mutationFn: async () => {
@@ -85,13 +91,58 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
                </Button>
             ))}
           </div>
-          <Button className="mt-5 whitespace-normal" onClick={() => toast.info(t("plan.paymentsSoon"))}>
+          <Button className="mt-5 whitespace-normal" onClick={() => { if (!user) { window.location.href = "/auth"; return; } setCheckoutTier(tier); }}>
             {t("plan.subscribeCta")}
           </Button>
         </div>
       </div>
+      {checkoutTier && (
+        <div className="mt-6 rounded-2xl border border-border bg-card p-3">
+          <h3 className="mb-2 text-center font-semibold text-foreground">{t("billing.checkoutTitle")}</h3>
+          {isTestPayments && <p className="mb-3 rounded-md bg-secondary px-3 py-2 text-center text-xs text-foreground">{t("billing.testMode")}</p>}
+          <EmbeddedCheckoutProvider
+            key={checkoutTier}
+            stripe={getStripe()}
+            options={{
+              fetchClientSecret: async () => {
+                try {
+                  const r = await startCheckout({ data: { tier: checkoutTier, environment: getStripeEnvironment(), returnUrl: `${window.location.origin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}` } });
+                  if ("error" in r) throw new Error(r.error);
+                  return r.clientSecret;
+                } catch (e) {
+                  toast.error(t("billing.error"));
+                  setCheckoutTier(null);
+                  throw e;
+                }
+              },
+            }}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </div>
+      )}
     </div>
   );
+}
+
+/** Shows the localized success toast once after returning from checkout. */
+export function CheckoutReturnWatcher() {
+  const t = useT();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("checkout") !== "success") return;
+    toast.success(t("billing.success"));
+    url.searchParams.delete("checkout");
+    url.searchParams.delete("session_id");
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    const refresh = () => queryClient.invalidateQueries({ queryKey: ["ad-status"] });
+    refresh();
+    const timer = setTimeout(refresh, 4000);
+    return () => clearTimeout(timer);
+  }, [t, queryClient, user?.id]);
+  return null;
 }
 
 /** Blocking overlay shown when the trial is over and no plan was chosen yet. */

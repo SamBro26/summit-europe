@@ -29,6 +29,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PlanSelection, TrialBanner } from "@/components/PlanSelection";
+import { useAdStatus } from "@/hooks/useAdStatus";
+import { createPortalSession } from "@/lib/payments.functions";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -57,6 +60,20 @@ function AccountPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [plansOpen, setPlansOpen] = useState(false);
+  const adStatus = useAdStatus();
+  const isPaid = adStatus.subscription_status === "active_paid";
+  const openPortal = useServerFn(createPortalSession);
+  async function manageSubscription() {
+    const tab = window.open("", "_blank");
+    try {
+      const r = await openPortal({ data: { environment: getStripeEnvironment(), returnUrl: window.location.href } });
+      if ("error" in r) throw new Error(r.error);
+      if (tab) tab.location.href = r.url; else window.location.href = r.url;
+    } catch {
+      tab?.close();
+      toast.error(t("common.actionFailed"));
+    }
+  }
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
   const deleteAccountFn = useServerFn(deleteMyAccount);
@@ -161,10 +178,19 @@ function AccountPage() {
 
       <main className="mx-auto w-full max-w-5xl px-5 pt-5 pb-10 sm:px-10">
         <TrialBanner className="mb-4 bg-secondary text-center [&>div]:justify-center" onChoose={() => setPlansOpen(true)} />
-        <div className="mb-5 flex justify-end">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setPlansOpen(true)}>
-            <Crown className="h-4 w-4" /> {t("plan.manage")}
-          </Button>
+        <div className="mb-5 flex flex-wrap items-center justify-end gap-2">
+          {isPaid ? (
+            <>
+              <span className="text-sm font-medium text-primary-ink">{t("billing.premiumActive")}</span>
+              <Button variant="outline" size="sm" className="h-auto min-h-9 gap-1.5 whitespace-normal" onClick={manageSubscription}>
+                <Crown className="h-4 w-4" /> {t("billing.manageSub")}
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setPlansOpen(true)}>
+              <Crown className="h-4 w-4" /> {t("plan.manage")}
+            </Button>
+          )}
         </div>
         <Dialog open={plansOpen} onOpenChange={setPlansOpen}>
           <DialogContent className="plan-dialog">

@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { NotificationWatcher } from "@/components/NotificationWatcher";
-import { PlanGate, TrialWarning } from "@/components/PlanSelection";
+import { CheckoutReturnWatcher, PlanGate, TrialWarning } from "@/components/PlanSelection";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AdStatusProvider } from "@/hooks/useAdStatus";
 import { I18nProvider, useT } from "@/lib/i18n";
@@ -142,6 +142,7 @@ function RootComponent() {
         <NotificationWatcher />
         <PlanGate />
         <TrialWarning />
+        <CheckoutReturnWatcher />
         <Toaster richColors position="top-center" />
         </AdStatusProvider>
         </AuthProvider>
