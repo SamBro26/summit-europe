@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock, Crown, Megaphone } from "lucide-react";
+import { Check, Clock, Copy, Crown, Megaphone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -28,6 +28,18 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
   const status = useAdStatus();
   const [checkoutTier, setCheckoutTier] = useState<typeof tier | null>(null);
   const startCheckout = useServerFn(createCheckoutSession);
+  // Google Play review protection: detect the Android app container and hide
+  // external checkout there. Set after mount to avoid SSR/hydration mismatch.
+  const [isAndroidApp, setIsAndroidApp] = useState(false);
+  useEffect(() => {
+    const w = window as unknown as { Android?: unknown };
+    setIsAndroidApp(
+      window.location.search.includes("mode=app") ||
+        /; wv\)|\bwv\b/.test(navigator.userAgent) ||
+        Boolean(w.Android) ||
+        document.referrer.includes("android-app://"),
+    );
+  }, []);
 
   const freePlan = useMutation({
     mutationFn: async () => {
@@ -91,12 +103,34 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
                </Button>
             ))}
           </div>
-          <Button className="mt-5 whitespace-normal" onClick={() => { if (!user) { window.location.href = "/auth"; return; } setCheckoutTier(tier); }}>
-            {t("plan.subscribeCta")}
-          </Button>
+          {!isAndroidApp && (
+            <Button className="mt-5 whitespace-normal" onClick={() => { if (!user) { window.location.href = "/auth"; return; } setCheckoutTier(tier); }}>
+              {t("plan.subscribeCta")}
+            </Button>
+          )}
         </div>
       </div>
-      {checkoutTier && (
+      {isAndroidApp && (
+        <div className="mt-6 rounded-2xl border border-border bg-secondary/60 p-5 text-center">
+          <p className="text-sm leading-relaxed text-foreground">{t("billing.androidNotice")}</p>
+          <Button
+            variant="outline"
+            className="mt-4 whitespace-normal"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(window.location.origin);
+                toast.success(t("billing.linkCopied"));
+              } catch {
+                toast.error(t("common.actionFailed"));
+              }
+            }}
+          >
+            <Copy className="h-4 w-4" />
+            {t("billing.copyLink")}
+          </Button>
+        </div>
+      )}
+      {!isAndroidApp && checkoutTier && (
         <div className="mt-6 rounded-2xl border border-border bg-card p-3">
           <h3 className="mb-2 text-center font-semibold text-foreground">{t("billing.checkoutTitle")}</h3>
           {isTestPayments && <p className="mb-3 rounded-md bg-secondary px-3 py-2 text-center text-xs text-foreground">{t("billing.testMode")}</p>}
