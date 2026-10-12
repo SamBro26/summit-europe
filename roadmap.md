@@ -23,3 +23,4 @@
 - [ ] Real test purchase end-to-end (needs the user to run a test card in the preview).
 
 - [x] Play Store review guard: Android app container (?mode=app, WV user agent, window.Android, android-app referrer) hides Stripe checkout on the plans screen and shows a localized "visit our website" notice with a Copy Website Link button (22 languages); web users keep normal checkout.
+- [x] Add a localized "Open in Browser" share button (navigator.share, then new tab, then clipboard) beside Copy Website Link in the Android guard, verified in app mode on desktop and phone widths.
