@@ -9,6 +9,7 @@ export const BILLING_EN = {
   "billing.androidNotice": "To upgrade your account to our Ad-Free Premium Plan, please visit our official website directly from your smartphone's native browser (Chrome/Safari) and complete the subscription safely from there.",
   "billing.copyLink": "Copy Website Link",
   "billing.linkCopied": "Link copied!",
+  "billing.openBrowser": "Open in Browser",
 };
 
 type K = keyof typeof BILLING_EN;
