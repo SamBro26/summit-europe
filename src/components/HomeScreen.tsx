@@ -125,8 +125,11 @@ export function HomeScreen({
                   <span className="relative">
                     <MessageSquare className="h-4 w-4" />
                     {unread > 0 && (
-                      <span className="absolute -top-1.5 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
-                        {unread > 99 ? "99+" : unread}
+                      <span className="absolute -top-1.5 -right-2 flex h-4 min-w-4">
+                        <span className="absolute inset-0 animate-ping rounded-full bg-destructive opacity-60 motion-reduce:hidden" />
+                        <span className="relative flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground ring-2 ring-primary">
+                          {unread > 99 ? "99+" : unread}
+                        </span>
                       </span>
                     )}
                   </span>

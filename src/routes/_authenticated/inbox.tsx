@@ -135,16 +135,27 @@ function InboxPage() {
       });
   }, [open, user, refetch, queryClient]);
 
-  // Entering the inbox clears pending admin announcements.
+  // Entering the inbox clears the header badge: marks incoming messages and admin announcements read.
   useEffect(() => {
     if (!user) return;
-    supabase
-      .from("notifications")
-      .update({ read_at: new Date().toISOString() })
-      .eq("user_id", user.id)
-      .is("read_at", null)
-      .then(() => queryClient.invalidateQueries({ queryKey: ["unread", user.id] }));
-  }, [user, queryClient]);
+    const now = new Date().toISOString();
+    queryClient.setQueryData(["unread", user.id], 0);
+    Promise.all([
+      supabase
+        .from("messages")
+        .update({ read_at: now })
+        .eq("recipient_id", user.id)
+        .is("read_at", null),
+      supabase
+        .from("notifications")
+        .update({ read_at: now })
+        .eq("user_id", user.id)
+        .is("read_at", null),
+    ]).then(() => {
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ["unread", user.id] });
+    });
+  }, [user, queryClient, refetch]);
 
   return (
     <div className={cn("min-h-screen bg-background", AD_BANNER_SPACING)}>
