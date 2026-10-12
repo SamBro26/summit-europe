@@ -13,7 +13,9 @@
 
 # Stripe premium subscriptions
 
-- [ ] Enable built-in Stripe payments (approved; blocked by unsupported prefilled seller country, awaiting actual business/residence country).
+- [x] Enable built-in Stripe payments.
+- [x] Make pricing tier rows wrap cleanly with large phone text sizes.
+- [ ] Confirm purchase / cancel / upgrade-downgrade business logic with the user (asked).
 - [ ] Create the three recurring Euro prices and connect Subscribe Now to secure checkout (blocked by Stripe activation).
 - [ ] Verify payment notifications and synchronize premium status with localized return confirmation (blocked by Stripe activation).
 - [ ] Add paid-user subscription management through Stripe's customer portal in all 22 languages (blocked by Stripe activation).
