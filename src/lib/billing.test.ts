@@ -1,6 +1,8 @@
 import { describe, test } from "node:test";
 import { strictEqual } from "node:assert";
 import { isPremiumSubscription, QUARTERLY } from "./billing";
+import { BILLING_EN, BILLING_I18N } from "./i18n-billing";
+import { LANGUAGES } from "./languages";
 
 const now = Date.parse("2026-10-12T00:00:00Z");
 const future = "2026-11-12T00:00:00Z";
