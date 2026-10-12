@@ -21,3 +21,5 @@
 - [x] Add paid-user subscription management in all 22 languages.
 - [x] Test pricing rules.
 - [ ] Real test purchase end-to-end (needs the user to run a test card in the preview).
+
+- [x] Play Store review guard: Android app container (?mode=app, WV user agent, window.Android, android-app referrer) hides Stripe checkout on the plans screen and shows a localized "visit our website" notice with a Copy Website Link button (22 languages); web users keep normal checkout.
