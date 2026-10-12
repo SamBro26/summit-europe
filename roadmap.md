@@ -15,8 +15,9 @@
 
 - [x] Enable built-in Stripe payments.
 - [x] Make pricing tier rows wrap cleanly with large phone text sizes.
-- [ ] Confirm purchase / cancel / upgrade-downgrade business logic with the user (asked).
-- [ ] Create the three recurring Euro prices and connect Subscribe Now to secure checkout (blocked by Stripe activation).
-- [ ] Verify payment notifications and synchronize premium status with localized return confirmation (blocked by Stripe activation).
-- [ ] Add paid-user subscription management through Stripe's customer portal in all 22 languages (blocked by Stripe activation).
-- [ ] Test pricing rules and the signed-in checkout and portal flows (blocked by Stripe activation).
+- [x] Confirm business logic: ads return at period end on cancel, prorated immediate plan changes, grace period on failed payments.
+- [x] Create the three recurring Euro prices and connect Subscribe Now to secure checkout.
+- [x] Synchronize premium status from payment notifications with localized return confirmation.
+- [x] Add paid-user subscription management in all 22 languages.
+- [x] Test pricing rules.
+- [ ] Real test purchase end-to-end (needs the user to run a test card in the preview).

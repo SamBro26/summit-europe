@@ -5,15 +5,16 @@ import { QUARTERLY, TIER_PRICE_IDS, type TierId } from "@/lib/billing";
 
 type Stripe = ReturnType<typeof createStripeClient>;
 
-async function resolveOrCreateCustomer(stripe: Stripe, options: { email?: string; userId: string }): Promise<string> {
+async function resolveOrCreateCustomer(stripe: Stripe, options: { email?: string | undefined; userId: string }): Promise<string> {
   if (!/^[a-zA-Z0-9_-]+$/.test(options.userId)) throw new Error("Invalid userId");
   const found = await stripe.customers.search({ query: `metadata['userId']:'${options.userId}'`, limit: 1 });
-  if (found.data.length) return found.data[0].id;
+  const hit = found.data[0];
+  if (hit) return hit.id;
   if (options.email) {
     const existing = await stripe.customers.list({ email: options.email, limit: 1 });
-    if (existing.data.length) {
-      const customer = existing.data[0];
-      if (customer.metadata?.userId !== options.userId) {
+    const customer = existing.data[0];
+    if (customer) {
+      if (customer.metadata?.["userId"] !== options.userId) {
         await stripe.customers.update(customer.id, { metadata: { ...customer.metadata, userId: options.userId } });
       }
       return customer.id;
@@ -41,8 +42,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       // Monthly price carries the Premium product; quarterly is built inline on it.
       const monthly = await stripe.prices.list({ lookup_keys: [TIER_PRICE_IDS.monthly] });
-      if (!monthly.data.length) throw new Error("Price not found");
-      const productId = typeof monthly.data[0].product === "string" ? monthly.data[0].product : monthly.data[0].product.id;
+      const monthlyPrice = monthly.data[0];
+      if (!monthlyPrice) throw new Error("Price not found");
+      const productId = typeof monthlyPrice.product === "string" ? monthlyPrice.product : monthlyPrice.product.id;
 
       let lineItem: Record<string, unknown>;
       if (data.tier === "quarterly") {
@@ -58,8 +60,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         };
       } else {
         const prices = data.tier === "monthly" ? monthly : await stripe.prices.list({ lookup_keys: [TIER_PRICE_IDS[data.tier]] });
-        if (!prices.data.length) throw new Error("Price not found");
-        lineItem = { price: prices.data[0].id, quantity: 1 };
+        const price = prices.data[0];
+        if (!price) throw new Error("Price not found");
+        lineItem = { price: price.id, quantity: 1 };
       }
 
       const customerId = await resolveOrCreateCustomer(stripe, { email, userId });
