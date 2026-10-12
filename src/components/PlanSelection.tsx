@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock, Copy, Crown, Megaphone } from "lucide-react";
+import { Check, Clock, Copy, Crown, ExternalLink, Megaphone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -55,6 +55,32 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
     },
     onError: () => toast.error(t("common.actionFailed")),
   });
+
+  /**
+   * Hands the site address to the device itself: first the native share sheet
+   * (Android's system dialog), then a browser tab, then the clipboard. The app
+   * container never hosts a checkout, which keeps it Play Store compliant.
+   */
+  const shareInBrowser = async () => {
+    const url = window.location.origin;
+    const nav = navigator as Navigator & { share?: (data: ShareData) => Promise<void> };
+    if (typeof nav.share === "function") {
+      try {
+        await nav.share({ title: "FindMe RealEstate", url });
+        return;
+      } catch (e) {
+        // The reviewer or user closed the share sheet: nothing else to do.
+        if ((e as DOMException)?.name === "AbortError") return;
+      }
+    }
+    if (window.open(url, "_blank", "noopener,noreferrer")) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("billing.linkCopied"));
+    } catch {
+      toast.error(t("common.actionFailed"));
+    }
+  };
 
   return (
     <div className="w-full">
@@ -113,21 +139,27 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
       {isAndroidApp && (
         <div className="mt-6 rounded-2xl border border-border bg-secondary/60 p-5 text-center">
           <p className="text-sm leading-relaxed text-foreground">{t("billing.androidNotice")}</p>
-          <Button
-            variant="outline"
-            className="mt-4 whitespace-normal"
-            onClick={async () => {
-              try {
-                await navigator.clipboard.writeText(window.location.origin);
-                toast.success(t("billing.linkCopied"));
-              } catch {
-                toast.error(t("common.actionFailed"));
-              }
-            }}
-          >
-            <Copy className="h-4 w-4" />
-            {t("billing.copyLink")}
-          </Button>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <Button className="min-w-40 whitespace-normal" onClick={shareInBrowser}>
+              <ExternalLink className="h-4 w-4" />
+              {t("billing.openBrowser")}
+            </Button>
+            <Button
+              variant="outline"
+              className="min-w-40 whitespace-normal"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(window.location.origin);
+                  toast.success(t("billing.linkCopied"));
+                } catch {
+                  toast.error(t("common.actionFailed"));
+                }
+              }}
+            >
+              <Copy className="h-4 w-4" />
+              {t("billing.copyLink")}
+            </Button>
+          </div>
         </div>
       )}
       {!isAndroidApp && checkoutTier && (
