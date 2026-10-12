@@ -1,0 +1,37 @@
+/** Payment & subscription strings. */
+export const BILLING_EN = {
+  "billing.checkoutTitle": "Secure checkout",
+  "billing.success": "Payment successful! Your ad-free Premium plan is now active.",
+  "billing.manageSub": "Manage Subscription",
+  "billing.testMode": "Test mode: no real money is charged in the preview.",
+  "billing.error": "Checkout could not be started. Please try again.",
+  "billing.premiumActive": "Premium (Ad-Free) active",
+};
+
+type K = keyof typeof BILLING_EN;
+const row = (v: string[]): Record<K, string> =>
+  Object.fromEntries((Object.keys(BILLING_EN) as K[]).map((k, i) => [k, v[i]])) as Record<K, string>;
+
+export const BILLING_I18N: Record<string, Record<K, string>> = {
+  fr: row(["Paiement sécurisé", "Paiement réussi ! Votre formule Premium sans publicité est active.", "Gérer l’abonnement", "Mode test : aucun argent réel n’est débité dans l’aperçu.", "Impossible de démarrer le paiement. Veuillez réessayer.", "Premium (sans publicité) actif"]),
+  de: row(["Sichere Zahlung", "Zahlung erfolgreich! Ihr werbefreier Premium-Tarif ist jetzt aktiv.", "Abonnement verwalten", "Testmodus: In der Vorschau wird kein echtes Geld abgebucht.", "Die Zahlung konnte nicht gestartet werden. Bitte erneut versuchen.", "Premium (werbefrei) aktiv"]),
+  it: row(["Pagamento sicuro", "Pagamento riuscito! Il tuo piano Premium senza pubblicità è attivo.", "Gestisci abbonamento", "Modalità test: nessun addebito reale nell’anteprima.", "Impossibile avviare il pagamento. Riprova.", "Premium (senza pubblicità) attivo"]),
+  es: row(["Pago seguro", "¡Pago completado! Tu plan Premium sin anuncios ya está activo.", "Gestionar suscripción", "Modo de prueba: no se cobra dinero real en la vista previa.", "No se pudo iniciar el pago. Inténtalo de nuevo.", "Premium (sin anuncios) activo"]),
+  pt: row(["Pagamento seguro", "Pagamento concluído! O seu plano Premium sem anúncios está ativo.", "Gerir subscrição", "Modo de teste: nenhum dinheiro real é cobrado na pré-visualização.", "Não foi possível iniciar o pagamento. Tente novamente.", "Premium (sem anúncios) ativo"]),
+  nl: row(["Veilig afrekenen", "Betaling gelukt! Je advertentievrije Premium-abonnement is actief.", "Abonnement beheren", "Testmodus: in de preview wordt geen echt geld afgeschreven.", "Afrekenen kon niet worden gestart. Probeer het opnieuw.", "Premium (advertentievrij) actief"]),
+  el: row(["Ασφαλής πληρωμή", "Η πληρωμή ολοκληρώθηκε! Το Premium πρόγραμμα χωρίς διαφημίσεις είναι ενεργό.", "Διαχείριση συνδρομής", "Δοκιμαστική λειτουργία: δεν χρεώνονται πραγματικά χρήματα στην προεπισκόπηση.", "Δεν ήταν δυνατή η έναρξη της πληρωμής. Δοκιμάστε ξανά.", "Premium (χωρίς διαφημίσεις) ενεργό"]),
+  ga: row(["Seiceáil slán", "D’éirigh leis an íocaíocht! Tá do phlean Premium gan fógraí gníomhach anois.", "Bainistigh síntiús", "Mód tástála: ní ghearrtar fíorairgead sa réamhamharc.", "Níorbh fhéidir an íocaíocht a thosú. Bain triail eile as.", "Premium (gan fógraí) gníomhach"]),
+  fi: row(["Turvallinen maksu", "Maksu onnistui! Mainokseton Premium-tilauksesi on nyt aktiivinen.", "Hallinnoi tilausta", "Testitila: esikatselussa ei veloiteta oikeaa rahaa.", "Maksua ei voitu aloittaa. Yritä uudelleen.", "Premium (mainokseton) aktiivinen"]),
+  et: row(["Turvaline makse", "Makse õnnestus! Teie reklaamivaba Premium-pakett on aktiivne.", "Halda tellimust", "Testrežiim: eelvaates päris raha ei võeta.", "Makset ei õnnestunud alustada. Proovige uuesti.", "Premium (reklaamivaba) aktiivne"]),
+  lv: row(["Droša apmaksa", "Maksājums veiksmīgs! Jūsu Premium plāns bez reklāmām ir aktīvs.", "Pārvaldīt abonementu", "Testa režīms: priekšskatījumā netiek iekasēta īsta nauda.", "Neizdevās sākt apmaksu. Lūdzu, mēģiniet vēlreiz.", "Premium (bez reklāmām) aktīvs"]),
+  lt: row(["Saugus mokėjimas", "Mokėjimas sėkmingas! Jūsų Premium planas be reklamų aktyvus.", "Tvarkyti prenumeratą", "Bandomasis režimas: peržiūroje tikri pinigai nenuskaičiuojami.", "Nepavyko pradėti mokėjimo. Bandykite dar kartą.", "Premium (be reklamų) aktyvus"]),
+  mt: row(["Ħlas sigur", "Il-ħlas irnexxa! Il-pjan Premium mingħajr reklami tiegħek issa attiv.", "Immaniġġja l-abbonament", "Modalità ta’ test: l-ebda flus veri ma jitħallsu fil-preview.", "Il-ħlas ma setax jinbeda. Erġa’ pprova.", "Premium (mingħajr reklami) attiv"]),
+  sk: row(["Bezpečná platba", "Platba prebehla úspešne! Váš Premium plán bez reklám je aktívny.", "Spravovať predplatné", "Testovací režim: v náhľade sa nestrhávajú skutočné peniaze.", "Platbu sa nepodarilo spustiť. Skúste to znova.", "Premium (bez reklám) aktívne"]),
+  sl: row(["Varno plačilo", "Plačilo uspešno! Vaš paket Premium brez oglasov je aktiven.", "Upravljaj naročnino", "Testni način: v predogledu se ne zaračuna pravi denar.", "Plačila ni bilo mogoče začeti. Poskusite znova.", "Premium (brez oglasov) aktiven"]),
+  bg: row(["Сигурно плащане", "Плащането е успешно! Вашият Premium план без реклами е активен.", "Управление на абонамента", "Тестов режим: в прегледа не се таксуват реални пари.", "Плащането не можа да започне. Опитайте отново.", "Premium (без реклами) активен"]),
+  sv: row(["Säker betalning", "Betalningen lyckades! Din reklamfria Premium-plan är nu aktiv.", "Hantera prenumeration", "Testläge: inga riktiga pengar dras i förhandsvisningen.", "Betalningen kunde inte startas. Försök igen.", "Premium (reklamfri) aktiv"]),
+  tr: row(["Güvenli ödeme", "Ödeme başarılı! Reklamsız Premium planınız artık etkin.", "Aboneliği yönet", "Test modu: önizlemede gerçek para çekilmez.", "Ödeme başlatılamadı. Lütfen tekrar deneyin.", "Premium (reklamsız) etkin"]),
+  lb: row(["Sécher bezuelen", "Bezuelung erfollegräich! Äre reklammfräie Premium-Plang ass elo aktiv.", "Abonnement verwalten", "Testmodus: an der Virschau gëtt keng richteg Suen ofgebucht.", "D’Bezuelung konnt net gestart ginn. Probéiert w.e.g. nach eng Kéier.", "Premium (reklammfräi) aktiv"]),
+  ca: row(["Pagament segur", "Pagament completat! El teu pla Premium sense anuncis ja és actiu.", "Gestiona la subscripció", "Mode de prova: no es cobren diners reals a la previsualització.", "No s’ha pogut iniciar el pagament. Torna-ho a provar.", "Premium (sense anuncis) actiu"]),
+  hr: row(["Sigurno plaćanje", "Plaćanje uspješno! Vaš Premium plan bez oglasa je aktivan.", "Upravljaj pretplatom", "Testni način: u pregledu se ne naplaćuje pravi novac.", "Plaćanje nije moguće pokrenuti. Pokušajte ponovno.", "Premium (bez oglasa) aktivan"]),
+};

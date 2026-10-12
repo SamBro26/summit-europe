@@ -8,6 +8,13 @@
       "when": 1791446750676,
       "tag": "0000_listing_photos_owner_read",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791793944808,
+      "tag": "0001_subscriptions",
+      "breakpoints": true
     }
   ]
 }
