@@ -20,3 +20,15 @@ test("quarterly costs €4.99 every 3 months", () => {
   strictEqual(QUARTERLY.unitAmount, 499);
   strictEqual(QUARTERLY.intervalCount, 3);
 });
+
+describe("Open in Browser label (Play Store share button)", () => {
+  const key = "billing.openBrowser";
+  test("English source label is set", () => strictEqual(BILLING_EN[key], "Open in Browser"));
+  for (const lang of LANGUAGES.filter((l) => l.code !== "en")) {
+    test(`${lang.code} translates the label`, () => {
+      const value = BILLING_I18N[lang.code]?.[key];
+      strictEqual(typeof value, "string");
+      strictEqual((value ?? "").length > 0, true);
+    });
+  }
+});
