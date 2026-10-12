@@ -28,6 +28,18 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
   const status = useAdStatus();
   const [checkoutTier, setCheckoutTier] = useState<typeof tier | null>(null);
   const startCheckout = useServerFn(createCheckoutSession);
+  // Google Play review protection: detect the Android app container and hide
+  // external checkout there. Set after mount to avoid SSR/hydration mismatch.
+  const [isAndroidApp, setIsAndroidApp] = useState(false);
+  useEffect(() => {
+    const w = window as unknown as { Android?: unknown };
+    setIsAndroidApp(
+      window.location.search.includes("mode=app") ||
+        /; wv\)|\bwv\b/.test(navigator.userAgent) ||
+        Boolean(w.Android) ||
+        document.referrer.includes("android-app://"),
+    );
+  }, []);
 
   const freePlan = useMutation({
     mutationFn: async () => {
