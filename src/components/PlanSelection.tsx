@@ -69,18 +69,18 @@ export function PlanSelection({ expired, onDone }: { expired?: boolean; onDone?:
                 aria-checked={tier === p.id}
                 onClick={() => setTier(p.id)}
                 className={cn(
-                   "grid h-auto min-h-14 w-full grid-cols-[minmax(0,1fr)_auto] gap-2 whitespace-normal rounded-lg border px-3 py-2.5 text-left text-sm transition-colors",
+                   "flex h-auto min-h-14 w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 whitespace-normal rounded-lg border px-3 py-2.5 text-left text-sm transition-colors",
                   tier === p.id ? "border-accent bg-accent/10 hover:bg-accent/20 hover:text-foreground" : "border-border hover:bg-secondary/50",
                 )}
               >
-                 <span className="flex min-w-0 items-center gap-2 font-medium text-foreground">
+                 <span className="flex min-w-0 flex-[1_1_auto] items-center gap-2 break-words font-medium text-foreground">
                    <span className={cn("flex h-4 w-4 shrink-0 items-center justify-center rounded-full border", tier === p.id ? "border-accent bg-accent text-accent-foreground" : "border-border")}>
                     {tier === p.id && <Check className="h-3 w-3" />}
                   </span>
-                  {t(p.label)}
+                  <span className="min-w-0">{t(p.label)}</span>
                 </span>
-                 <span className="max-w-36 text-right text-muted-foreground">
-                  <span className="font-semibold text-foreground">€{p.price.toFixed(2)}</span> / {t(p.period)}
+                 <span className="ml-auto min-w-0 text-right text-muted-foreground">
+                  <span className="whitespace-nowrap font-semibold text-foreground">€{p.price.toFixed(2)}</span> / {t(p.period)}
                 </span>
                </Button>
             ))}
