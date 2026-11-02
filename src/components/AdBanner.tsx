@@ -6,13 +6,19 @@
  * phones, 90px on tablets/desktop. Pages using it must add matching bottom
  * padding (`pb-[var(--ad-banner-h)]`-style spacing) so nothing is covered.
  */
+import { useEffect } from "react";
 import { useT } from "@/lib/i18n";
 import { useAdStatus } from "@/hooks/useAdStatus";
+import { syncNativeBanner } from "@/lib/admob";
 
 export function AdBanner({ label }: { label?: string }) {
   const t = useT();
   const { show_ads } = useAdStatus();
   const visibleLabel = label ?? t("common.advertisement");
+  useEffect(() => {
+    syncNativeBanner(show_ads);
+    return () => void syncNativeBanner(false);
+  }, [show_ads]);
   if (!show_ads) return null;
   return (
     <div
