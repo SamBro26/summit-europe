@@ -1,7 +1,7 @@
 /** Production AdMob IDs. The App ID belongs in the native Android app's AndroidManifest.xml. */
 export const ADMOB_APP_ID = "ca-app-pub-5516554712058767~8604467991";
 export const ADMOB_BANNER_ID =
-  (import.meta.env.VITE_ADMOB_BANNER_ID as string | undefined) || "ca-app-pub-5516554712058767/155562148";
+  (import.meta.env["VITE_ADMOB_BANNER_ID"] as string | undefined) || "ca-app-pub-5516554712058767/155562148";
 
 type AndroidBridge = { showBanner?: (unitId: string) => void; hideBanner?: () => void };
 
